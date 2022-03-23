@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
   ai_model_t *model = create_model(package_name, desc_file);
 
   // Use the model to create an aerosol state.
-  ai_state_t *state = aero_model_create_state(model);
+  ai_state_t *state = ai_model_create_state(model);
 
   // The host wavelength grid to which optical properties are interpolated.
   ai_grid_t *host_grid = create_host_wavelength_grid();
@@ -72,8 +72,8 @@ int main(int argc, char *argv[]) {
   ai_array_free(host_od_asym);
 
   ai_interp_free(interp);
-  ai_grid_free(native_grid);
-  ai_grid_free(wavelength_grid);
+  ai_grid_free(aero_grid);
+  ai_grid_free(hoѕt_grid);
   ai_state_free(state);
   ai_model_free(model);
 

@@ -4,7 +4,7 @@ build/
 **/CMakeFiles/
 
 # Aerosol source code
-src/
+src/*
 !src/README
 
 # Prerequisites

@@ -3,6 +3,7 @@ project(aerosol-radiation)
 enable_language(Fortran)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_CXX_STANDARD 17)
 
 ################################################################################
 # options
@@ -17,19 +18,16 @@ add_custom_target(copy_input_data ALL ${CMAKE_COMMAND} -E copy_directory
 # aerosol model source
 
 add_subdirectory(src)
-include_directories(${CMAKE_BINARY_DIR}/src)
 
 ################################################################################
 # aerosol interface
 
 add_subdirectory(interface)
-include_directories(${CMAKE_BINARY_DIR}/interface)
 
 ################################################################################
 # mock model driver
 
 add_subdirectory(driver)
-include_directories(${CMAKE_BINARY_DIR}/driver)
 
 ################################################################################
 # aerosol driver executables
@@ -38,11 +36,18 @@ add_executable(fortran_driver ${AEROSOL_SRC}
                               ${INTERFACE_SRC}
                               ${DRIVER_F90_SRC})
 
+add_executable(cpp_driver     ${AEROSOL_SRC}
+                              ${INTERFACE_SRC}
+                              ${DRIVER_CPP_SRC})
+
+target_include_directories(fortran_driver PUBLIC ${CMAKE_SOURCE_DIR})
+target_include_directories(cpp_driver     PUBLIC ${CMAKE_SOURCE_DIR})
 
 ################################################################################
 # Add driver executables to test suite
 
 enable_testing()
 add_test(NAME fortran_host_model COMMAND fortran_driver)
+add_test(NAME cpp_host_model     COMMAND cpp_driver    )
 
 ################################################################################

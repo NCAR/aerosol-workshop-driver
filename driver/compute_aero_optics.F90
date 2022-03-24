@@ -15,6 +15,8 @@ contains
     stop
   end subroutine
 
+  create_interpolator(aero_grid, host_grid)
+
   ! This helper creates an array whose data conforms to the given grid.
   type(array_t) function create_array_from_grid(grid)
     type(grid_t), intent(in) :: grid
@@ -36,12 +38,12 @@ program compute_aero_optics
 
   character(len=255) :: package_name, desc_file
 
-  model_t  :: model
-  state_t  :: state
-  grid_t   :: host_grid, aero_grid
-  array_t  :: host_od, host_od_ssa, host_od_asym
-  array_t  :: aero_od, aero_od_ssa, aero_od_asym
-  interp_t :: interp
+  class(model_t), pointer :: model ! polymorphic
+  type(state_t)           :: state
+  type(grid_t)            :: host_grid, aero_grid  ! wavelength grids for radiative properties
+  type(array_t)           :: host_od, host_od_ssa, host_od_asym
+  type(array_t)           :: aero_od, aero_od_ssa, aero_od_asym
+  type(interp_t)          :: interp
 
   if (command_argument_count() < 3) then
     call usage()
@@ -54,8 +56,8 @@ program compute_aero_optics
   ! descriptor file.
   model = create_model(package_name, desc_file)
 
-  ! Use the model to create an aerosol state.
-  state = ai_model_create_state(model)
+  ! Use the model to create an initial aerosol state.
+  state = model%create_state()
 
   ! The host wavelength grid to which optical properties are interpolated.
   host_grid = create_host_wavelength_grid();
@@ -76,7 +78,7 @@ program compute_aero_optics
   aero_od_asym = create_array_from_grid(aero_grid)
 
   ! Have the aerosol model compute its optical properties on its native grid.
-  call model%compute_optics(model, state, aero_od, aero_od_ssa, aero_od_asym)
+  call model%compute_optics(state, aero_od, aero_od_ssa, aero_od_asym)
 
   ! Interpolate the aerosol optics to the host grid.
   call interp%interpolate(aero_od, host_od)
@@ -86,18 +88,5 @@ program compute_aero_optics
   ! Plot the results.
   call plot_optics(host_grid, host_od, host_od_ssa, host_od_asym)
 
-  ! Clean up.
-  call aero_od%free(aero_od)
-  call aero_od_ssa%free(aero_od_ssa)
-  call aero_od_asym%free(aero_od_asym)
-  call host_od%free(host_od)
-  call host_od_ssa%free(host_od_ssa)
-  call host_od_sym%free(host_od_asym)
-
-  call interp%free()
-  call aero_grid%free()
-  call host_grid%free()
-  call state%free()
-  call model%free()
-
+  ! (Cleanup implemented by final functions)
 end program

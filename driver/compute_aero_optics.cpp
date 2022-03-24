@@ -36,13 +36,13 @@ void main(int argc, char *argv[]) {
   ai::Model model = ai::create_model(package_name, desc_file);
 
   // Use the model to create an aerosol state.
-  ai::State state = model->create_state();
+  ai::State state = model.create_state();
 
   // The host wavelength grid to which optical properties are interpolated.
   ai::Grid host_grid = create_host_wavelength_grid();
 
   // The grid the model uses to compute optical properties.
-  ai::Grid aero_grid = model->optics_grid();
+  ai::Grid aero_grid = model.optics_grid();
 
   // An interpolator that interpolates data from aero_grid to host_grid,
   // using a pre-selected scheme.

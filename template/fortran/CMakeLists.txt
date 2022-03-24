@@ -2,6 +2,7 @@
 # Aerosol source code
 
 set( AEROSOL_SRC src/my_aerosol.F90
+                 src/aerosol_factory.F90
                  PARENT_SCOPE )
 
 ################################################################################

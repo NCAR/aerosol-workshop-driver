@@ -88,11 +88,11 @@ target_include_directories(test_cpp_aero_c_driver           PUBLIC ${CMAKE_SOURC
 # Add driver executables to test suite
 
 enable_testing()
-add_test(NAME fortran_aero_fortran_driver COMMAND test_fortran_aero_fortran_driver my_aerosol none)
-add_test(NAME fortran_aero_cpp_driver     COMMAND test_fortran_aero_cpp_driver     my_aerosol none)
-add_test(NAME fortran_aero_c_driver       COMMAND test_fortran_aero_c_driver       my_aerosol none)
-add_test(NAME cpp_aero_fortran_driver     COMMAND test_cpp_aero_fortran_driver     my_aerosol none)
-add_test(NAME cpp_aero_cpp_driver         COMMAND test_cpp_aero_cpp_driver         my_aerosol none)
-add_test(NAME cpp_aero_c_driver           COMMAND test_cpp_aero_c_driver           my_aerosol none)
+add_test(NAME fortran_aero_fortran_driver COMMAND test_fortran_aero_fortran_driver "my aerosol" none)
+add_test(NAME fortran_aero_cpp_driver     COMMAND test_fortran_aero_cpp_driver     "my aerosol" none)
+add_test(NAME fortran_aero_c_driver       COMMAND test_fortran_aero_c_driver       "my aerosol" none)
+add_test(NAME cpp_aero_fortran_driver     COMMAND test_cpp_aero_fortran_driver     "my aerosol" none)
+add_test(NAME cpp_aero_cpp_driver         COMMAND test_cpp_aero_cpp_driver         "my aerosol" none)
+add_test(NAME cpp_aero_c_driver           COMMAND test_cpp_aero_c_driver           "my aerosol" none)
 
 ################################################################################

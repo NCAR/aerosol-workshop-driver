@@ -1,0 +1,3 @@
+## Aerosol model source code
+
+Start by copying either the C++ or Fortan template code into this folder, along with your aerosol model source code. You can then adapt the template code to wrap you aerosol model functions.

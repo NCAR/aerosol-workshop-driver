@@ -35,6 +35,18 @@ void* ai_bridge_cpp_new_aerosol(const char *package_name,
 void* ai_bridge_f_new_aerosol(const char *package_name,
                               const char *description_file);
 
+/// Returns whether an aerosol model is available in C with the given
+/// package name.
+bool ai_bridge_c_supports_aerosol(const char *package_name);
+
+/// Returns whether an aerosol model is available in C++ with the given
+/// package name.
+bool ai_bridge_cpp_supports_aerosol(const char *package_name);
+
+/// Returns whether an aerosol model is available in Fortran with the given
+/// package name.
+bool ai_bridge_f_supports_aerosol(const char *package_name);
+
 /// Frees resources associated with the given C aerosol model.
 void ai_bridge_c_aerosol_free(void *aerosol);
 

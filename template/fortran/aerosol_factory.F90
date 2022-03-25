@@ -13,7 +13,7 @@ module ai_aerosol_factory
   implicit none
   private
 
-  public :: create_aerosol, create_fortran_aerosol
+  public :: create_aerosol, is_fortran_aerosol, create_fortran_aerosol
 
 contains
 
@@ -31,11 +31,29 @@ contains
     if( trim( package_name ) == "my aerosol" ) then
       aerosol => my_aerosol_t( description_file )
     else
-      ! assume model is in another language
-      aerosol => aerosol_t( package_name, description_file )
+      aerosol => c_aerosol_t( package_name, description_file )
+      if( .not. associated( aerosol ) then
+        aerosol => cpp_aerosol_t( package_name, description_file )
+      endif
+      if( .not. associated( aerosol ) then
+        call die_msg( 743895691, "Aerosol package '"//package_name//          &
+                                 "'not supported" )
+      end if
     end if
 
   end function create_aerosol
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns whether a aerosol model is supported in Fortran
+  pure logical function is_fortran_aerosol( package_name )
+
+    character(len=*), intent(in) :: package_name
+
+    is_fortran_aerosol = .false.
+    if( trim( package_name ) == "my aerosol" ) is_fortran_aerosol = .true.
+
+  end function is_fortran_aerosol
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -52,8 +70,8 @@ contains
     if( trim( package_name ) == "my aerosol" ) then
       aerosol => my_aerosol_t( description_file )
     else
-      call die_msg( 743895691, "Aerosol package '"//package_name//            &
-                               "'not supported" )
+      call die_msg( 611497899, "Aerosol package '"//package_name//            &
+                               "'not supported in Fortran" )
     end if
 
   end function create_fortran_aerosol

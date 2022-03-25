@@ -23,6 +23,14 @@ void* ai_bridge_cpp_new_aerosol(const char *package_name,
   return nullptr;
 }
 
+bool ai_bridge_c_supports_aerosol(const char *package_name) {
+  return true;
+}
+
+bool ai_bridge_cpp_supports_aerosol(const char *package_name) {
+  return true;
+}
+
 void ai_bridge_c_aerosol_free(void *aerosol) {
 }
 

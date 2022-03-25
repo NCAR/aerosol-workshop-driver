@@ -15,50 +15,20 @@ module ai_aerosol
 
   public :: aerosol_t
 
-  type :: aerosol_t
-    type(c_ptr) :: model_
+  type, abstract :: aerosol_t
   contains
-    procedure :: get_optics
+    procedure(get_optics), deferred :: get_optics
   end type aerosol_t
 
-  interface aerosol_t
-    module procedure :: constructor
-  end interface
-
-  interface
-
-    !> Builds non-Fortran models
-    function ai_build_non_fortran_aerosol( package_name, description_file )   &
-        result( aerosol ) bind (c)
-      use iso_c_binding
-      type(c_ptr)                          :: aerosol
-      character(kind=c_char), dimension(*) :: package_name
-      character(kind=c_char), dimension(*) :: description_file
-    end function ai_build_non_fortran_aerosol
-
-  end interface
-
-contains
+interface
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  !> Creates an aerosol model in another language
-  function constructor( package_name, description_file ) result( aerosol )
-
-    type(aerosol_t),  pointer    :: aerosol
-    character(len=*), intent(in) :: package_name
-    character(len=*), intent(in) :: description_file
-
-    allocate( aerosol )
-    aerosol%model_ = ai_build_non_fortran_aerosol(                            &
-                        trim( package_name )//c_null_char,                    &
-                        trim( description_file )//c_null_char )
-
-  end function constructor
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+  !> Returns optical properties on the native aerosol model wavelength grid
   subroutine get_optics( this, optics )
+
+    use ai_constants,                  only : double_kind
+    import :: aerosol_t
 
     !> Aerosol model
     class(aerosol_t),       intent(inout) :: this
@@ -68,5 +38,7 @@ contains
   end subroutine get_optics
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+end interface
 
 end module ai_aerosol

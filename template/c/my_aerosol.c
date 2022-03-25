@@ -9,6 +9,7 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#include <stdlib.h>
 #include "my_aerosol.h"
 
 // Store your data here. It's available via the context pointer argument to

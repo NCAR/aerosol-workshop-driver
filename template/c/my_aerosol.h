@@ -16,3 +16,5 @@
 
 /// Implement this function to create your aerosol model.
 ai_aerosol_t* my_aerosol_new(const char *description_file);
+
+#endif // AI_MY_AEROSOL_H

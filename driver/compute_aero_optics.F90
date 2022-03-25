@@ -41,7 +41,7 @@ program compute_aero_optics
 
   character(len=255) :: package_name, desc_file
 
-  class(aerosol_t), pointer :: model ! polymorphic
+  class(aerosol_t), pointer :: model => null( ) ! polymorphic
 !  type(state_t)           :: state
 !  type(grid_t)            :: host_grid, aero_grid  ! wavelength grids for radiative properties
 !  type(array_t)           :: host_od, host_od_ssa, host_od_asym

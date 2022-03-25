@@ -45,6 +45,7 @@ add_executable(c_driver       ${AEROSOL_SRC}
 foreach (lang fortran cpp c)
   target_link_libraries(${lang}_driver PRIVATE ai)
   target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR})
+  target_include_directories(${lang}_driver PUBLIC ${CMAKE_BINARY_DIR}/interface)
 endforeach(lang)
 
 ################################################################################
@@ -90,6 +91,7 @@ foreach (model_lang fortran cpp c)
     # Set link libraries and include directories
     target_link_libraries(${driver_name} PRIVATE ai)
     target_include_directories(${driver_name} PUBLIC ${CMAKE_SOURCE_DIR})
+    target_include_directories(${driver_name} PUBLIC ${CMAKE_BINARY_DIR}/interface)
 
     # Add tests to the test suite
     add_test(NAME ${test_name} COMMAND ${driver_name} "my aerosol" none)

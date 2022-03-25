@@ -8,6 +8,8 @@
 module ai_aerosol_factory
 
   use ai_aerosol,                      only : aerosol_t
+  use ai_c_aerosol,                    only : c_aerosol_t
+  use ai_cpp_aerosol,                  only : cpp_aerosol_t
   use my_aerosol,                      only : my_aerosol_t
 
   implicit none
@@ -32,10 +34,10 @@ contains
       aerosol => my_aerosol_t( description_file )
     else
       aerosol => c_aerosol_t( package_name, description_file )
-      if( .not. associated( aerosol ) then
+      if( .not. associated( aerosol ) ) then
         aerosol => cpp_aerosol_t( package_name, description_file )
       endif
-      if( .not. associated( aerosol ) then
+      if( .not. associated( aerosol ) ) then
         call die_msg( 743895691, "Aerosol package '"//package_name//          &
                                  "'not supported" )
       end if

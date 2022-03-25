@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "interface/aerosol.hpp"
+#include "interface/ai_aerosol.hpp"
 
 namespace {
 

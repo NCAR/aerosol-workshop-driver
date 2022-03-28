@@ -1,0 +1,15 @@
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the docker image with tests only
+      run: docker build -t aerosol-test . --build-arg BUILD=TESTS_ONLY
+    - name: Run the tests in the docker container
+      run: docker run -t aerosol-test bash -c 'cd /build; make test'

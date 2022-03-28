@@ -13,8 +13,17 @@ RUN dnf -y install \
 
 COPY . /aerosol/
 
+# command line argument for option build of aerosol code
+ARG BUILD=ALL
+
 # build the aerosol demo code
 RUN mkdir build \
     && cd build \
-    && cmake ../aerosol \
+    && if [ "$BUILD" = "TESTS_ONLY" ] ; then \
+         echo "Building tests only" \
+         && cmake -D TESTS_ONLY:BOOL=TRUE ../aerosol \
+       ; else \
+         echo "Building all" \
+         && cmake ../aerosol \
+       ; fi \
     && make

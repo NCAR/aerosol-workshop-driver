@@ -7,6 +7,10 @@ build/
 src/*
 !src/README
 
+# Model output
+output/*
+!output/README
+
 # Prerequisites
 *.d
 

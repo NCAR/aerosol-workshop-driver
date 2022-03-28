@@ -9,6 +9,8 @@ set(CMAKE_CXX_STANDARD 11)
 ################################################################################
 # options
 
+option(TESTS_ONLY "Build only tests (ignores code in src/)" OFF)
+
 ################################################################################
 # Copy input data
 
@@ -18,7 +20,9 @@ add_custom_target(copy_input_data ALL ${CMAKE_COMMAND} -E copy_directory
 ################################################################################
 # aerosol model source
 
-add_subdirectory(src)
+if (NOT TESTS_ONLY)
+  add_subdirectory(src)
+endif ()
 
 ################################################################################
 # aerosol interface
@@ -33,21 +37,23 @@ add_subdirectory(driver)
 ################################################################################
 # aerosol driver executables
 
-add_executable(fortran_driver ${AEROSOL_SRC}
-                              ${DRIVER_F90_SRC})
+if (NOT TESTS_ONLY)
+  add_executable(fortran_driver ${AEROSOL_SRC}
+                                ${DRIVER_F90_SRC})
 
-add_executable(cpp_driver     ${AEROSOL_SRC}
-                              ${DRIVER_CPP_SRC})
+  add_executable(cpp_driver     ${AEROSOL_SRC}
+                                ${DRIVER_CPP_SRC})
 
-add_executable(c_driver       ${AEROSOL_SRC}
-                              ${DRIVER_C_SRC})
+  add_executable(c_driver       ${AEROSOL_SRC}
+                                ${DRIVER_C_SRC})
 
-foreach (lang fortran cpp c)
-  target_link_libraries(${lang}_driver PRIVATE ai)
-  target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR})
-  target_include_directories(${lang}_driver PUBLIC ${CMAKE_BINARY_DIR}/interface)
-  target_include_directories(${lang}_driver PUBLIC ${CMAKE_BINARY_DIR}/src)
-endforeach(lang)
+  foreach (lang fortran cpp c)
+    target_link_libraries(${lang}_driver PRIVATE ai)
+    target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR})
+    target_include_directories(${lang}_driver PUBLIC ${CMAKE_BINARY_DIR}/interface)
+    target_include_directories(${lang}_driver PUBLIC ${CMAKE_BINARY_DIR}/src)
+  endforeach(lang)
+endif ()
 
 ################################################################################
 # tests built from template code

@@ -10,7 +10,6 @@ module ai_aerosol_factory
   use ai_aerosol,                      only : aerosol_t
   use ai_c_aerosol,                    only : c_aerosol_t
   use ai_cpp_aerosol,                  only : cpp_aerosol_t
-  use my_aerosol,                      only : my_aerosol_t
 
   implicit none
   private

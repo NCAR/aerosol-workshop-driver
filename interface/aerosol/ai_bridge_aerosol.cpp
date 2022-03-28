@@ -1,15 +1,15 @@
-//===-- interface/aerosol_cpp.cpp -------------------------------*- C++ -*-===//
+//===-- interface/aerosol/ai_bridge_aerosol.cpp -----------------*- C++ -*-===//
 //
 // Copyright (C) 2022 National Center for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
 //
 //===----------------------------------------------------------------------===//
 ///
-/// \file C/C++ <--> Fortran bridge functions
+/// \file C/C++ <--> Fortran bridge functions for the Aerosol class
 ///
 //===----------------------------------------------------------------------===//
 #include <iostream>
-#include "ai_bridge.h"
+#include "ai_bridge_aerosol.h"
 
 void* ai_bridge_c_new_aerosol(const char *package_name,
                               const char *description_file) {
@@ -36,46 +36,3 @@ void ai_bridge_c_aerosol_free(void *aerosol) {
 
 void ai_bridge_cpp_aerosol_free(void *aerosol) {
 }
-
-void* ai_bridge_c_state_clone(void *state) {
-  return nullptr;
-}
-
-void* ai_bridge_cpp_state_clone(void *state) {
-  return nullptr;
-}
-
-void ai_bridge_c_state_free(void *aerosol) {
-}
-
-void ai_bridge_cpp_state_free(void *aerosol) {
-}
-
-void* ai_bridge_c_array_clone(void *state) {
-  return nullptr;
-}
-
-void* ai_bridge_cpp_array_clone(void *state) {
-  return nullptr;
-}
-
-void ai_bridge_c_array_free(void *aerosol) {
-}
-
-void ai_bridge_cpp_array_free(void *aerosol) {
-}
-
-void* ai_bridge_c_grid_clone(void *state) {
-  return nullptr;
-}
-
-void* ai_bridge_cpp_grid_clone(void *state) {
-  return nullptr;
-}
-
-void ai_bridge_c_grid_free(void *aerosol) {
-}
-
-void ai_bridge_cpp_grid_free(void *aerosol) {
-}
-

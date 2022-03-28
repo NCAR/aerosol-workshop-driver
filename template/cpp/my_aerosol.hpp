@@ -10,7 +10,7 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
-#include "interface/ai_aerosol.hpp"
+#include "interface/aerosol/ai_aerosol.hpp"
 
 namespace mya {
 

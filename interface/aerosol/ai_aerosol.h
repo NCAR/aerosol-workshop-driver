@@ -1,4 +1,4 @@
-/*===-- interface/aerosol.h -------------------------------------*- C -*-===//
+/*===-- interface/aerosol/ai_aerosol.h ----------------------------*- C -*-===//
  *
  * Copyright (C) 2022 National Center for Atmospheric Research
  * SPDX-License-Identifier: Apache-2.0
@@ -13,9 +13,9 @@
 #ifndef AI_AEROSOL_H
 #define AI_AEROSOL_H
 
-#include "ai_array.h"
-#include "ai_grid.h"
-#include "ai_state.h"
+#include "array/ai_array.h"
+#include "grid/ai_grid.h"
+#include "state/ai_state.h"
 
 #ifdef __cplusplus
 extern "C" {

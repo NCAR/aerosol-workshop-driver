@@ -12,7 +12,7 @@
 #ifndef AI_MY_AEROSOL_H
 #define AI_MY_AEROSOL_H
 
-#include "interface/ai_aerosol.h"
+#include "interface/aerosol/ai_aerosol.h"
 
 /// Implement this function to create your aerosol model.
 ai_aerosol_t* my_aerosol_new(const char *description_file);

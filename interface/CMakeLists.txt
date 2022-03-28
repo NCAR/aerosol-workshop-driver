@@ -1,18 +1,21 @@
 ################################################################################
-# Aerosol interface source
-add_library(ai ai_aerosol.c
-               ai_aerosol.cpp
-               ai_aerosol.F90
-               ai_c_aerosol.F90
-               ai_cpp_aerosol.F90
-               ai_array.c
-               ai_array.cpp
-               ai_bridge.cpp
-               ai_constants.F90
-               ai_state.c
-               ai_state.cpp
-               ai_grid.c
-               ai_grid.cpp
-               ai_util.F90)
+# Aerosol interface classes
+
+add_subdirectory(aerosol)
+add_subdirectory(array)
+add_subdirectory(grid)
+add_subdirectory(state)
+
+################################################################################
+# Aerosol interface library
+
+add_library(ai ai_constants.F90
+               ai_util.F90
+               ${AEROSOL_SRC}
+               ${ARRAY_SRC}
+               ${GRID_SRC}
+               ${STATE_SRC})
+
+target_include_directories(ai PUBLIC ${CMAKE_SOURCE_DIR}/interface)
 
 ################################################################################

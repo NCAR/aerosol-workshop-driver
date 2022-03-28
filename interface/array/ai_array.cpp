@@ -1,5 +1,5 @@
 #include "ai_array.hpp"
-#include "ai_bridge.h"
+#include "ai_bridge_array.h"
 
 namespace ai {
 

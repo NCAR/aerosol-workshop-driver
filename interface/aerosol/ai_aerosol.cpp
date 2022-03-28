@@ -1,4 +1,4 @@
-//===-- interface/aerosol.cpp -----------------------------------*- C++ -*-===//
+//===-- interface/aerosol/ai_aerosol.cpp ------------------------*- C++ -*-===//
 //
 // Copyright (C) 2022 National Center for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
@@ -10,7 +10,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "ai_aerosol.hpp"
-#include "ai_state.hpp"
+#include "state/ai_state.hpp"
 
 extern "C" {
 

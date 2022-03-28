@@ -1,4 +1,4 @@
-//===-- interface/aerosol.hpp -----------------------------------*- C++ -*-===//
+//===-- interface/aerosol/ai_aerosol.hpp ------------------------*- C++ -*-===//
 //
 // Copyright (C) 2022 National Center for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
@@ -12,9 +12,9 @@
 #ifndef AI_AEROSOL_HPP
 #define AI_AEROSOL_HPP
 
-#include "ai_array.hpp"
-#include "ai_grid.hpp"
-#include "ai_state.hpp"
+#include "array/ai_array.hpp"
+#include "grid/ai_grid.hpp"
+#include "state/ai_state.hpp"
 
 #include <string>
 

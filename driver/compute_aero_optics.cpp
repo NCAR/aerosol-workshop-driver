@@ -69,7 +69,7 @@ int main(int argc, char *argv[]) {
 //  plot_optics(host_grid, host_od, host_od_ssa, host_od_asym);
 
   // Clean up.
-  delete model;
+  // delete model;
 
   std::cout << "Finished!" << std::endl;
   return 0;

@@ -40,6 +40,6 @@ ai_aerosol_t* my_aerosol_new(const char *description_file) {
   // Define the model's data based on the contents of the description file.
   my_model_data_t *data = malloc(sizeof(my_model_data_t));
   data->parameter = 42; // the Answer to It All
-  return ai_aerosol_new("my package name", data, behaviors);
+  return ai_aerosol_new(data, behaviors);
 }
 

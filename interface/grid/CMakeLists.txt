@@ -1,8 +1,8 @@
 ################################################################################
-# Aerosol source code
-
-set( AEROSOL_SRC src/my_aerosol.F90
-                 src/aerosol_factory.F90
-                 PARENT_SCOPE )
+# Aerosol interface source
+set(GRID_SRC grid/ai_grid.c
+             grid/ai_grid.cpp
+             grid/ai_bridge_grid.cpp
+             PARENT_SCOPE)
 
 ################################################################################

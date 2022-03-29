@@ -1,9 +1,21 @@
 ################################################################################
-# Aerosol interface source
+# Aerosol interface classes
 
-set( INTERFACE_SRC interface/aerosol.cpp
-                   interface/aerosol.F90
-                   interface/constants.F90
-                   PARENT_SCOPE )
+add_subdirectory(aerosol)
+add_subdirectory(array)
+add_subdirectory(grid)
+add_subdirectory(state)
+
+################################################################################
+# Aerosol interface library
+
+add_library(ai ai_constants.F90
+               ai_util.F90
+               ${AEROSOL_SRC}
+               ${ARRAY_SRC}
+               ${GRID_SRC}
+               ${STATE_SRC})
+
+target_include_directories(ai PUBLIC ${CMAKE_SOURCE_DIR}/interface)
 
 ################################################################################

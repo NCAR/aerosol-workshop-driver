@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "interface/aerosol.hpp"
+#include "interface/aerosol/ai_aerosol.hpp"
 
 namespace {
 
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 
   // Construct an aerosol model from the given package name and
   // descriptor file.
-  ai::Aerosol model; // = ai::create_model(package_name, desc_file);
+  ai::Aerosol* model; // = ai::create_model(package_name, desc_file);
 
   // Use the model to create an aerosol state.
 //  ai::State state = model.create_state();
@@ -67,6 +67,9 @@ int main(int argc, char *argv[]) {
 
   // Plot the results.
 //  plot_optics(host_grid, host_od, host_od_ssa, host_od_asym);
+
+  // Clean up.
+  // delete model;
 
   std::cout << "Finished!" << std::endl;
   return 0;

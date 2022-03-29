@@ -39,67 +39,71 @@ add_subdirectory(driver)
 
 if (NOT TESTS_ONLY)
   add_executable(fortran_driver ${AEROSOL_SRC}
-                                ${INTERFACE_SRC}
                                 ${DRIVER_F90_SRC})
 
   add_executable(cpp_driver     ${AEROSOL_SRC}
-                                ${INTERFACE_SRC}
                                 ${DRIVER_CPP_SRC})
 
   add_executable(c_driver       ${AEROSOL_SRC}
-                                ${INTERFACE_SRC}
                                 ${DRIVER_C_SRC})
 
-  target_include_directories(fortran_driver PUBLIC ${CMAKE_SOURCE_DIR})
-  target_include_directories(cpp_driver     PUBLIC ${CMAKE_SOURCE_DIR})
-  target_include_directories(c_driver       PUBLIC ${CMAKE_SOURCE_DIR})
+  foreach (lang fortran cpp c)
+    target_link_libraries(${lang}_driver PRIVATE ai)
+    target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR})
+    target_include_directories(${lang}_driver PUBLIC ${CMAKE_BINARY_DIR}/interface)
+    target_include_directories(${lang}_driver PUBLIC ${CMAKE_BINARY_DIR}/src)
+  endforeach(lang)
 endif ()
 
 ################################################################################
 # tests built from template code
 
+enable_testing()
+
 add_subdirectory(template)
 
 add_executable(test_fortran_aero_fortran_driver ${TEMPLATE_F90_SRC}
-                                                ${INTERFACE_SRC}
                                                 ${DRIVER_F90_SRC})
 
 add_executable(test_fortran_aero_cpp_driver     ${TEMPLATE_F90_SRC}
-                                                ${INTERFACE_SRC}
                                                 ${DRIVER_CPP_SRC})
 
 add_executable(test_fortran_aero_c_driver       ${TEMPLATE_F90_SRC}
-                                                ${INTERFACE_SRC}
                                                 ${DRIVER_C_SRC})
 
 add_executable(test_cpp_aero_fortran_driver     ${TEMPLATE_CPP_SRC}
-                                                ${INTERFACE_SRC}
                                                 ${DRIVER_F90_SRC})
 
 add_executable(test_cpp_aero_cpp_driver         ${TEMPLATE_CPP_SRC}
-                                                ${INTERFACE_SRC}
                                                 ${DRIVER_CPP_SRC})
 
 add_executable(test_cpp_aero_c_driver           ${TEMPLATE_CPP_SRC}
-                                                ${INTERFACE_SRC}
                                                 ${DRIVER_C_SRC})
 
-target_include_directories(test_fortran_aero_fortran_driver PUBLIC ${CMAKE_SOURCE_DIR})
-target_include_directories(test_fortran_aero_cpp_driver     PUBLIC ${CMAKE_SOURCE_DIR})
-target_include_directories(test_fortran_aero_c_driver       PUBLIC ${CMAKE_SOURCE_DIR})
-target_include_directories(test_cpp_aero_fortran_driver     PUBLIC ${CMAKE_SOURCE_DIR})
-target_include_directories(test_cpp_aero_cpp_driver         PUBLIC ${CMAKE_SOURCE_DIR})
-target_include_directories(test_cpp_aero_c_driver           PUBLIC ${CMAKE_SOURCE_DIR})
+add_executable(test_c_aero_fortran_driver       ${TEMPLATE_C_SRC}
+                                                ${DRIVER_F90_SRC})
 
-################################################################################
-# Add driver executables to test suite
+add_executable(test_c_aero_cpp_driver           ${TEMPLATE_C_SRC}
+                                                ${DRIVER_CPP_SRC})
 
-enable_testing()
-add_test(NAME fortran_aero_fortran_driver COMMAND test_fortran_aero_fortran_driver my_aerosol none)
-add_test(NAME fortran_aero_cpp_driver     COMMAND test_fortran_aero_cpp_driver     my_aerosol none)
-add_test(NAME fortran_aero_c_driver       COMMAND test_fortran_aero_c_driver       my_aerosol none)
-add_test(NAME cpp_aero_fortran_driver     COMMAND test_cpp_aero_fortran_driver     my_aerosol none)
-add_test(NAME cpp_aero_cpp_driver         COMMAND test_cpp_aero_cpp_driver         my_aerosol none)
-add_test(NAME cpp_aero_c_driver           COMMAND test_cpp_aero_c_driver           my_aerosol none)
+add_executable(test_c_aero_c_driver             ${TEMPLATE_C_SRC}
+                                                ${DRIVER_C_SRC})
+
+
+foreach (model_lang fortran cpp c)
+  foreach (driver_lang fortran cpp c)
+    set (test_name ${model_lang}_aero_${driver_lang}_driver)
+    set (driver_name test_${test_name})
+
+    # Set link libraries and include directories
+    target_link_libraries(${driver_name} PRIVATE ai)
+    target_include_directories(${driver_name} PUBLIC ${CMAKE_SOURCE_DIR})
+    target_include_directories(${driver_name} PUBLIC ${CMAKE_BINARY_DIR}/interface)
+    target_include_directories(${driver_name} PUBLIC ${CMAKE_BINARY_DIR}/template)
+
+    # Add tests to the test suite
+    add_test(NAME ${test_name} COMMAND ${driver_name} "my aerosol" none)
+  endforeach()
+endforeach()
 
 ################################################################################

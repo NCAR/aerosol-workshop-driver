@@ -37,6 +37,7 @@ end module
 program compute_aero_optics
 
   use ai_aerosol,                      only : aerosol_t
+  use ai_aerosol_factory,              only : create_aerosol
   use compute_aero_optics_mod
 
   character(len=255) :: package_name, desc_file
@@ -57,7 +58,7 @@ program compute_aero_optics
 
   ! Construct an aerosol model from the given package name and
   ! descriptor file.
-!  model = create_model(package_name, desc_file)
+  model => create_aerosol(package_name, desc_file)
 
   ! Use the model to create an initial aerosol state.
 !  state = model%create_state()

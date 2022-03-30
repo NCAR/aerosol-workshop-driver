@@ -7,7 +7,7 @@ function(get_suffix_from_language language suffix)
   endif()
 endfunction()
 
-if (NOT TESTS_ONLY)
+if (NOT AERO_TESTS_ONLY)
   foreach (lang fortran cpp c)
     get_suffix_from_language(${lang} suffix)
     add_executable(${lang}_driver compute_aero_optics.${suffix})

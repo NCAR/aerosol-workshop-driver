@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 11)
 ################################################################################
 # options
 
-option(TESTS_ONLY "Build only tests (ignores code in src/)" OFF)
+option(AERO_TESTS_ONLY "Build only tests (ignores code in src/)" OFF)
 
 ################################################################################
 # floating point precision
@@ -42,7 +42,7 @@ add_custom_target(copy_input_data ALL ${CMAKE_COMMAND} -E copy_directory
 ################################################################################
 # aerosol model source
 
-if (NOT TESTS_ONLY)
+if (NOT AERO_TESTS_ONLY)
   add_subdirectory(my_model)
 endif ()
 

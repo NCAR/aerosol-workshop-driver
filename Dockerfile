@@ -19,9 +19,9 @@ ARG BUILD=ALL
 # build the aerosol demo code
 RUN mkdir build \
     && cd build \
-    && if [ "$BUILD" = "TESTS_ONLY" ] ; then \
+    && if [ "$BUILD" = "AERO_TESTS_ONLY" ] ; then \
          echo "Building tests only" \
-         && cmake -D TESTS_ONLY:BOOL=TRUE ../aerosol \
+         && cmake -D AERO_TESTS_ONLY:BOOL=TRUE ../aerosol \
        ; else \
          echo "Building all" \
          && cmake ../aerosol \

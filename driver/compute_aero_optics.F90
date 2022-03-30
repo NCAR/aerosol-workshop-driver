@@ -36,8 +36,8 @@ end module
 
 program compute_aero_optics
 
-  use ai_aerosol,                      only : aerosol_t
-  use ai_aerosol_factory,              only : create_aerosol
+  use aero_model,                      only : model_t
+  use aero_model_factory,              only : create_model
   use compute_aero_optics_mod
 
   character(len=255) :: package_name, desc_file

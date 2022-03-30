@@ -46,15 +46,15 @@ if (NOT AERO_TESTS_ONLY)
   add_subdirectory(my_model)
 endif ()
 
+# Project-wide include directories
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_BINARY_DIR}/include)
+
 ################################################################################
 # aerosol interface library
 
 add_subdirectory(include)
 add_subdirectory(src)
-
-# Project-wide include directories
-include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_BINARY_DIR}/include)
 
 ################################################################################
 # mock model driver and tests

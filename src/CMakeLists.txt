@@ -1,7 +1,7 @@
 ################################################################################
 # Aerosol interface classes
 
-add_subdirectory(aerosol)
+add_subdirectory(model)
 add_subdirectory(array)
 add_subdirectory(grid)
 add_subdirectory(state)
@@ -9,12 +9,20 @@ add_subdirectory(state)
 ################################################################################
 # Aerosol interface library
 
-add_library(aero ai_constants.F90 ai_util.F90
-            ${AEROSOL_SRC}
-            ${ARRAY_SRC}
-            ${GRID_SRC}
-            ${STATE_SRC})
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/aero_constants.F90.in
+  ${CMAKE_CURRENT_BINARY_DIR}/aero_constants.F90
+  @ONLY
+)
 
-target_include_directories(aero PUBLIC ${CMAKE_SOURCE_DIR}/include)
+add_library(aero
+            ${CMAKE_CURRENT_BINARY_DIR}/aero_constants.F90
+            aero_util.F90
+            ${model_src}
+            ${array_src}
+            ${grid_src}
+            ${state_src})
+
+target_include_directories(aero PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
 ################################################################################

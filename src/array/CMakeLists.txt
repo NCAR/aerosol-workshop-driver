@@ -1,8 +1,5 @@
-################################################################################
-# Aerosol interface source
-set(ARRAY_SRC array/ai_array.c
-              array/ai_array.cpp
-              array/ai_bridge_array.cpp
-              PARENT_SCOPE)
-
-################################################################################
+# Aerosol array implementations
+foreach (src array.c array.cpp array_bridge.cpp)
+  list(APPEND array_src ${CMAKE_CURRENT_SOURCE_DIR}/${src})
+endforeach()
+set(array_src ${array_src} PARENT_SCOPE)

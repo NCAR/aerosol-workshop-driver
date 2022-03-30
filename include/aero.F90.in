@@ -1,0 +1,7 @@
+module aero
+  implicit none
+
+  public
+
+  integer, parameter :: real_k = @AERO_REAL_KIND@
+end module

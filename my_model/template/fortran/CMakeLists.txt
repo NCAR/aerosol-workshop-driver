@@ -1,8 +1,6 @@
 ################################################################################
 # Aerosol source code
 
-set( AEROSOL_SRC src/my_aerosol.F90
-                 src/aerosol_factory.F90
-                 PARENT_SCOPE )
+add_library(my_model my_aerosol.F90 aerosol_factory.F90)
 
 ################################################################################

@@ -1,0 +1,7 @@
+#ifndef AERO_H
+#define AERO_H
+
+/// Floating point type (with proper precision).
+typedef @AERO_REAL_TYPE@ real_t;
+
+#endif

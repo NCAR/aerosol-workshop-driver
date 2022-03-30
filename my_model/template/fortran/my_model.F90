@@ -4,23 +4,23 @@
 !> \file
 !> Implementation of an aerosol model
 
-!> The my_aerosol_t type and related functions
-module my_aerosol
+!> The my_model_t type and related functions
+module my_model
 
-  use ai_aerosol,                      only : aerosol_t
-  use ai_constants,                    only : double_kind
+  use aero_model,                      only : model_t
+  use aero_constants,                  only : real_kind
 
   implicit none
   private
 
-  public :: my_aerosol_t
+  public :: my_model_t
 
-  type, extends(aerosol_t) :: my_aerosol_t
+  type, extends(model_t) :: my_model_t
   contains
     procedure :: get_optics
-  end type my_aerosol_t
+  end type my_model_t
 
-  interface my_aerosol_t
+  interface my_model_t
     module procedure :: constructor
   end interface
 
@@ -29,12 +29,12 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Creates and configure the aerosol model
-  function constructor( description_file ) result( aerosol )
+  function constructor( description_file ) result( model )
 
-    type(my_aerosol_t), pointer    :: aerosol
-    character(len=*),   intent(in) :: description_file
+    type(my_model_t), pointer    :: model
+    character(len=*), intent(in) :: description_file
 
-    allocate( aerosol )
+    allocate( model )
 
   end function constructor
 
@@ -43,12 +43,12 @@ contains
   subroutine get_optics( this, optics )
 
     !> My aerosol model
-    class(my_aerosol_t),    intent(inout) :: this
+    class(my_model_t),    intent(inout) :: this
     !> Calculated optical properties
-    real(kind=double_kind), intent(out)   :: optics(:)
+    real(kind=real_kind), intent(out)   :: optics(:)
 
   end subroutine get_optics
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-end module my_aerosol
+end module my_model

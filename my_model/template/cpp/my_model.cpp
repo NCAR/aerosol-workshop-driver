@@ -9,13 +9,13 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "my_aerosol.hpp"
+#include "my_model.hpp"
 
 namespace mya {
 
-MyAerosol::MyAerosol() {}
+MyModel::MyModel() {}
 
-void MyAerosol::GetOptics(double *optics) {
+void MyModel::GetOptics(double *optics) {
   // calculate optics
 }
 

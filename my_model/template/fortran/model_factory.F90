@@ -10,6 +10,7 @@ module aero_model_factory
   use aero_model,                      only : model_t
   use aero_c_model,                    only : c_model_t
   use aero_cpp_model,                  only : cpp_model_t
+  use my_model,                        only : my_model_t
 
   implicit none
   private
@@ -29,6 +30,10 @@ contains
     character(len=*), intent(in) :: package_name
     character(len=*), intent(in) :: description_file
 
+    if( trim( package_name ) == "my model" ) then
+      model => my_model_t( description_file )
+      return
+    end if
     model => c_model_t( package_name, description_file )
     if( .not. associated( model ) ) then
       model => cpp_model_t( package_name, description_file )
@@ -48,6 +53,7 @@ contains
     character(len=*), intent(in) :: package_name
 
     is_fortran_model = .false.
+    if( trim( package_name ) == "my model" ) is_fortran_model = .true.
 
   end function is_fortran_model
 
@@ -63,6 +69,10 @@ contains
     character(len=*), intent(in) :: package_name
     character(len=*), intent(in) :: description_file
 
+    if( trim( package_name ) == "my model" ) then
+      model => my_model_t( description_file )
+      return
+    end if
     call die_msg( 611497899, "Aerosol package '"//package_name//              &
                              "'not supported in Fortran" )
 

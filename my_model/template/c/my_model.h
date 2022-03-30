@@ -9,12 +9,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#ifndef AI_MY_AEROSOL_H
-#define AI_MY_AEROSOL_H
+#ifndef AI_MY_MODEL_H
+#define AI_MY_MODEL_H
 
-#include "interface/aerosol/ai_aerosol.h"
+#include "aero/model/model.h"
 
 /// Implement this function to create your aerosol model.
-ai_aerosol_t* my_aerosol_new(const char *description_file);
+aero_model_t* my_model_new(const char *description_file);
 
-#endif // AI_MY_AEROSOL_H
+#endif // AI_MY_MODEL_H

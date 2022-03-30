@@ -10,16 +10,16 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
-#include "interface/aerosol/ai_aerosol.hpp"
+#include "aero/model/model.hpp"
 
 namespace mya {
 
 /// \brief My aerosol model
-class MyAerosol : public ai::Aerosol {
+class MyModel : public aero::Model {
 
 public:
-  MyAerosol();
-  virtual ~MyAerosol() {}
+  MyModel();
+  virtual ~MyModel() {}
   void GetOptics(double *optics);
 
 private:

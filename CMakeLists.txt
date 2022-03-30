@@ -45,6 +45,7 @@ add_custom_target(copy_input_data ALL ${CMAKE_COMMAND} -E copy_directory
 if (NOT AERO_TESTS_ONLY)
   add_subdirectory(my_model)
 endif ()
+add_subdirectory(my_model/template)
 
 # Project-wide include directories
 include_directories(${PROJECT_SOURCE_DIR}/include)
@@ -59,5 +60,6 @@ add_subdirectory(src)
 ################################################################################
 # mock model driver and tests
 
+enable_testing()
 add_subdirectory(driver)
 

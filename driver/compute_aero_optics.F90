@@ -42,7 +42,7 @@ program compute_aero_optics
 
   character(len=255) :: package_name, desc_file
 
-  class(aerosol_t), pointer :: model => null( ) ! polymorphic
+  class(model_t), pointer :: model => null( ) ! polymorphic
 !  type(state_t)           :: state
 !  type(grid_t)            :: host_grid, aero_grid  ! wavelength grids for radiative properties
 !  type(array_t)           :: host_od, host_od_ssa, host_od_asym
@@ -58,7 +58,7 @@ program compute_aero_optics
 
   ! Construct an aerosol model from the given package name and
   ! descriptor file.
-  model => create_aerosol(package_name, desc_file)
+  model => create_model(package_name, desc_file)
 
   ! Use the model to create an initial aerosol state.
 !  state = model%create_state()

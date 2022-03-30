@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "interface/aerosol/ai_aerosol.hpp"
+#include "aero/model/model.hpp"
 
 namespace {
 
@@ -11,13 +11,13 @@ void usage(const std::string &exe_name) {
 }
 
 // This helper creates an array whose data conforms to the given grid.
-//ai::Array create_array_from_grid(const ai::Grid &grid) {
+//aero::Array create_array_from_grid(const aero::Grid &grid) {
   // TODO
 //}
 
 // This helper plots the aerosol optics data on the given grid.
-//void plot_optics(const ai::Grid &grid, const ai::Array &od,
-//                 const ai::Array &od_ssa, const ai::Array &od_asym) {
+//void plot_optics(const aero::Grid &grid, const aero::Array &od,
+//                 const aero::Array &od_ssa, const aero::Array &od_asym) {
   // TODO
 //}
 
@@ -34,28 +34,28 @@ int main(int argc, char *argv[]) {
 
   // Construct an aerosol model from the given package name and
   // descriptor file.
-  ai::Aerosol* model; // = ai::create_model(package_name, desc_file);
+  aero::Model* model; // = aero::create_model(package_name, desc_file);
 
   // Use the model to create an aerosol state.
-//  ai::State state = model.create_state();
+//  aero::State state = model.create_state();
 
   // The host wavelength grid to which optical properties are interpolated.
-//  ai::Grid host_grid = create_host_wavelength_grid();
+//  aero::Grid host_grid = create_host_wavelength_grid();
 
   // The grid the model uses to compute optical properties.
-//  ai::Grid aero_grid = model.optics_grid();
+//  aero::Grid aero_grid = model.optics_grid();
 
   // An interpolator that interpolates data from aero_grid to host_grid,
   // using a pre-selected scheme.
-//  ai::Interp interp = create_interpolator(aero_grid, host_grid);
+//  aero::Interp interp = create_interpolator(aero_grid, host_grid);
 
   // Make some arrays to store optical properties on the host and model grids.
-//  ai::Array host_od      = create_array_from_grid(host_grid);
-//  ai::Array host_od_ssa  = create_array_from_grid(host_grid);
-//  ai::Array host_od_asym = create_array_from_grid(host_grid);
-//  ai::Array aero_od      = create_array_from_grid(aero_grid);
-//  ai::Array aero_od_ssa  = create_array_from_grid(aero_grid);
-//  ai::Array aero_od_asym = create_array_from_grid(aero_grid);
+//  aero::Array host_od      = create_array_from_grid(host_grid);
+//  aero::Array host_od_ssa  = create_array_from_grid(host_grid);
+//  aero::Array host_od_asym = create_array_from_grid(host_grid);
+//  aero::Array aero_od      = create_array_from_grid(aero_grid);
+//  aero::Array aero_od_ssa  = create_array_from_grid(aero_grid);
+//  aero::Array aero_od_asym = create_array_from_grid(aero_grid);
 
   // Have the aerosol model compute its optical properties on its native grid.
 //  model.compute_optics(state, aero_od, aero_od_ssa, aero_od_asym);

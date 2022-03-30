@@ -4,8 +4,9 @@ build/
 **/CMakeFiles/
 
 # Aerosol source code
-src/*
-!src/README
+my_model/*
+!my_model/README
+!my_model/template/
 
 # Model output
 output/*

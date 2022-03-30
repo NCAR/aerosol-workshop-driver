@@ -1,0 +1,13 @@
+! Copyright (C) 2022 National Center for Atmospheric Research
+! SPDX-License-Identifier: Apache-2.0
+!
+!> \file
+!> General usage constants
+module aero_constants
+
+  implicit none
+
+  integer, parameter :: real_kind = @AERO_REAL_KIND@
+
+end module aero_constants
+

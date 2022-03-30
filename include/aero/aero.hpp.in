@@ -1,0 +1,7 @@
+#ifndef AERO_HPP
+#define AERO_HPP
+
+/// Floating point type (with proper precision).
+using Real = @AERO_REAL_TYPE@;
+
+#endif

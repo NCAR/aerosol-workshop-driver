@@ -8,7 +8,6 @@
 module aero_model
 
   use aero_constants,              only : real_kind
-  use iso_c_binding
 
   implicit none
   private

@@ -11,7 +11,7 @@ module aero_array
   implicit none
   private
 
-  public :: array_t
+  public :: array_t, array_ptr
 
   type :: array_t
     private
@@ -27,6 +27,12 @@ module aero_array
     module procedure :: constructor
     module procedure :: constructor_array
   end interface
+
+  type :: array_ptr
+    class(array_t), pointer :: ptr_ => null( )
+  contains
+    final :: array_ptr_finalize
+  end type array_ptr
 
 contains
 
@@ -65,8 +71,8 @@ contains
   !> Copies data into an Array
   subroutine copy_in( to, from )
 
-    class(array_t),       intent(inout) :: to
-    real(kind=real_kind), intent(in)    :: from(:)
+    class(array_t),       intent(inout)        :: to
+    real(kind=real_kind), intent(in),   target :: from(:)
 
     to%data_(:) = from(:)
 
@@ -77,8 +83,8 @@ contains
   !> Copies data out of an Array
   subroutine copy_out( to, from )
 
-    real(kind=real_kind), intent(inout) :: to(:)
-    class(array_t),       intent(in)    :: from
+    real(kind=real_kind), intent(inout), target :: to(:)
+    class(array_t),       intent(in)            :: from
 
     to(:) = from%data_(:)
 
@@ -97,6 +103,17 @@ contains
     end if
 
   end function array_size
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Finalize an array pointer by deallocating the target
+  subroutine array_ptr_finalize( this )
+
+    type(array_ptr), intent(inout) :: this
+
+    if( associated( this%ptr_ ) ) deallocate( this%ptr_ )
+
+  end subroutine array_ptr_finalize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

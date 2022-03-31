@@ -2,6 +2,6 @@
 #define AERO_H
 
 /// Floating point type (with proper precision).
-typedef @AERO_REAL_TYPE@ real_t;
+typedef @AERO_REAL_TYPE@ aero_real_t;
 
 #endif

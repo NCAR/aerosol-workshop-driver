@@ -3,42 +3,48 @@
 
 namespace aero {
 
-class Grid {
+/// Simple container for storing grid lower/upper bounds.
+struct GridBounds {
+  Real lower, upper;
+};
+
+/// This type represents a computional grid consisting of a set of contiguous
+/// segments separated by interfaces. The grid keeps track of the midpoints
+/// between interfaces.
+class Grid final {
 public:
-  /// Default constructor.
-  Grid() = default;
-  /// Copy constructor
-  Grid(const Grid& other) = default;
+  // No Default constructor for Grids
+  Grid() = delete;
+  // No copy constructor, either
+  Grid(const Grid& other) = delete;
+
+  /// Creates a Grid from an Array containing points delimiting the interfaces
+  /// between segments. The Grid assumes ownership of this array.
+  explicit Grid(Array&& interfaces);
+
   /// Move constructor
   Grid(Grid&& other) = default;
 
   /// Destructor
-  virtual ~Grid() {}
+  ~Grid();
 
-  /// Assignment operator
-  Grid& operator=(const Grid&) = default;
   /// Default move assignment operator
   Grid& operator=(Grid&&) = default;
-};
 
-/// This Grid subclass allows access to arrays implemented in Fortran.
-class FortranGrid: public Grid {
-public:
+  /// Returns the lower bound (minimum grid interface point) for the grid.
+  GridBounds bounds() const { return bounds_; }
 
-  /// Construct an aerosol model wrapped around a Fortran implementation
-  /// that can be accessed with the given pointer.
-  explicit FortranGrid(void *fortran_pointer);
+  /// Provides const access to the array containing grid interfaces.
+  const Array& interfaces() const { return interfaces_; }
 
-  // Overridden functionality
+  /// Provides const access to the array containing grid segment midpoints.
+  const Array& midpoints() const { return midpoints_; }
 
-  FortranGrid(FortranGrid& other);
-  FortranGrid(FortranGrid&& other);
-  ~FortranGrid() override;
-
-  FortranGrid& operator=(FortranGrid& other);
-  FortranGrid& operator=(FortranGrid&& other);
-
-  void *f_ptr_; // pointer to Fortran grid implementation
+private:
+  // Arrays containing interfaces and segment midpoints.
+  Array interfaces_, midpoints_;
+  // Lower and upper bounds.
+  GridBounds bounds_;
 };
 
 } // namespace aero

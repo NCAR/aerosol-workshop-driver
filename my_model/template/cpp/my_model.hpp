@@ -9,8 +9,7 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#pragma once
-#include "aero/model/model.hpp"
+#include <aero/model/model.hpp>
 
 namespace mya {
 

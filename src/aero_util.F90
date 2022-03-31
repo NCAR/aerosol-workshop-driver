@@ -5,7 +5,7 @@
 !> Fortran utility functions
 
 !> Fortran utility functions
-module ai_util
+module aero_util
 
   implicit none
 
@@ -26,7 +26,7 @@ contains
 
     call assert_msg( code, .false., error_message )
 
-  end subroutine die_msg
+  end subroutine
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -40,7 +40,7 @@ contains
 
     call assert_msg( code, condition, 'assertion failed' )
 
-  end subroutine assert
+  end subroutine
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -63,8 +63,8 @@ contains
       stop 3
     end if
 
-  end subroutine assert_msg
+  end subroutine
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-end module ai_util
+end module

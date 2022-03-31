@@ -12,7 +12,7 @@
 #ifndef AERO_ARRAY_BRIDGE_H
 #define AERO_ARRAY_BRIDGE_H
 
-#include "aero/aero.h"
+#include <aero/aero.h>
 
 #ifdef __cplusplus
 extern "C" {

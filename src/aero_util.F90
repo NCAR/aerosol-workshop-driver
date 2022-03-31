@@ -5,7 +5,7 @@
 !> Fortran utility functions
 
 !> Fortran utility functions
-module ai_util
+module aero_util
 
   implicit none
 
@@ -67,4 +67,4 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-end module ai_util
+end module aero_util

@@ -42,14 +42,15 @@ add_custom_target(copy_input_data ALL ${CMAKE_COMMAND} -E copy_directory
 ################################################################################
 # aerosol model source
 
+# Project-wide include directories
+include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_BINARY_DIR}/include)
+include_directories(${PROJECT_BINARY_DIR}/src)
+
 if (NOT AERO_TESTS_ONLY)
   add_subdirectory(my_model)
 endif ()
 add_subdirectory(my_model/template)
-
-# Project-wide include directories
-include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_BINARY_DIR}/include)
 
 ################################################################################
 # aerosol interface library

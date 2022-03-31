@@ -3,6 +3,10 @@
 
 #include <aero/array/array.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /// This type represents a computional grid consisting of a set of contiguous
 /// segments separated by interfaces. The grid keeps track of the midpoints
 /// between interfaces.
@@ -29,5 +33,9 @@ aero_array_t* aero_grid_interfaces(aero_grid_t *grid);
 
 /// Provides access to the array containing grid segment midpoints.
 aero_array_t* aero_grid_midpoints(aero_grid_t *grid);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif

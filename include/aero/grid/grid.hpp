@@ -22,6 +22,14 @@ public:
   /// between segments. The Grid assumes ownership of this array.
   explicit Grid(Array&& interfaces);
 
+  /// Creates a Grid from a C pointer to a Grid. The Grid itself is copied
+  /// so it lives in both C and C++ runtimes.
+  static Grid from_c_ptr(void *c_ptr);
+
+  /// Creates a Grid from a Fortran pointer to a Grid. The Grid itself is copied
+  /// so it lives in both Fortran and C++ runtimes.
+  static Grid from_fortran_ptr(void *f_ptr);
+
   /// Move constructor
   Grid(Grid&& other) = default;
 

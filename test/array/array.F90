@@ -20,7 +20,7 @@ contains
   subroutine test_array_t( )
 
     use aero_constants,                only : rk => real_kind
-    use ai_util,                       only : assert
+    use aero_util,                     only : assert
 
     type(array_t) :: a, b
     real(kind=rk) :: ra(4), rb(4)

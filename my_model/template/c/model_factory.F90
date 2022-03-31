@@ -23,7 +23,7 @@ contains
   !> Builder of all-language aerosol model objects
   function create_model( package_name, description_file ) result( model )
 
-    use ai_util,                       only : die_msg
+    use aero_util,                       only : die_msg
 
     class(model_t), pointer      :: model
     character(len=*), intent(in) :: package_name
@@ -57,7 +57,7 @@ contains
   function create_fortran_model( package_name, description_file )             &
       result( model )
 
-    use ai_util,                       only : die_msg
+    use aero_util,                       only : die_msg
 
     class(model_t),   pointer    :: model
     character(len=*), intent(in) :: package_name

@@ -26,7 +26,7 @@ contains
 
     call assert_msg( code, .false., error_message )
 
-  end subroutine
+  end subroutine die_msg
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -40,7 +40,7 @@ contains
 
     call assert_msg( code, condition, 'assertion failed' )
 
-  end subroutine
+  end subroutine assert
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -63,7 +63,7 @@ contains
       stop 3
     end if
 
-  end subroutine
+  end subroutine assert_msg
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

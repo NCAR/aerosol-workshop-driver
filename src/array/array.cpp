@@ -16,8 +16,20 @@ namespace aero {
     return *this;
   }
 
+  Array* Array::clone() const {
+    return new Array(*this);
+  }
+
+  void Array::copy_in(const Real *input) {
+    for (int i=0; i<this->values_.size(); ++i) this->values_[i] = input[i];
+  }
+
   void Array::copy_in(const std::vector<Real> &input) {
     this->values_ = input;
+  }
+
+  void Array::copy_out(Real *output) const {
+    for (int i=0; i<this->values_.size(); ++i) output[i] = this->values_[i];
   }
 
   void Array::copy_out(std::vector<Real> &output) const {

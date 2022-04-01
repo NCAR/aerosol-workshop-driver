@@ -33,12 +33,18 @@ public:
   /// Default move assignment operator
   Array& operator=(Array&&) = default;
 
+  /// Returns a clone (deep-copy) of an Array
+  virtual Array* clone() const;
   /// Copies data into an Array
-  void copy_in(const std::vector<Real> &input);
+  virtual void copy_in(const Real *input);
+  /// Copies data into an Array
+  virtual void copy_in(const std::vector<Real> &input);
   /// Copies data out of an Array
-  void copy_out(std::vector<Real> &output) const;
+  virtual void copy_out(Real *output) const;
+  /// Copies data out of an Array
+  virtual void copy_out(std::vector<Real> &output) const;
   /// Returns the number of elements in an Array
-  unsigned int size() const;
+  virtual unsigned int size() const;
 
 private:
   std::vector<Real> values_;

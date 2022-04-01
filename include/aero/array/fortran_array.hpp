@@ -1,5 +1,5 @@
-#ifndef AERO_ARRAY_HPP
-#define AERO_ARRAY_HPP
+#ifndef AERO_FORTRAN_ARRAY_HPP
+#define AERO_FORTRAN_ARRAY_HPP
 
 #include <aero/array/array.hpp>
 
@@ -9,20 +9,39 @@ namespace aero {
 /// Fortran.
 class FortranArray: public Array {
 public:
-
-  /// Construct an aerosol model wrapped around a Fortran implementation
-  /// that can be accessed with the given pointer.
-  explicit FortranArray(void *fortran_pointer);
-
-  // Overridden functionality
-
-  FortranArray(FortranArray& other);
+  /// Default constructor
+  FortranArray() = delete;
+  /// Copy constructor
+  FortranArray(const FortranArray& other);
+  /// Move constructor
   FortranArray(FortranArray&& other);
+  /// Construct from a pointer to a Fortran-backed Array
+  FortranArray(void *fortran_array);
+
+  /// Destructor
   ~FortranArray() override;
 
+  /// Copy assignment operator
   FortranArray& operator=(FortranArray& other);
-  FortranArray& operator=(FortranArray&& other);
+  /// Assignment from a vector of Reals
+  FortranArray& operator=(const std::vector<Real> &values);
+  /// Default move assignment operator
+  FortranArray& operator=(FortranArray&&);
 
+  /// Returns a clone (deep-copy) of an array
+  Array* clone() const;
+  /// Copies data into an Array
+  void copy_in(const Real *input) override;
+  /// Copies data into an Array
+  void copy_in(const std::vector<Real> &input) override;
+  /// Copies data out of an Array
+  void copy_out(Real *output) const override;
+  /// Copies data out of an Array
+  void copy_out(std::vector<Real> &output) const override;
+  /// Returns the number of elements in an Array
+  unsigned int size() const override;
+
+private:
   void *f_ptr_; // pointer to Fortran array implementation
 };
 

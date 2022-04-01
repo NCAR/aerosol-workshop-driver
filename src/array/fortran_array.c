@@ -37,7 +37,7 @@ void aero_fortran_array_free(aero_array_t *array) {
   free(array);
 }
 
-void aero_fortran_array_copy_in(aero_array_t *array, aero_real_t *from) {
+void aero_fortran_array_copy_in(aero_array_t *array, const aero_real_t *from) {
   aero_bridge_fortran_array_copy_in(array->data_->fortran_array_, from);
 }
 

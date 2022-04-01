@@ -9,6 +9,7 @@ program test_array
 
   use aero_array,                      only : array_t
   use aero_c_array,                    only : c_array_t
+  use aero_cpp_array,                  only : cpp_array_t
   use iso_c_binding
 
   implicit none
@@ -18,6 +19,13 @@ program test_array
     type(c_ptr) function test_array_create_c_array() bind(c)
       use iso_c_binding
     end function test_array_create_c_array
+  end interface
+
+  ! cpp support functions
+  interface
+    type(c_ptr) function test_array_create_cpp_array() bind(c)
+      use iso_c_binding
+    end function test_array_create_cpp_array
   end interface
 
   call test_array_t( )
@@ -65,6 +73,21 @@ contains
     rb(:) = 0.0_rk
     call b%copy_out( rb )
     call assert( 368839302, rb(3) == -132.45_rk )
+    deallocate( a )
+    deallocate( b )
+
+    ! cpp array
+    a => cpp_array_t( test_array_create_cpp_array( ) )
+    call assert( 437330843, a%size( ) == 4 )
+    call a%copy_out( rb )
+    call assert( 267173939, rb(3) == -1.0e9_rk )
+    call a%copy_in( ra )
+    call a%copy_out( rb )
+    call assert( 714541785, rb(3) == -132.45_rk )
+    b => a%clone( )
+    rb(:) = 0.0_rk
+    call b%copy_out( rb )
+    call assert( 544384881, rb(3) == -132.45_rk )
     deallocate( a )
     deallocate( b )
 

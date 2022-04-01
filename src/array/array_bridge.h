@@ -44,13 +44,13 @@ void aero_bridge_cpp_array_free(void *array);
 void aero_bridge_fortran_array_free(void *array);
 
 /// Copies data into the given C array
-void aero_bridge_c_array_copy_in(void *array, aero_real_t *input);
+void aero_bridge_c_array_copy_in(void *array, const aero_real_t *input);
 
 /// Copies data into the given C++ array
-void aero_bridge_cpp_array_copy_in(void *array, aero_real_t *input);
+void aero_bridge_cpp_array_copy_in(void *array, const aero_real_t *input);
 
 /// Copies data into the given Fortran array
-void aero_bridge_fortran_array_copy_in(void *array, aero_real_t *input);
+void aero_bridge_fortran_array_copy_in(void *array, const aero_real_t *input);
 
 /// Copies data out of the given C array
 void aero_bridge_c_array_copy_out(void *array, aero_real_t *output);

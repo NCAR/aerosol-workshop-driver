@@ -51,7 +51,7 @@ void aero_array_free(aero_array_t *array) {
   free(array);
 }
 
-void aero_array_copy_in(aero_array_t *array, aero_real_t *from) {
+void aero_array_copy_in(aero_array_t *array, const aero_real_t *from) {
   for (int i=0; i<array->data_->size_; ++i) array->data_->values_[i] = from[i];
 }
 

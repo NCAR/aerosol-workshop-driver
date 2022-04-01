@@ -21,7 +21,7 @@ typedef struct aero_array_t {
   /// frees resources associated with an array
   void (*free)(aero_array_t *array);
   /// copies data into an array
-  void (*copy_in)(aero_array_t *array, aero_real_t *from);
+  void (*copy_in)(aero_array_t *array, const aero_real_t *from);
   /// copies data out of an array
   void (*copy_out)(aero_array_t *array, aero_real_t *to);
   /// returns the number of elements in an array
@@ -43,7 +43,7 @@ aero_array_t* aero_array_clone(aero_array_t *from);
 void aero_array_free(aero_array_t *array);
 
 /// Copies values into an array
-void aero_array_copy_in(aero_array_t *array, aero_real_t *from);
+void aero_array_copy_in(aero_array_t *array, const aero_real_t *from);
 
 /// Copies values out of an array
 void aero_array_copy_out(aero_array_t *array, aero_real_t *to);

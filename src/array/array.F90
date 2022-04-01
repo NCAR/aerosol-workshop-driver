@@ -17,8 +17,8 @@ module aero_array
     private
     real(kind=real_kind), allocatable :: data_(:)
   contains
+    procedure, pass(from) :: clone
     procedure, pass(to) :: copy_in
-    generic :: assignment(=) => copy_in
     procedure, pass(from) :: copy_out
     procedure :: size => array_size
   end type array_t
@@ -41,10 +41,11 @@ contains
   !> Creates an Array object from a number of elements and an initial value
   function constructor( number_of_elements, initial_value ) result( array )
 
-    type(array_t)                              :: array
+    class(array_t),       pointer              :: array
     integer,              intent(in)           :: number_of_elements
     real(kind=real_kind), intent(in), optional :: initial_value
 
+    allocate( array )
     allocate( array%data_( number_of_elements ) )
     if( present( initial_value ) ) then
       array%data_(:) = initial_value
@@ -59,12 +60,25 @@ contains
   !> Creates an Array based on the shape and values of a primitive type array
   function constructor_array( from_array ) result( array )
 
-    type(array_t)                    :: array
+    class(array_t),       pointer    :: array
     real(kind=real_kind), intent(in) :: from_array(:)
 
+    allocate( array )
     array%data_ = from_array
 
   end function constructor_array
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Creates a clone (deep-copy) of an array
+  function clone( from )
+
+    class(array_t), pointer :: clone
+    class(array_t), intent(in) :: from
+
+    allocate( clone, SOURCE = from )
+
+  end function clone
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

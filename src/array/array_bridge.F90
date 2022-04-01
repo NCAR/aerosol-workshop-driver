@@ -55,7 +55,7 @@ contains
   type(c_ptr) function aero_bridge_fortran_array_clone( from_c_ptr )          &
       result( to_c_ptr ) bind(c)
 
-    type(c_ptr), intent(in) :: from_c_ptr
+    type(c_ptr), value, intent(in) :: from_c_ptr
 
     type(array_ptr), pointer :: from_ptr, to_ptr
 
@@ -71,7 +71,7 @@ contains
   !> Frees resources associated with the given Fortran array
   subroutine aero_bridge_fortran_array_free( array_c_ptr ) bind(c)
 
-    type(c_ptr), intent(inout) :: array_c_ptr
+    type(c_ptr), value, intent(in) :: array_c_ptr
 
     type(array_ptr), pointer :: array_ptr
 
@@ -83,27 +83,29 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Copies data into the given Fortran array
-  subroutine aero_bridge_fortran_copy_in( array_c_ptr, input_c_ptr ) bind(c)
+  subroutine aero_bridge_fortran_array_copy_in( array_c_ptr, input_c_ptr )    &
+      bind(c)
 
-    type(c_ptr), intent(inout) :: array_c_ptr
-    type(c_ptr), intent(in)    :: input_c_ptr
+    type(c_ptr), value, intent(in) :: array_c_ptr
+    type(c_ptr), value, intent(in) :: input_c_ptr
 
     type(array_ptr),      pointer :: array_ptr
     real(kind=real_kind), pointer :: input_ptr(:)
 
     call c_f_pointer( array_c_ptr, array_ptr )
     call c_f_pointer( input_c_ptr, input_ptr, (/ array_ptr%ptr_%size( ) /) )
-    array_ptr%ptr_ = input_ptr
+    call array_ptr%ptr_%copy_in( input_ptr )
 
-  end subroutine aero_bridge_fortran_copy_in
+  end subroutine aero_bridge_fortran_array_copy_in
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Copies data out of the given Fortran array
-  subroutine aero_bridge_fortran_copy_out( array_c_ptr, output_c_ptr ) bind(c)
+  subroutine aero_bridge_fortran_array_copy_out( array_c_ptr, output_c_ptr )  &
+      bind(c)
 
-    type(c_ptr), intent(in)    :: array_c_ptr
-    type(c_ptr), intent(inout) :: output_c_ptr
+    type(c_ptr), value, intent(in) :: array_c_ptr
+    type(c_ptr), value, intent(in) :: output_c_ptr
 
     type(array_ptr),      pointer :: array_ptr
     real(kind=real_kind), pointer :: output_ptr(:)
@@ -112,7 +114,7 @@ contains
     call c_f_pointer( output_c_ptr, output_ptr, (/ array_ptr%ptr_%size( ) /) )
     call array_ptr%ptr_%copy_out( output_ptr )
 
-  end subroutine aero_bridge_fortran_copy_out
+  end subroutine aero_bridge_fortran_array_copy_out
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -120,7 +122,7 @@ contains
   integer(kind=c_int) function aero_bridge_fortran_array_size( array_c_ptr )  &
       result( array_size ) bind(c)
 
-    type(c_ptr), intent(in) :: array_c_ptr
+    type(c_ptr), value, intent(in) :: array_c_ptr
 
     type(array_ptr), pointer :: array_ptr
 

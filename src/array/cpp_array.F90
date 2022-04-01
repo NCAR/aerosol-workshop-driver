@@ -19,9 +19,8 @@ module aero_cpp_array
     private
     type(c_ptr) :: array_ = c_null_ptr
   contains
-    procedure, pass(to) :: copy_in
-    procedure, pass(to) :: clone
-    generic :: assignment(=) => clone
+    procedure, pass(from) :: clone
+    procedure, pass(to)   :: copy_in
     procedure, pass(from) :: copy_out
     procedure :: size => array_size
     final :: finalize
@@ -94,6 +93,22 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  !> Clones an Array
+  function clone( from )
+
+    class(array_t),     pointer    :: clone
+    class(cpp_array_t), intent(in) :: from
+
+    allocate( cpp_array_t :: clone )
+    select type( clone )
+    class is( cpp_array_t )
+      clone%array_ =  aero_bridge_cpp_array_clone( from%array_ )
+    end select
+
+  end function clone
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   !> Copies data into an Array
   subroutine copy_in( to, from )
 
@@ -106,18 +121,6 @@ contains
     call aero_bridge_cpp_array_copy_in( to%array_, from_c )
 
   end subroutine copy_in
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  !> Clones an Array
-  subroutine clone( to, from )
-
-    class(cpp_array_t), intent(inout) :: to
-    type(cpp_array_t),  intent(in)    :: from
-
-    to%array_ =  aero_bridge_cpp_array_clone( from%array_ )
-
-  end subroutine clone
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

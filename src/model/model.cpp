@@ -25,7 +25,7 @@ void aero_fortran_model_compute_optics(void *model_ptr,
 }
 
 namespace aero {
-
+#if 0
 FortranModel::FortranModel(void *fortran_pointer):
   Model(),
   f_ptr_(fortran_pointer) {}
@@ -49,5 +49,5 @@ void FortranModel::compute_optics(const State& state,
   aero_fortran_model_compute_optics(f_ptr_, f_state.f_ptr_, f_od.f_ptr_,
                                     f_od_ssa.f_ptr_, f_od_asym.f_ptr_);
 }
-
+#endif
 } // aero namespace

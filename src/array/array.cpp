@@ -3,40 +3,29 @@
 
 namespace aero {
 
-FortranArray::FortranArray(void *fortran_pointer):
-  f_ptr_(fortran_pointer) {}
+  Array::Array(const unsigned int number_of_elements) :
+    values_(number_of_elements, 0.0) {}
 
-FortranArray::FortranArray(FortranArray& other):
-  f_ptr_(nullptr) {
-  f_ptr_ = aero_bridge_fortran_array_clone(other.f_ptr_);
-}
+  Array:: Array(const unsigned int number_of_elements,
+      const Real initial_value) : values_(number_of_elements, initial_value) {}
 
-FortranArray::FortranArray(FortranArray&& other):
-  f_ptr_(nullptr) {
-  f_ptr_ = other.f_ptr_;
-  other.f_ptr_ = nullptr;
-}
+  Array::Array(const std::vector<Real> &values) : values_(values) {}
 
-FortranArray::~FortranArray() {
-  aero_bridge_fortran_array_free(f_ptr_);
-}
-
-FortranArray& FortranArray::operator=(FortranArray& other) {
-  if (this != &other) {
-    if (f_ptr_) {
-      aero_bridge_fortran_array_free(f_ptr_);
-    }
-    f_ptr_ = aero_bridge_fortran_array_clone(other.f_ptr_);
+  Array& Array::operator=(const std::vector<Real> &values) {
+    this->values_ = values;
+    return *this;
   }
-  return *this;
-}
 
-FortranArray& FortranArray::operator=(FortranArray&& other) {
-  if (this != &other) {
-    f_ptr_ = other.f_ptr_;
-    other.f_ptr_ = nullptr;
+  void Array::copy_in(const std::vector<Real> &input) {
+    this->values_ = input;
   }
-  return *this;
-}
+
+  void Array::copy_out(std::vector<Real> &output) const {
+    output = this->values_;
+  }
+
+  unsigned int Array::size() const {
+    return this->values_.size();
+  }
 
 } // namespace aero

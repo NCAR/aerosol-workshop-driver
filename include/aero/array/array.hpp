@@ -1,6 +1,9 @@
 #ifndef AERO_ARRAY_HPP
 #define AERO_ARRAY_HPP
 
+#include <aero/aero.hpp>
+#include <vector>
+
 namespace aero {
 
 class Array {
@@ -11,35 +14,35 @@ public:
   Array(const Array& other) = default;
   /// Move constructor
   Array(Array&& other) = default;
+  /// Constructor from dimensions. Array elements
+  /// are initialized to zero.
+  Array(const unsigned int number_of_elements);
+  /// Constructor from dimensions and initial value
+  Array(const unsigned int number_of_elements,
+      const Real initial_value);
+  /// Constructor from vector of reals
+  Array(const std::vector<Real> &values);
 
   /// Destructor
   virtual ~Array() {}
 
   /// Assignment operator
   Array& operator=(const Array&) = default;
+  /// Assignment from a vector of Reals
+  Array& operator=(const std::vector<Real> &values);
   /// Default move assignment operator
   Array& operator=(Array&&) = default;
-};
 
-/// This Array subclass allows access to arrays implemented in
-/// Fortran.
-class FortranArray: public Array {
-public:
+  /// Copies data into an Array
+  void copy_in(const std::vector<Real> &input);
+  /// Copies data out of an Array
+  void copy_out(std::vector<Real> &output) const;
+  /// Returns the number of elements in an Array
+  unsigned int size() const;
 
-  /// Construct an aerosol model wrapped around a Fortran implementation
-  /// that can be accessed with the given pointer.
-  explicit FortranArray(void *fortran_pointer);
+private:
+  std::vector<Real> values_;
 
-  // Overridden functionality
-
-  FortranArray(FortranArray& other);
-  FortranArray(FortranArray&& other);
-  ~FortranArray() override;
-
-  FortranArray& operator=(FortranArray& other);
-  FortranArray& operator=(FortranArray&& other);
-
-  void *f_ptr_; // pointer to Fortran array implementation
 };
 
 } // namespace aero

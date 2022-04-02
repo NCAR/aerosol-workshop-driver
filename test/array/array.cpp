@@ -9,7 +9,7 @@
 #include <aero/array/fortran_array.hpp>
 #include <assert.h>
 #include <iostream>
-#include "array_fortran.c"
+#include "array_helper.c"
 
 extern "C" {
   void *test_array_create_fortran_array();

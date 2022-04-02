@@ -10,7 +10,7 @@
 #include <aero/array/fortran_array.h>
 #include <assert.h>
 #include <stdio.h>
-#include "array_fortran.h"
+#include "array_helper.h"
 
 void *test_array_create_fortran_array();
 

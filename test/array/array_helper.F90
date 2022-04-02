@@ -3,8 +3,8 @@
 !
 !> \file
 
-!> Support functions for C Array tests
-module test_array_c
+!> Support functions for C/C++ Array tests
+module test_array_helper
 
   use aero_array,                      only : array_t, array_ptr
   use iso_c_binding
@@ -33,4 +33,4 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-end module test_array_c
+end module test_array_helper

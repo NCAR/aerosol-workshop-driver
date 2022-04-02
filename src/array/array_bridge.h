@@ -18,12 +18,6 @@
 extern "C" {
 #endif
 
-/// Returns a pointer to a Fortran array wrapper for the given C array
-void* aero_bridge_c_array_fortran_wrapper(void *array);
-
-/// Returns a pointer to a Fortran array wrapper for the given C++ array
-void* aero_bridge_cpp_array_fortran_wrapper(void *array);
-
 /// Returns a pointer to a newly cloned (deep-copied) array implemented in C.
 void* aero_bridge_c_array_clone(void *array);
 

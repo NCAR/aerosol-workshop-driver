@@ -1,11 +1,11 @@
 // Copyright (C) 2022 National Center for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
 //
-// Support functions for Fortran array tests
+// Support functions for C/Fortran array tests
 
 #include <aero/aero.hpp>
 #include <aero/array/array.hpp>
-#include "array_fortran.h"
+#include "array_helper.h"
 
 extern "C" {
 

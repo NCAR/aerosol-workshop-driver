@@ -18,38 +18,6 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  !> Wrap a pointer to a C array with a Fortran Array pointer
-  type(c_ptr) function aero_bridge_c_array_fortran_wrapper( c_array_c_ptr )   &
-      result( array_wrapper_c_ptr ) bind(c)
-
-    type(c_ptr) :: c_array_c_ptr
-
-    type(array_ptr), pointer :: array_wrapper_ptr
-
-    allocate( array_wrapper_ptr )
-    array_wrapper_ptr%ptr_ => c_array_t( c_array_c_ptr )
-    array_wrapper_c_ptr = c_loc( array_wrapper_ptr )
-
-  end function aero_bridge_c_array_fortran_wrapper
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  !> Wrap a pointer to a C++ array with a Fortran Array pointer
-  type(c_ptr) function aero_bridge_cpp_array_fortran_wrapper(                 &
-      cpp_array_c_ptr ) result( array_wrapper_c_ptr ) bind(c)
-
-    type(c_ptr) :: cpp_array_c_ptr
-
-    type(array_ptr), pointer :: array_wrapper_ptr
-
-    allocate( array_wrapper_ptr )
-    array_wrapper_ptr%ptr_ => cpp_array_t( cpp_array_c_ptr )
-    array_wrapper_c_ptr = c_loc( array_wrapper_ptr )
-
-  end function aero_bridge_cpp_array_fortran_wrapper
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
   !> Returns a pointer to a newly cloned (deep-copied) array implemented in
   !! Fortran
   type(c_ptr) function aero_bridge_fortran_array_clone( from_c_ptr )          &

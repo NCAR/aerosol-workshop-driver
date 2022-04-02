@@ -5,6 +5,7 @@
 
 #include <aero/aero.hpp>
 #include <aero/array/array.hpp>
+#include "array_fortran.h"
 
 extern "C" {
 

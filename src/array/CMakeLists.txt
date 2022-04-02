@@ -4,7 +4,9 @@ foreach (src array.c
              array.F90
              array_bridge.cpp
              array_bridge.F90
+             c_array.cpp
              c_array.F90
+             cpp_array.c
              cpp_array.F90
              fortran_array.c
              fortran_array.cpp)

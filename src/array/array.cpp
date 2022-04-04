@@ -3,11 +3,11 @@
 
 namespace aero {
 
-  Array::Array(const unsigned int number_of_elements) :
+  Array::Array(std::size_t number_of_elements) :
     values_(number_of_elements, 0.0) {}
 
-  Array:: Array(const unsigned int number_of_elements,
-      const Real initial_value) : values_(number_of_elements, initial_value) {}
+  Array:: Array(std::size_t number_of_elements,
+      Real initial_value) : values_(number_of_elements, initial_value) {}
 
   Array::Array(const std::vector<Real> &values) : values_(values) {}
 
@@ -36,7 +36,7 @@ namespace aero {
     output = this->values_;
   }
 
-  unsigned int Array::size() const {
+  std::size_t Array::size() const {
     return this->values_.size();
   }
 

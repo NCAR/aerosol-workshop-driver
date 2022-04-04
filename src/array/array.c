@@ -59,6 +59,6 @@ void aero_array_copy_out(aero_array_t *array, aero_real_t *to) {
   for (int i=0; i<array->data_->size_; ++i) to[i] = array->data_->values_[i];
 }
 
-unsigned int aero_array_size(aero_array_t *array) {
+size_t aero_array_size(aero_array_t *array) {
   return array->data_->size_;
 }

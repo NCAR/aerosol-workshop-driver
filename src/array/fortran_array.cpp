@@ -60,7 +60,7 @@ void FortranArray::copy_out(std::vector<Real> &output) const {
   if (f_ptr_) aero_bridge_fortran_array_copy_out(f_ptr_, output.data());
 }
 
-unsigned int FortranArray::size() const {
+std::size_t FortranArray::size() const {
   if (f_ptr_) return aero_bridge_fortran_array_size(f_ptr_);
   return 0;
 }

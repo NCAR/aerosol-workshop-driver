@@ -60,7 +60,7 @@ void CArray::copy_out(std::vector<Real> &output) const {
   if (c_ptr_) aero_bridge_c_array_copy_out(c_ptr_, output.data());
 }
 
-unsigned int CArray::size() const {
+std::size_t CArray::size() const {
   if (c_ptr_) return aero_bridge_c_array_size(c_ptr_);
   return 0;
 }

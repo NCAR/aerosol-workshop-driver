@@ -15,7 +15,7 @@ public:
   /// Move constructor
   CArray(CArray&& other);
   /// Construct from a pointer to a C-backed Array
-  CArray(void *fortran_array);
+  explicit CArray(void *fortran_array);
 
   /// Destructor
   ~CArray() override;
@@ -38,7 +38,7 @@ public:
   /// Copies data out of an Array
   void copy_out(std::vector<Real> &output) const override;
   /// Returns the number of elements in an Array
-  unsigned int size() const override;
+  std::size_t size() const override;
 
 private:
   void *c_ptr_; // pointer to C array implementation

@@ -2,6 +2,7 @@
 #define AERO_ARRAY_H
 
 #include <aero/aero.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,7 +50,7 @@ void aero_array_copy_in(aero_array_t *array, const aero_real_t *from);
 void aero_array_copy_out(aero_array_t *array, aero_real_t *to);
 
 /// Returns the number of elements in the array
-unsigned int aero_array_size(aero_array_t *array);
+size_t aero_array_size(aero_array_t *array);
 
 #ifdef __cplusplus
 } // extern "C"

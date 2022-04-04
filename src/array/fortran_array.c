@@ -45,6 +45,6 @@ void aero_fortran_array_copy_out(aero_array_t *array, aero_real_t *to) {
   aero_bridge_fortran_array_copy_out(array->data_->fortran_array_, to);
 }
 
-unsigned int aero_fortran_array_size(aero_array_t *array) {
+size_t aero_fortran_array_size(aero_array_t *array) {
   return aero_bridge_fortran_array_size(array->data_->fortran_array_);
 }

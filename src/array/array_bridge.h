@@ -13,6 +13,7 @@
 #define AERO_ARRAY_BRIDGE_H
 
 #include <aero/aero.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,13 +57,13 @@ void aero_bridge_cpp_array_copy_out(void *array, aero_real_t *output);
 void aero_bridge_fortran_array_copy_out(void *array, aero_real_t *output);
 
 /// Returns the number of elements in the given C array
-unsigned int aero_bridge_c_array_size(void *array);
+size_t aero_bridge_c_array_size(void *array);
 
 /// Returns the number of elements in the given C++ array
-unsigned int aero_bridge_cpp_array_size(void *array);
+size_t aero_bridge_cpp_array_size(void *array);
 
 /// Returns the number of elements in the given Fortran array
-unsigned int aero_bridge_fortran_array_size(void *array);
+size_t aero_bridge_fortran_array_size(void *array);
 
 #ifdef __cplusplus
 }

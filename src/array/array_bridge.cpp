@@ -58,12 +58,12 @@ void aero_bridge_cpp_array_copy_out(void *array, aero_real_t *output) {
   cpp_array->copy_out(output);
 }
 
-unsigned int aero_bridge_c_array_size(void *array) {
+size_t aero_bridge_c_array_size(void *array) {
   aero_array_t *c_array = reinterpret_cast<aero_array_t*>(array);
   return c_array->size(c_array);
 }
 
-unsigned int  aero_bridge_cpp_array_size(void *array) {
+size_t  aero_bridge_cpp_array_size(void *array) {
   aero::Array *cpp_array = reinterpret_cast<aero::Array*>(array);
   return cpp_array->size();
 }

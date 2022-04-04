@@ -87,8 +87,8 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Returns the number of elements in the given Fortran array
-  integer(kind=c_int) function aero_bridge_fortran_array_size( array_c_ptr )  &
-      result( array_size ) bind(c)
+  integer(kind=c_size_t) function aero_bridge_fortran_array_size(             &
+      array_c_ptr ) result( array_size ) bind(c)
 
     type(c_ptr), value, intent(in) :: array_c_ptr
 

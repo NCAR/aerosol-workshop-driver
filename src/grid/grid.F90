@@ -14,11 +14,11 @@ module aero_grid
   implicit none
   private
 
-  public :: grid_t, grid_bounds_t
+  public :: grid_bounds_t, grid_t
 
   !> Simple container for storing grid lower/upper bounds.
   type :: grid_bounds_t
-    real(kind=real_kind :: lower, upper
+    real(kind=real_kind) :: lower, upper
   end type
 
   !> This type represents a computional grid consisting of a set of contiguous
@@ -26,42 +26,43 @@ module aero_grid
   !> between interfaces.
   type :: grid_t
     !> Arrays containing interfaces and segment midpoints.
-    type(array_t)         :: interfaces, midpoints
+    type(array_t)         :: interfaces_, midpoints_
     !> Lower and upper bounds.
-    type(grid_bounds_t)   :: bounds
+    type(grid_bounds_t)   :: bounds_
   contains
-    procedure(interfaces) :: g_interfaces
-    procedure(midpoints)  :: g_midpoints
-    procedure(bounds)     :: g_bounds
-  end type
+    procedure :: interfaces
+    procedure :: midpoints
+    procedure :: bounds
+  end type grid_t
 
-interface
+contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   !> Provides access to the array containing grid interfaces.
-  type(array_t) function g_interfaces(this)
-    class(grid_t), in(inout) :: this
+  type(array_t) function interfaces(this) result(ifaces)
+    type(array_t)                :: ifaces
+    class(grid_t), intent(inout) :: this
 
-    return this%interfaces
-  end function
+    ifaces = this%interfaces_
+  end function interfaces
 
   !> Provides access to the array containing grid segment midpoints.
-  type(array_t) function g_midpoints(this)
-    class(grid_t), in(inout) :: this
+  type(array_t) function midpoints(this) result(midp)
+    type(array_t)                :: midp
+    class(grid_t), intent(inout) :: this
 
-    return this%midpoints
-  end function
+    midp = this%midpoints_
+  end function midpoints
 
   !> Returns the lower and upper bounds (minimum and maximum grid interface
   !> points) for the grid.
-  type(grid_bounds_t) function g_bounds(this)
-    class(grid_t), in(inout) :: this
+  type(grid_bounds_t) function bounds(this) result(bnds)
+    type(grid_bounds_t)          :: bnds
+    class(grid_t), intent(inout) :: this
 
-    return this%g_bounds
-  end function
+    bnds = this%bounds_
+  end function bounds
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-end interface
-
-end module
+end module aero_grid

@@ -52,7 +52,7 @@ public:
                               Array& od_ssa,
                               Array& od_asym) const = 0;
 };
-
+#if 0
 /// This Model subclass allows access to aerosol models implemented in
 /// Fortran.
 class FortranModel: public Model {
@@ -80,7 +80,7 @@ public:
 
   void *f_ptr_; // pointer to Fortran aerosol implementation
 };
-
+#endif
 } // namespace aero
 
 #endif

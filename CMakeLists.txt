@@ -63,4 +63,4 @@ add_subdirectory(src)
 
 enable_testing()
 add_subdirectory(driver)
-
+add_subdirectory(tests)

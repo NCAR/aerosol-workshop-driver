@@ -3,40 +3,41 @@
 
 namespace aero {
 
-FortranArray::FortranArray(void *fortran_pointer):
-  f_ptr_(fortran_pointer) {}
+  Array::Array(std::size_t size) :
+    values_(size, 0.0) {}
 
-FortranArray::FortranArray(FortranArray& other):
-  f_ptr_(nullptr) {
-  f_ptr_ = aero_bridge_fortran_array_clone(other.f_ptr_);
-}
+  Array:: Array(std::size_t size,
+      Real initial_value) : values_(size, initial_value) {}
 
-FortranArray::FortranArray(FortranArray&& other):
-  f_ptr_(nullptr) {
-  f_ptr_ = other.f_ptr_;
-  other.f_ptr_ = nullptr;
-}
+  Array::Array(const std::vector<Real> &values) : values_(values) {}
 
-FortranArray::~FortranArray() {
-  aero_bridge_fortran_array_free(f_ptr_);
-}
-
-FortranArray& FortranArray::operator=(FortranArray& other) {
-  if (this != &other) {
-    if (f_ptr_) {
-      aero_bridge_fortran_array_free(f_ptr_);
-    }
-    f_ptr_ = aero_bridge_fortran_array_clone(other.f_ptr_);
+  Array& Array::operator=(const std::vector<Real> &values) {
+    this->values_ = values;
+    return *this;
   }
-  return *this;
-}
 
-FortranArray& FortranArray::operator=(FortranArray&& other) {
-  if (this != &other) {
-    f_ptr_ = other.f_ptr_;
-    other.f_ptr_ = nullptr;
+  Array* Array::clone() const {
+    return new Array(*this);
   }
-  return *this;
-}
+
+  void Array::copy_in(const Real *input) {
+    for (int i=0; i<this->values_.size(); ++i) this->values_[i] = input[i];
+  }
+
+  void Array::copy_in(const std::vector<Real> &input) {
+    this->copy_in(input.data());
+  }
+
+  void Array::copy_out(Real *output) const {
+    for (int i=0; i<this->values_.size(); ++i) output[i] = this->values_[i];
+  }
+
+  void Array::copy_out(std::vector<Real> &output) const {
+    this->copy_out(output.data());
+  }
+
+  std::size_t Array::size() const {
+    return this->values_.size();
+  }
 
 } // namespace aero

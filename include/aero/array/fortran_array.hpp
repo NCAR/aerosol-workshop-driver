@@ -32,12 +32,8 @@ public:
   Array* clone() const;
   /// Copies data into an Array
   void copy_in(const Real *input) override;
-  /// Copies data into an Array
-  void copy_in(const std::vector<Real> &input) override;
   /// Copies data out of an Array
   void copy_out(Real *output) const override;
-  /// Copies data out of an Array
-  void copy_out(std::vector<Real> &output) const override;
   /// Returns the number of elements in an Array
   std::size_t size() const override;
 

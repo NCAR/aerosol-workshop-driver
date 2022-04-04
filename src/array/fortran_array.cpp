@@ -48,16 +48,8 @@ void FortranArray::copy_in(const Real *input) {
   if (f_ptr_) aero_bridge_fortran_array_copy_in(f_ptr_, input);
 }
 
-void FortranArray::copy_in(const std::vector<Real> &input) {
-  if (f_ptr_) aero_bridge_fortran_array_copy_in(f_ptr_, input.data());
-}
-
 void FortranArray::copy_out(Real *output) const {
   if (f_ptr_) aero_bridge_fortran_array_copy_out(f_ptr_, output);
-}
-
-void FortranArray::copy_out(std::vector<Real> &output) const {
-  if (f_ptr_) aero_bridge_fortran_array_copy_out(f_ptr_, output.data());
 }
 
 std::size_t FortranArray::size() const {

@@ -38,6 +38,8 @@ int main(const int argc, const char *argv[]) {
   rb = std::vector<Real>(8);
   a->copy_out(rb);
   assert(rb[7] == 12.3);
+  delete a;
+  a = new aero::Array(4);
   a->copy_in(ra);
   assert(a->size() == 4);
   rb = std::vector<Real>(4);

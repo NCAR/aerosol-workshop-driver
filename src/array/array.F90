@@ -39,14 +39,14 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Creates an Array object from a number of elements and an initial value
-  function constructor( number_of_elements, initial_value ) result( array )
+  function constructor( size, initial_value ) result( array )
 
     class(array_t),       pointer              :: array
-    integer,              intent(in)           :: number_of_elements
+    integer,              intent(in)           :: size
     real(kind=real_kind), intent(in), optional :: initial_value
 
     allocate( array )
-    allocate( array%data_( number_of_elements ) )
+    allocate( array%data_( size ) )
     if( present( initial_value ) ) then
       array%data_(:) = initial_value
     else

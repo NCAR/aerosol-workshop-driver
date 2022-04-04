@@ -16,9 +16,9 @@ public:
   Array(Array&& other) = default;
   /// Constructor from dimensions. Array elements
   /// are initialized to zero.
-  explicit Array(std::size_t number_of_elements);
+  explicit Array(std::size_t size);
   /// Constructor from dimensions and initial value
-  Array(std::size_t number_of_elements,
+  Array(std::size_t size,
       Real initial_value);
   /// Constructor from vector of reals
   Array(const std::vector<Real> &values);
@@ -38,11 +38,11 @@ public:
   /// Copies data into an Array
   virtual void copy_in(const Real *input);
   /// Copies data into an Array
-  virtual void copy_in(const std::vector<Real> &input);
+  void copy_in(const std::vector<Real> &input);
   /// Copies data out of an Array
   virtual void copy_out(Real *output) const;
   /// Copies data out of an Array
-  virtual void copy_out(std::vector<Real> &output) const;
+  void copy_out(std::vector<Real> &output) const;
   /// Returns the number of elements in an Array
   virtual std::size_t size() const;
 

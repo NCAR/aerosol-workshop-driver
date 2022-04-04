@@ -3,11 +3,11 @@
 
 namespace aero {
 
-  Array::Array(std::size_t number_of_elements) :
-    values_(number_of_elements, 0.0) {}
+  Array::Array(std::size_t size) :
+    values_(size, 0.0) {}
 
-  Array:: Array(std::size_t number_of_elements,
-      Real initial_value) : values_(number_of_elements, initial_value) {}
+  Array:: Array(std::size_t size,
+      Real initial_value) : values_(size, initial_value) {}
 
   Array::Array(const std::vector<Real> &values) : values_(values) {}
 
@@ -25,7 +25,7 @@ namespace aero {
   }
 
   void Array::copy_in(const std::vector<Real> &input) {
-    this->values_ = input;
+    this->copy_in(input.data());
   }
 
   void Array::copy_out(Real *output) const {
@@ -33,7 +33,7 @@ namespace aero {
   }
 
   void Array::copy_out(std::vector<Real> &output) const {
-    output = this->values_;
+    this->copy_out(output.data());
   }
 
   std::size_t Array::size() const {

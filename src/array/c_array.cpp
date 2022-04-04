@@ -48,16 +48,8 @@ void CArray::copy_in(const Real *input) {
   if (c_ptr_) aero_bridge_c_array_copy_in(c_ptr_, input);
 }
 
-void CArray::copy_in(const std::vector<Real> &input) {
-  if (c_ptr_) aero_bridge_c_array_copy_in(c_ptr_, input.data());
-}
-
 void CArray::copy_out(Real *output) const {
   if (c_ptr_) aero_bridge_c_array_copy_out(c_ptr_, output);
-}
-
-void CArray::copy_out(std::vector<Real> &output) const {
-  if (c_ptr_) aero_bridge_c_array_copy_out(c_ptr_, output.data());
 }
 
 std::size_t CArray::size() const {

@@ -26,15 +26,15 @@ typedef struct aero_array_t {
   /// copies data out of an array
   void (*copy_out)(aero_array_t *array, aero_real_t *to);
   /// returns the number of elements in an array
-  unsigned int (*size)(aero_array_t *array);
-} aero_array_behaviors_t;
+  size_t (*size)(aero_array_t *array);
+} aero_array_t;
 
 /// Creates an array from a number of elements and an initial value
-aero_array_t* aero_array_from_dimensions(const int number_of_elements,
+aero_array_t* aero_array_from_dimensions(size_t size,
     aero_real_t initial_value);
 
 /// Creates an array from a primitive type array
-aero_array_t* aero_array_from_array(const int number_of_elements,
+aero_array_t* aero_array_from_array(size_t size,
     aero_real_t *values);
 
 /// Creates an an array by cloning (deep-copying) an array

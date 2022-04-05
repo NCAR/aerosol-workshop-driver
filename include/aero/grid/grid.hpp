@@ -1,33 +1,30 @@
 #ifndef AERO_GRID_HPP
 #define AERO_GRID_HPP
 
-namespace aero {
+#include <aero/array/array.hpp>
 
-/// Simple container for storing grid lower/upper bounds.
-struct GridBounds {
-  Real lower, upper;
-};
+namespace aero {
 
 /// This type represents a computional grid consisting of a set of contiguous
 /// segments separated by interfaces. The grid keeps track of the midpoints
 /// between interfaces.
-class Grid final {
+struct Grid final {
 public:
-  // No Default constructor for Grids
+  // A grid may be neither default constructed nor copied from another grid.
   Grid() = delete;
-  // No copy constructor, either
-  Grid(const Grid& other) = delete;
+  Grid(const Grid&) = delete;
+  Grid& operator=(const Grid&) = delete;
 
-  /// Creates a Grid from an Array containing points delimiting the interfaces
+  /// Creates a grid from an Array containing points delimiting the interfaces
   /// between segments. The Grid assumes ownership of this array.
   explicit Grid(Array&& interfaces);
 
-  /// Creates a Grid from a C pointer to a Grid. The Grid itself is copied
-  /// so it lives in both C and C++ runtimes.
+  /// Creates a grid from a C pointer. The grid data is copied so it lives in
+  /// both C and C++ runtimes.
   static Grid from_c_ptr(void *c_ptr);
 
-  /// Creates a Grid from a Fortran pointer to a Grid. The Grid itself is copied
-  /// so it lives in both Fortran and C++ runtimes.
+  /// Creates a grid from a Fortran pointer. The Grid data is copied so it
+  /// lives in both Fortran and C++ runtimes.
   static Grid from_fortran_ptr(void *f_ptr);
 
   /// Move constructor
@@ -39,20 +36,17 @@ public:
   /// Default move assignment operator
   Grid& operator=(Grid&&) = default;
 
-  /// Returns the lower bound (minimum grid interface point) for the grid.
-  GridBounds bounds() const { return bounds_; }
+  /// Array storing interface coordinates (in ascending order)
+  Array interfaces;
 
-  /// Provides const access to the array containing grid interfaces.
-  const Array& interfaces() const { return interfaces_; }
+  /// Array storing coordinates of midpoints between interfaces (in ascending
+  /// order)
+  Array midpoints;
 
-  /// Provides const access to the array containing grid segment midpoints.
-  const Array& midpoints() const { return midpoints_; }
-
-private:
-  // Arrays containing interfaces and segment midpoints.
-  Array interfaces_, midpoints_;
-  // Lower and upper bounds.
-  GridBounds bounds_;
+  /// Lower bound (minimum interface coordinate), provided for convenience
+  Real lower_bound;
+  /// Upper bound (maximum interface coordinate), provided for convenience
+  Real upper_bound;
 };
 
 } // namespace aero

@@ -3,41 +3,48 @@
 
 namespace aero {
 
-  Array::Array(std::size_t size) :
-    values_(size, 0.0) {}
+Array::Array(std::size_t size)
+  : values_(size, 0.0) {}
 
-  Array:: Array(std::size_t size,
-      Real initial_value) : values_(size, initial_value) {}
+Array:: Array(std::size_t size, Real initial_value)
+  : values_(size, initial_value) {}
 
-  Array::Array(const std::vector<Real> &values) : values_(values) {}
+Array::Array(const std::vector<Real> &values)
+  : values_(values) {}
 
-  Array& Array::operator=(const std::vector<Real> &values) {
-    this->values_ = values;
-    return *this;
+Array& Array::operator=(const std::vector<Real> &values) {
+  this->values_ = values;
+  return *this;
+}
+
+Array* Array::clone() const {
+  return new Array(*this);
+}
+
+void Array::copy_in(const Real *input) {
+  for (int i=0; i<this->values_.size(); ++i) {
+    this->values_[i] = input[i];
   }
+}
 
-  Array* Array::clone() const {
-    return new Array(*this);
-  }
+void Array::copy_in(const std::vector<Real> &input) {
+  this->values_.resize(input.size());
+  this->copy_in(input.data());
+}
 
-  void Array::copy_in(const Real *input) {
-    for (int i=0; i<this->values_.size(); ++i) this->values_[i] = input[i];
+void Array::copy_out(Real *output) const {
+  for (int i=0; i<this->values_.size(); ++i) {
+    output[i] = this->values_[i];
   }
+}
 
-  void Array::copy_in(const std::vector<Real> &input) {
-    this->copy_in(input.data());
-  }
+void Array::copy_out(std::vector<Real> &output) const {
+  output.resize(this->values_.size());
+  this->copy_out(output.data());
+}
 
-  void Array::copy_out(Real *output) const {
-    for (int i=0; i<this->values_.size(); ++i) output[i] = this->values_[i];
-  }
-
-  void Array::copy_out(std::vector<Real> &output) const {
-    this->copy_out(output.data());
-  }
-
-  std::size_t Array::size() const {
-    return this->values_.size();
-  }
+std::size_t Array::size() const {
+  return this->values_.size();
+}
 
 } // namespace aero

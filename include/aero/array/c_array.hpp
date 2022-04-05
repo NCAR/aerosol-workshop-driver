@@ -15,7 +15,7 @@ public:
   /// Move constructor
   CArray(CArray&& other);
   /// Construct from a pointer to a C-backed Array
-  explicit CArray(void *fortran_array);
+  explicit CArray(void *c_array);
 
   /// Destructor
   ~CArray() override;
@@ -28,7 +28,7 @@ public:
   CArray& operator=(CArray&&);
 
   /// Returns a clone (deep-copy) of an array
-  Array* clone() const;
+  Array* clone() const override;
   /// Copies data into an Array
   void copy_in(const Real *input) override;
   /// Copies data out of an Array

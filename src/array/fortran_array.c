@@ -24,6 +24,11 @@ aero_array_t* aero_fortran_array_wrap(void *fortran_array) {
   return aero_fortran_array_create(array_data);
 }
 
+void aero_fortran_array_unwrap(aero_array_t *fortran_array) {
+  free(fortran_array->data_);
+  free(fortran_array);
+}
+
 aero_array_t* aero_fortran_array_clone(aero_array_t *from) {
   aero_array_data_t *array_data = malloc(sizeof(aero_array_data_t));
   array_data->fortran_array_ =

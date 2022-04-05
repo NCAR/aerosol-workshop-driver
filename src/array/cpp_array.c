@@ -24,6 +24,11 @@ aero_array_t* aero_cpp_array_wrap(void *cpp_array) {
   return aero_cpp_array_create(array_data);
 }
 
+void aero_cpp_array_unwrap(aero_array_t *cpp_array) {
+  free(cpp_array->data_);
+  free(cpp_array);
+}
+
 aero_array_t* aero_cpp_array_clone(aero_array_t *from) {
   aero_array_data_t *array_data = malloc(sizeof(aero_array_data_t));
   array_data->cpp_array_ =

@@ -11,6 +11,10 @@ extern "C" {
 /// Creates an array by wrapping a C++-backed array
 aero_array_t* aero_cpp_array_wrap(void *array);
 
+/// "Unwraps" a wrapped C++-backed array, freeing the wrapper resources but
+/// leaving the original C++ array intact.
+void aero_cpp_array_unwrap(aero_array_t *array);
+
 /// Creates an array by cloning (deep-copying) an array
 aero_array_t* aero_cpp_array_clone(aero_array_t *from);
 

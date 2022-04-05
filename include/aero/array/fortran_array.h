@@ -11,6 +11,10 @@ extern "C" {
 /// Creates an array by wrapping a Fortran-backed array
 aero_array_t* aero_fortran_array_wrap(void *array);
 
+/// "Unwraps" a wrapped Fortran-backed array, freeing the wrapper resources but
+/// leaving the original Fortran array intact.
+void aero_fortran_array_unwrap(aero_array_t *array);
+
 /// Creates an array by cloning (deep-copying) an array
 aero_array_t* aero_fortran_array_clone(aero_array_t *from);
 

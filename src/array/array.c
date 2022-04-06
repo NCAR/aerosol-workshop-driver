@@ -15,6 +15,7 @@ aero_array_t* aero_array_create(aero_array_data_t *array_data) {
   array->copy_in = aero_array_copy_in;
   array->copy_out = aero_array_copy_out;
   array->size = aero_array_size;
+  return array;
 }
 
 aero_array_t* aero_array_from_dimensions(size_t size,

@@ -20,6 +20,7 @@ typedef struct my_model_data_t {
 
 static aero_grid_t* my_optics_grid(void *context) {
   // extract grid from data stashed in context.
+  return NULL;
 }
 
 static void my_compute_optics(void *context,

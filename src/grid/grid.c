@@ -19,13 +19,14 @@ aero_grid_t aero_grid_from_interfaces(aero_array_t *interfaces) {
   for (size_t i = 0; i < n_midpt; ++i) {
     midpt_data[i] = 0.5 * (iface_data[i] + iface_data[i+1]);
   }
+  aero_real_t lb = iface_data[0], ub = iface_data[n_iface-1];
   free(iface_data);
 
   return (aero_grid_t){
     .interfaces = interfaces,
     .midpoints = aero_array_from_array(n_midpt, midpt_data),
-    .lower_bound = iface_data[0],
-    .upper_bound = iface_data[n_iface-1]
+    .lower_bound = lb,
+    .upper_bound = ub
   };
 }
 

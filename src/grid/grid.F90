@@ -57,7 +57,7 @@ contains
       midpt_data(i) = 0.5 * (iface_data(i) + iface_data(i+1));
     end do
 
-    grid%interfaces  => interfaces%clone()
+    grid%interfaces  => interfaces
     grid%midpoints   => array_t(midpt_data)
     grid%lower_bound =  iface_data(1)
     grid%upper_bound =  iface_data(n_iface)

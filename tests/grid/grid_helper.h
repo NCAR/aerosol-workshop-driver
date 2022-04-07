@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 
+void *test_grid_create_c_interfaces();
 void *test_grid_create_cpp_interfaces();
 void *test_grid_create_fortran_interfaces();
 

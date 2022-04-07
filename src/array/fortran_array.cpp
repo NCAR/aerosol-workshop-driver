@@ -8,7 +8,6 @@ FortranArray::FortranArray(const FortranArray& other):
 
 FortranArray::FortranArray(FortranArray&& other)
   : f_ptr_(other.f_ptr_) {
-  printf("Ting-a-ling!\n");
   other.f_ptr_ = nullptr;
 }
 

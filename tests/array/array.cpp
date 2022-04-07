@@ -15,6 +15,8 @@ extern "C" {
   void *test_array_create_fortran_array();
 }
 
+using Real = aero::Real;
+
 int main(const int argc, const char *argv[]) {
 
   aero::Array *a, *b;

@@ -1,7 +1,16 @@
 #ifndef AERO_HPP
 #define AERO_HPP
 
+#include <limits>
+
+namespace aero {
+
 /// Floating point type (with proper precision).
 using Real = @AERO_REAL_TYPE@;
+
+// Machine-precision "epsilon" for select floating point type.
+static const Real epsilon = std::numeric_limits<Real>::epsilon();
+
+}
 
 #endif

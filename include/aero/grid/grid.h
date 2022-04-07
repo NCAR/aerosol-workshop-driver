@@ -12,10 +12,10 @@ extern "C" {
 /// interfaces and the midpoints between them.
 typedef struct aero_grid_t {
   /// array storing interface coordinates (in ascending order)
-  const aero_array_t * const interfaces;
+  aero_array_t *interfaces;
   /// array storing coordinates of midpoints between interfaces (in ascending
   /// order)
-  const aero_array_t * const midpoints;
+  aero_array_t *midpoints;
   /// lower bound (minimum interface coordinate), provided for convenience
   const aero_real_t lower_bound;
   /// upper bound (maximum interface coordinate), provided for convenience

@@ -10,7 +10,7 @@
 extern "C" {
 
 void *test_array_create_cpp_array() {
-  std::vector<Real> ra {142.52, 0.235, -1e9, 12.5};
+  std::vector<aero::Real> ra {142.52, 0.235, -1e9, 12.5};
   return (void*) new aero::Array{ra};
 }
 

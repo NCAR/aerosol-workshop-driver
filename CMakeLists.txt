@@ -27,9 +27,11 @@ endif()
 if (AERO_PRECISION STREQUAL "single")
   set(AERO_REAL_TYPE "float")
   set(AERO_REAL_KIND "kind(1.0)")
+  set(AERO_C_EPSILON "FLT_EPSILON")
 else() # double precision
   set(AERO_REAL_TYPE "double")
   set(AERO_REAL_KIND "kind(1.d0)")
+  set(AERO_C_EPSILON "DBL_EPSILON")
 endif()
 message(STATUS "Using ${AERO_PRECISION} precision")
 

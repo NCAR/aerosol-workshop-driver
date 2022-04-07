@@ -13,6 +13,7 @@ aero_grid_t aero_grid_from_interfaces(aero_array_t *interfaces) {
   // Extract data from interfaces array to compute midpoints.
   size_t n_iface = aero_array_size(interfaces);
   aero_real_t *iface_data = malloc(sizeof(aero_real_t) * n_iface);
+  aero_array_copy_out(interfaces, iface_data);
   size_t n_midpt = n_iface - 1;
   aero_real_t *midpt_data = malloc(sizeof(aero_real_t) * n_midpt);
   for (size_t i = 0; i < n_midpt; ++i) {

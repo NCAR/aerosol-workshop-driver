@@ -17,9 +17,9 @@ typedef struct aero_grid_t {
   /// order)
   aero_array_t *midpoints;
   /// lower bound (minimum interface coordinate), provided for convenience
-  const aero_real_t lower_bound;
+  aero_real_t lower_bound;
   /// upper bound (maximum interface coordinate), provided for convenience
-  const aero_real_t upper_bound;
+  aero_real_t upper_bound;
 } aero_grid_t;
 
 /// Creates a grid from an array containing points delimiting the interfaces

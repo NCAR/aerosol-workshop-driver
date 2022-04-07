@@ -39,7 +39,7 @@ void Array::copy_out(Real *output) const {
 }
 
 void Array::copy_out(std::vector<Real> &output) const {
-  output.resize(this->values_.size());
+  output.resize(this->size());
   this->copy_out(output.data());
 }
 

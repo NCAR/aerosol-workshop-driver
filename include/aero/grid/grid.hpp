@@ -3,6 +3,8 @@
 
 #include <aero/array/array.hpp>
 
+#include <memory>
+
 namespace aero {
 
 /// This type represents a computional grid consisting of a set of contiguous
@@ -17,7 +19,7 @@ public:
 
   /// Creates a grid from an Array containing points delimiting the interfaces
   /// between segments. The Grid assumes ownership of this array.
-  explicit Grid(Array&& interfaces);
+  explicit Grid(Array* interfaces);
 
   /// Creates a grid from a C pointer. The grid data is copied so it lives in
   /// both C and C++ runtimes.
@@ -37,11 +39,11 @@ public:
   Grid& operator=(Grid&&) = default;
 
   /// Array storing interface coordinates (in ascending order)
-  Array interfaces;
+  std::unique_ptr<Array> interfaces;
 
   /// Array storing coordinates of midpoints between interfaces (in ascending
   /// order)
-  Array midpoints;
+  std::unique_ptr<Array> midpoints;
 
   /// Lower bound (minimum interface coordinate), provided for convenience
   Real lower_bound;

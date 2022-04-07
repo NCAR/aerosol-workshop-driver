@@ -1,7 +1,7 @@
 /* Copyright (C) 2022 National Center for Atmospheric Research
  * SPDX-License-Identifier: Apache-2.0
  *
- * Tests for the C Array type
+ * Tests for the C grid type
  */
 
 #include "grid_helper.h"
@@ -14,8 +14,6 @@
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
-
-void *test_grid_create_fortran_interfaces();
 
 int main(const int argc, const char *argv[]) {
 

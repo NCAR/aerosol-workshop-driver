@@ -3,12 +3,13 @@
 //
 // Support functions for C/Fortran array tests
 
-#if __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
 void *test_grid_create_cpp_interfaces();
+void *test_grid_create_fortran_interfaces();
 
-#if __cplusplus
+#ifdef __cplusplus
 } // extern "C"
 #endif

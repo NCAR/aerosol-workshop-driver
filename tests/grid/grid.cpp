@@ -11,7 +11,6 @@
 #include <aero/array/c_array.hpp>
 #include <aero/array/fortran_array.hpp>
 
-#include <cassert>
 #include <cmath>
 
 using Real = aero::Real;
@@ -25,30 +24,30 @@ int main(const int argc, const char *argv[]) {
   {
     auto *interfaces = new aero::Array(points);
     aero::Grid grid(interfaces);
-    assert(grid.interfaces().size() == 11);
-    assert(grid.midpoints().size() == 10);
-    assert(abs(grid.lower_bound()) < aero::epsilon);
-    assert(abs(grid.upper_bound() - 1.0) < aero::epsilon);
+    AERO_ASSERT(grid.interfaces().size() == 11);
+    AERO_ASSERT(grid.midpoints().size() == 10);
+    AERO_ASSERT(abs(grid.lower_bound()) < aero::epsilon);
+    AERO_ASSERT(abs(grid.upper_bound() - 1.0) < aero::epsilon);
   }
 
   // Now let's create a grid from a Fortran array.
   {
     auto *interfaces = new aero::FortranArray(test_grid_create_fortran_interfaces());
     aero::Grid grid(interfaces);
-    assert(grid.interfaces().size() == 11);
-    assert(grid.midpoints().size() == 10);
-    assert(abs(grid.lower_bound()) < aero::epsilon);
-    assert(abs(grid.upper_bound() - 1.0) < aero::epsilon);
+    AERO_ASSERT(grid.interfaces().size() == 11);
+    AERO_ASSERT(grid.midpoints().size() == 10);
+    AERO_ASSERT(abs(grid.lower_bound()) < aero::epsilon);
+    AERO_ASSERT(abs(grid.upper_bound() - 1.0) < aero::epsilon);
   }
 
   // Do the same with a C array.
   {
     auto *interfaces = new aero::CArray(aero_array_from_array(11, points.data()));
     aero::Grid grid(interfaces);
-    assert(grid.interfaces().size() == 11);
-    assert(grid.midpoints().size() == 10);
-    assert(abs(grid.lower_bound()) < aero::epsilon);
-    assert(abs(grid.upper_bound() - 1.0) < aero::epsilon);
+    AERO_ASSERT(grid.interfaces().size() == 11);
+    AERO_ASSERT(grid.midpoints().size() == 10);
+    AERO_ASSERT(abs(grid.lower_bound()) < aero::epsilon);
+    AERO_ASSERT(abs(grid.upper_bound() - 1.0) < aero::epsilon);
   }
 
   return 0;

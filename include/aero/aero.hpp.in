@@ -1,6 +1,10 @@
 #ifndef AERO_HPP
 #define AERO_HPP
 
+/// We use this to perform runtime checks in Debug builds.
+#define AERO_ASSERT(x) assert(x)
+
+#include <assert.h>
 #include <limits>
 
 namespace aero {

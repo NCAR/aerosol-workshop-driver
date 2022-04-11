@@ -1,12 +1,16 @@
 #ifndef AERO_H
 #define AERO_H
 
+/// We use this to perform runtime checks in Debug builds.
+#define AERO_ASSERT(x) assert(x)
+
+#include <assert.h>
 #include <float.h>
 
 /// Floating point type (with proper precision).
 typedef @AERO_REAL_TYPE@ aero_real_t;
 
-// Machine-precision "epsilon" for select floating point type.
+/// Machine-precision "epsilon" for select floating point type.
 static const aero_real_t aero_epsilon = @AERO_C_EPSILON@;
 
 #endif

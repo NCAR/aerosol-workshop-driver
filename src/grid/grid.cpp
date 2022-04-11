@@ -10,7 +10,7 @@ Grid::Grid(Array* interfaces):
   interfaces_(interfaces) {
 
   // Extract data from interfaces array to compute midpoints.
-  std::vector<Real> iface_data;
+  std::vector<Real> iface_data(interfaces_->size());
   interfaces_->copy_out(iface_data);
   std::vector<Real> midpt_data(iface_data.size()-1);
   for (size_t i = 0; i < midpt_data.size(); ++i) {

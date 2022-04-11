@@ -28,7 +28,7 @@ void Array::copy_in(const Real *input) {
 }
 
 void Array::copy_in(const std::vector<Real> &input) {
-  this->values_.resize(input.size());
+  AERO_ASSERT(input.size() == this->size());
   this->copy_in(input.data());
 }
 
@@ -39,7 +39,7 @@ void Array::copy_out(Real *output) const {
 }
 
 void Array::copy_out(std::vector<Real> &output) const {
-  output.resize(this->size());
+  AERO_ASSERT(output.size() == this->size());
   this->copy_out(output.data());
 }
 

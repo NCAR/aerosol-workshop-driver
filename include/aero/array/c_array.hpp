@@ -15,7 +15,7 @@ public:
   /// Move constructor
   CArray(CArray&& other);
   /// Construct from a pointer to a C-backed Array
-  explicit CArray(void *fortran_array);
+  explicit CArray(void *c_array);
 
   /// Destructor
   ~CArray() override;

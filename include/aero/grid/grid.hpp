@@ -1,44 +1,67 @@
 #ifndef AERO_GRID_HPP
 #define AERO_GRID_HPP
 
+#include <aero/array/array.hpp>
+
+#include <memory>
+
 namespace aero {
 
-class Grid {
+/// This type represents a computional grid consisting of a set of contiguous
+/// segments separated by interfaces. The grid keeps track of the midpoints
+/// between interfaces.
+struct Grid final {
 public:
-  /// Default constructor.
-  Grid() = default;
-  /// Copy constructor
-  Grid(const Grid& other) = default;
+  // A grid may be neither default constructed nor copied from another grid.
+  Grid() = delete;
+  Grid(const Grid&) = delete;
+  Grid& operator=(const Grid&) = delete;
+
+  /// Creates a grid from an Array containing points delimiting the interfaces
+  /// between segments. The Grid assumes ownership of this array.
+  explicit Grid(Array* interfaces);
+
+  /// Creates a grid from a C pointer. The grid data is copied so it lives in
+  /// both C and C++ runtimes.
+  static Grid from_c_ptr(void *c_ptr);
+
+  /// Creates a grid from a Fortran pointer. The Grid data is copied so it
+  /// lives in both Fortran and C++ runtimes.
+  static Grid from_fortran_ptr(void *f_ptr);
+
   /// Move constructor
   Grid(Grid&& other) = default;
 
   /// Destructor
-  virtual ~Grid() {}
+  ~Grid();
 
-  /// Assignment operator
-  Grid& operator=(const Grid&) = default;
-  /// Default move assignment operator
+  /// Move assignment operator
   Grid& operator=(Grid&&) = default;
-};
 
-/// This Grid subclass allows access to arrays implemented in Fortran.
-class FortranGrid: public Grid {
-public:
+  // Provides const access to grid interfaces.
+  const Array& interfaces() const { return *interfaces_; }
 
-  /// Construct an aerosol model wrapped around a Fortran implementation
-  /// that can be accessed with the given pointer.
-  explicit FortranGrid(void *fortran_pointer);
+  // Provides const access to grid interface midpoints.
+  const Array& midpoints() const { return *midpoints_; }
 
-  // Overridden functionality
+  // Provides const access to interface lower bound.
+  Real lower_bound() const { return lower_bound_; }
 
-  FortranGrid(FortranGrid& other);
-  FortranGrid(FortranGrid&& other);
-  ~FortranGrid() override;
+  // Provides const access to interface upper bound.
+  Real upper_bound() const { return upper_bound_; }
 
-  FortranGrid& operator=(FortranGrid& other);
-  FortranGrid& operator=(FortranGrid&& other);
+private:
+  /// Array storing interface coordinates (in ascending order)
+  std::unique_ptr<Array> interfaces_;
 
-  void *f_ptr_; // pointer to Fortran grid implementation
+  /// Array storing coordinates of midpoints between interfaces (in ascending
+  /// order)
+  std::unique_ptr<Array> midpoints_;
+
+  /// Lower bound (minimum interface coordinate), provided for convenience
+  Real lower_bound_;
+  /// Upper bound (maximum interface coordinate), provided for convenience
+  Real upper_bound_;
 };
 
 } // namespace aero

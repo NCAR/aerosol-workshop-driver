@@ -18,10 +18,9 @@ public:
   /// are initialized to zero.
   explicit Array(std::size_t size);
   /// Constructor from dimensions and initial value
-  Array(std::size_t size,
-      Real initial_value);
+  Array(std::size_t size, Real initial_value);
   /// Constructor from vector of reals
-  Array(const std::vector<Real> &values);
+  explicit Array(const std::vector<Real> &values);
 
   /// Destructor
   virtual ~Array() {}

@@ -14,6 +14,10 @@
 
 extern "C" {
 
+// This Fortran function returns a Fortran pointer to the optics grid for
+// the model identified by model_ptr.
+void* aero_fortran_model_optics_grid(void *model_ptr);
+
 // This Fortran subroutine populates the given optical property arrays with
 // data given pointers to an aerosol model and state.
 void aero_fortran_model_compute_optics(void *model_ptr,
@@ -36,6 +40,10 @@ FortranModel::FortranModel(FortranModel&& other):
 
   f_ptr_ = other.f_ptr_;
   other.f_ptr_ = nullptr;
+}
+
+Grid FortranModel::optics_grid() const {
+  return Grid::from_fortran_ptr(aero_fortran_model_optics_grid(f_ptr_));
 }
 
 void FortranModel::compute_optics(const State& state,

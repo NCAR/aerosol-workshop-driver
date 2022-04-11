@@ -6,12 +6,13 @@ namespace aero {
 FortranArray::FortranArray(const FortranArray& other):
   f_ptr_(aero_bridge_fortran_array_clone(other.f_ptr_)) {}
 
-FortranArray::FortranArray(FortranArray&& other):
-  f_ptr_(other.f_ptr_) {
+FortranArray::FortranArray(FortranArray&& other)
+  : f_ptr_(other.f_ptr_) {
   other.f_ptr_ = nullptr;
 }
 
-FortranArray::FortranArray(void *fortran_array) : f_ptr_(fortran_array) {}
+FortranArray::FortranArray(void *fortran_array)
+  : f_ptr_(fortran_array) {}
 
 FortranArray::~FortranArray() {
   aero_bridge_fortran_array_free(f_ptr_);

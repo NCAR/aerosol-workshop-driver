@@ -37,21 +37,6 @@ aero_array_t* aero_array_from_dimensions(size_t size,
 aero_array_t* aero_array_from_array(size_t size,
     aero_real_t *values);
 
-/// Creates an an array by cloning (deep-copying) an array
-aero_array_t* aero_array_clone(aero_array_t *from);
-
-/// Frees the resources associated with an array
-void aero_array_free(aero_array_t *array);
-
-/// Copies values into an array
-void aero_array_copy_in(aero_array_t *array, const aero_real_t *from);
-
-/// Copies values out of an array
-void aero_array_copy_out(aero_array_t *array, aero_real_t *to);
-
-/// Returns the number of elements in the array
-size_t aero_array_size(aero_array_t *array);
-
 #ifdef __cplusplus
 } // extern "C"
 #endif

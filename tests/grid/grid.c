@@ -21,31 +21,37 @@ int main(const int argc, const char *argv[]) {
   // correct within it.
   aero_real_t points[] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
   aero_array_t *interfaces = aero_array_from_array(11, points);
-  aero_grid_t grid = aero_grid_from_interfaces(interfaces);
-  assert(grid.interfaces->size(grid.interfaces) == 11);
-  assert(grid.midpoints->size(grid.midpoints) == 10);
-  assert(fabs(grid.lower_bound) < aero_epsilon);
-  assert(fabs(grid.upper_bound - 1.0) < aero_epsilon);
+  aero_grid_t *grid = aero_grid_from_interfaces(interfaces);
+  const aero_array_t* g_interfaces = aero_grid_interfaces(grid);
+  const aero_array_t* g_midpoints = aero_grid_midpoints(grid);
+  assert(g_interfaces->size(g_interfaces) == 11);
+  assert(g_midpoints->size(g_midpoints) == 10);
+  assert(fabs(aero_grid_lower_bound(grid)) < aero_epsilon);
+  assert(fabs(aero_grid_upper_bound(grid) - 1.0) < aero_epsilon);
   aero_grid_free(grid);
 
   // Now let's create a grid from a Fortran array.
   interfaces = aero_fortran_array_wrap(test_grid_create_fortran_interfaces());
   interfaces->copy_in(interfaces, points);
   grid = aero_grid_from_interfaces(interfaces);
-  assert(grid.interfaces->size(grid.interfaces) == 11);
-  assert(grid.midpoints->size(grid.midpoints) == 10);
-  assert(fabs(grid.lower_bound) < aero_epsilon);
-  assert(fabs(grid.upper_bound - 1.0) < aero_epsilon);
+  g_interfaces = aero_grid_interfaces(grid);
+  g_midpoints = aero_grid_midpoints(grid);
+  assert(g_interfaces->size(g_interfaces) == 11);
+  assert(g_midpoints->size(g_midpoints) == 10);
+  assert(fabs(aero_grid_lower_bound(grid)) < aero_epsilon);
+  assert(fabs(aero_grid_upper_bound(grid) - 1.0) < aero_epsilon);
   aero_grid_free(grid);
 
   // Do the same with a C++ array.
   interfaces = aero_cpp_array_wrap(test_grid_create_cpp_interfaces());
   interfaces->copy_in(interfaces, points);
   grid = aero_grid_from_interfaces(interfaces);
-  assert(grid.interfaces->size(grid.interfaces) == 11);
-  assert(grid.midpoints->size(grid.midpoints) == 10);
-  assert(fabs(grid.lower_bound) < aero_epsilon);
-  assert(fabs(grid.upper_bound - 1.0) < aero_epsilon);
+  g_interfaces = aero_grid_interfaces(grid);
+  g_midpoints = aero_grid_midpoints(grid);
+  assert(g_interfaces->size(g_interfaces) == 11);
+  assert(g_midpoints->size(g_midpoints) == 10);
+  assert(fabs(aero_grid_lower_bound(grid)) < aero_epsilon);
+  assert(fabs(aero_grid_upper_bound(grid) - 1.0) < aero_epsilon);
   aero_grid_free(grid);
 
   return 0;

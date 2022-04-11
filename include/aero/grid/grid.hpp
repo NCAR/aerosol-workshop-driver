@@ -35,20 +35,33 @@ public:
   /// Destructor
   ~Grid();
 
-  /// Default move assignment operator
+  /// Move assignment operator
   Grid& operator=(Grid&&) = default;
 
+  // Provides const access to grid interfaces.
+  const Array& interfaces() const { return *interfaces_; }
+
+  // Provides const access to grid interface midpoints.
+  const Array& midpoints() const { return *midpoints_; }
+
+  // Provides const access to interface lower bound.
+  Real lower_bound() const { return lower_bound_; }
+
+  // Provides const access to interface upper bound.
+  Real upper_bound() const { return upper_bound_; }
+
+private:
   /// Array storing interface coordinates (in ascending order)
-  std::unique_ptr<Array> interfaces;
+  std::unique_ptr<Array> interfaces_;
 
   /// Array storing coordinates of midpoints between interfaces (in ascending
   /// order)
-  std::unique_ptr<Array> midpoints;
+  std::unique_ptr<Array> midpoints_;
 
   /// Lower bound (minimum interface coordinate), provided for convenience
-  Real lower_bound;
+  Real lower_bound_;
   /// Upper bound (maximum interface coordinate), provided for convenience
-  Real upper_bound;
+  Real upper_bound_;
 };
 
 } // namespace aero

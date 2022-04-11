@@ -6,19 +6,19 @@
 
 namespace aero {
 
-Grid::Grid(Array* interfaces_):
-  interfaces(interfaces_) {
+Grid::Grid(Array* interfaces):
+  interfaces_(interfaces) {
 
   // Extract data from interfaces array to compute midpoints.
   std::vector<Real> iface_data;
-  interfaces->copy_out(iface_data);
+  interfaces_->copy_out(iface_data);
   std::vector<Real> midpt_data(iface_data.size()-1);
   for (size_t i = 0; i < midpt_data.size(); ++i) {
     midpt_data[i] = 0.5 * (iface_data[i] + iface_data[i+1]);
   }
-  midpoints = std::unique_ptr<Array>(new Array(midpt_data));
-  lower_bound = iface_data.front();
-  upper_bound = iface_data.back();
+  midpoints_ = std::unique_ptr<Array>(new Array(midpt_data));
+  lower_bound_ = iface_data.front();
+  upper_bound_ = iface_data.back();
 }
 
 Grid Grid::from_c_ptr(void *c_ptr) {

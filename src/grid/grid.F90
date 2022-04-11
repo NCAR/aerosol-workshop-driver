@@ -20,17 +20,22 @@ module aero_grid
   !> segments separated by interfaces. The grid keeps track of the midpoints
   !> between interfaces.
   type :: grid_t
+    private
     !> array storing interface coordinates (in ascending order)
-    class(array_t), pointer :: interfaces
+    class(array_t), pointer :: interfaces_
     !> array storing coordinates of midpoints between interfaces (in ascending
     !> order)
-    class(array_t), pointer :: midpoints
+    class(array_t), pointer :: midpoints_
     !> lower bound (minimum interface coordinate), provided for convenience
-    real(kind=real_kind) :: lower_bound
+    real(kind=real_kind) :: lower_bound_
     !> upper bound (maximum interface coordinate), provided for convenience
-    real(kind=real_kind) :: upper_bound
+    real(kind=real_kind) :: upper_bound_
   contains
-    final :: grid_finalize
+    procedure :: interfaces  => grid_interfaces
+    procedure :: midpoints   => grid_midpoints
+    procedure :: lower_bound => grid_lower_bound
+    procedure :: upper_bound => grid_upper_bound
+    final     :: grid_finalize
   end type grid_t
 
   ! Constructors
@@ -57,20 +62,59 @@ contains
       midpt_data(i) = 0.5 * (iface_data(i) + iface_data(i+1));
     end do
 
-    grid%interfaces  => interfaces
-    grid%midpoints   => array_t(midpt_data)
-    grid%lower_bound =  iface_data(1)
-    grid%upper_bound =  iface_data(n_iface)
+    grid%interfaces_  => interfaces
+    grid%midpoints_   => array_t(midpt_data)
+    grid%lower_bound_ =  iface_data(1)
+    grid%upper_bound_ =  iface_data(n_iface)
 
     deallocate(iface_data, midpt_data)
   end function grid_from_interfaces
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Provides access to grid interfaces
+  function grid_interfaces(grid) result(ifaces)
+    class(array_t), pointer    :: ifaces
+    class(grid_t),  intent(in) :: grid
+    ifaces => grid%interfaces_
+  end function grid_interfaces
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Provides access to grid midpoints
+  function grid_midpoints(grid) result(midpts)
+    class(array_t), pointer    :: midpts
+    class(grid_t),  intent(in) :: grid
+    midpts => grid%midpoints_
+  end function grid_midpoints
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Provides access to grid lower bound
+  function grid_lower_bound(grid) result(lb)
+    real(kind=real_kind)      :: lb
+    class(grid_t), intent(in) :: grid
+    lb = grid%lower_bound_
+  end function grid_lower_bound
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Provides access to grid upper bound
+  function grid_upper_bound(grid) result(ub)
+    real(kind=real_kind)      :: ub
+    class(grid_t), intent(in) :: grid
+    ub = grid%upper_bound_
+  end function grid_upper_bound
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   !> Finalize a grid, freeing its resources
   subroutine grid_finalize(grid)
     type(grid_t), intent(inout) :: grid
-    if (associated(grid%interfaces)) deallocate(grid%interfaces)
-    if (associated(grid%midpoints))  deallocate(grid%midpoints)
-  end subroutine
+    if (associated(grid%interfaces_)) deallocate(grid%interfaces_)
+    if (associated(grid%midpoints_))  deallocate(grid%midpoints_)
+  end subroutine grid_finalize
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 end module aero_grid

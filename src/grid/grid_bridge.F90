@@ -30,7 +30,7 @@ contains
 
     call c_f_pointer( grid_c_ptr, grid_ptr )
     allocate( ifaces_ptr )
-    allocate( ifaces_ptr%ptr_, SOURCE = grid_ptr%interfaces )
+    allocate( ifaces_ptr%ptr_, SOURCE = grid_ptr%interfaces() )
     ifaces_c_ptr = c_loc( ifaces_ptr )
 
   end function aero_bridge_fortran_grid_interfaces

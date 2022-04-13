@@ -25,11 +25,11 @@ static void aero_cpp_array_copy_in(aero_array_t *array, const aero_real_t *from)
   aero_bridge_cpp_array_copy_in(array->data_->cpp_array_, from);
 }
 
-static void aero_cpp_array_copy_out(aero_array_t *array, aero_real_t *to) {
+static void aero_cpp_array_copy_out(const aero_array_t *array, aero_real_t *to) {
   aero_bridge_cpp_array_copy_out(array->data_->cpp_array_, to);
 }
 
-static size_t aero_cpp_array_size(aero_array_t *array) {
+static size_t aero_cpp_array_size(const aero_array_t *array) {
   return aero_bridge_cpp_array_size(array->data_->cpp_array_);
 }
 

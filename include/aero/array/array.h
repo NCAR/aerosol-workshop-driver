@@ -24,9 +24,9 @@ typedef struct aero_array_t {
   /// copies data into an array
   void (*copy_in)(aero_array_t *array, const aero_real_t *from);
   /// copies data out of an array
-  void (*copy_out)(aero_array_t *array, aero_real_t *to);
+  void (*copy_out)(const aero_array_t *array, aero_real_t *to);
   /// returns the number of elements in an array
-  size_t (*size)(aero_array_t *array);
+  size_t (*size)(const aero_array_t *array);
 } aero_array_t;
 
 /// Creates an array from a number of elements and an initial value

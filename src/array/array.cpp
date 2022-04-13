@@ -17,6 +17,14 @@ Array& Array::operator=(const std::vector<Real> &values) {
   return *this;
 }
 
+const Real& Array::operator[](std::size_t i) const {
+  return this->values_.data()[i];
+}
+
+Real& Array::operator[](std::size_t i) {
+  return this->values_.data()[i];
+}
+
 Array* Array::clone() const {
   return new Array(*this);
 }
@@ -41,6 +49,14 @@ void Array::copy_out(Real *output) const {
 void Array::copy_out(std::vector<Real> &output) const {
   AERO_ASSERT(output.size() == this->size());
   this->copy_out(output.data());
+}
+
+const Real* Array::data() const {
+  return this->values_.data();
+}
+
+Real* Array::data() {
+  return this->values_.data();
 }
 
 std::size_t Array::size() const {

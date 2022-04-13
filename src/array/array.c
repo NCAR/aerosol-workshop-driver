@@ -28,11 +28,11 @@ static void aero_array_copy_in(aero_array_t *array, const aero_real_t *from) {
   for (int i=0; i<array->data_->size_; ++i) array->data_->values_[i] = from[i];
 }
 
-static void aero_array_copy_out(aero_array_t *array, aero_real_t *to) {
+static void aero_array_copy_out(const aero_array_t *array, aero_real_t *to) {
   for (int i=0; i<array->data_->size_; ++i) to[i] = array->data_->values_[i];
 }
 
-static size_t aero_array_size(aero_array_t *array) {
+static size_t aero_array_size(const aero_array_t *array) {
   return array->data_->size_;
 }
 

@@ -14,7 +14,7 @@ public:
   /// No default constructor
   Interpolator() = delete;
   /// Copy constructor
-  Interpolator(const Interpolator&) = default;
+  Interpolator(const Interpolator&) = delete;
   /// Move constructor
   Interpolator(Interpolator&&) = default;
   /// Constructor from input and output grids
@@ -24,7 +24,7 @@ public:
   virtual ~Interpolator() {}
 
   /// Assignment operator
-  Interpolator& operator=(const Interpolator&) = default;
+  Interpolator& operator=(const Interpolator&) = delete;
   /// Default move assignment operator
   Interpolator& operator=(Interpolator&&) = default;
   /// Function call operator

@@ -31,11 +31,6 @@ public:
   Array& operator=(const std::vector<Real> &values);
   /// Default move assignment operator
   Array& operator=(Array&&) = default;
-  /// Subscript operator
-  /// @{
-  const Real& operator[](std::size_t i) const;
-  Real& operator[](std::size_t i);
-  /// @}
 
   /// Returns a clone (deep-copy) of an Array
   virtual Array* clone() const;

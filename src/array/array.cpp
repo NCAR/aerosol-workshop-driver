@@ -17,14 +17,6 @@ Array& Array::operator=(const std::vector<Real> &values) {
   return *this;
 }
 
-const Real& Array::operator[](std::size_t i) const {
-  return this->values_.data()[i];
-}
-
-Real& Array::operator[](std::size_t i) {
-  return this->values_.data()[i];
-}
-
 Array* Array::clone() const {
   return new Array(*this);
 }

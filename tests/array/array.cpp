@@ -58,7 +58,6 @@ int main(const int argc, const char *argv[]) {
   rb[7] = 0.0;
   a->copy_out(rb);
   AERO_ASSERT(rb[7] == 12.3);
-  AERO_ASSERT((*a)[7] == 12.3);
   AERO_ASSERT(a->data()[7] == 12.3);
   delete a;
   delete b;

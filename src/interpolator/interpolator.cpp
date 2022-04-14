@@ -30,9 +30,11 @@ Interpolator* Interpolator::clone() const {
 }
 
 void Interpolator::interpolate(const Array& from, Array& to) const {
-  for (int i=0; i<to.size(); ++i) to[i] = 0.0;
+  const Real *from_a = from.data();
+  Real *to_a = to.data();
+  for (int i=0; i<to.size(); ++i) to_a[i] = 0.0;
   for (auto& map_elem : this->map_) {
-    to[std::get<1>(map_elem)] += from[std::get<0>(map_elem)] * std::get<2>(map_elem);
+    to_a[std::get<1>(map_elem)] += from_a[std::get<0>(map_elem)] * std::get<2>(map_elem);
   }
 }
 

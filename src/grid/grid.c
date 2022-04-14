@@ -37,6 +37,7 @@ aero_grid_t* aero_grid_from_interfaces(aero_array_t *interfaces) {
   aero_grid_t *grid = malloc(sizeof(aero_grid_t));
   grid->interfaces_ = interfaces;
   grid->midpoints_ = aero_array_from_array(n_midpt, midpt_data);
+  free(midpt_data);
   grid->lower_bound_ = lb;
   grid->upper_bound_ = ub;
   return grid;

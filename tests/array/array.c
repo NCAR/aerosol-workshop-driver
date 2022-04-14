@@ -34,6 +34,7 @@ int main(const int argc, const char *argv[]) {
   b = a->clone(a);
   b->copy_out(b, rb);
   AERO_ASSERT(rb[2] == 94.32);
+  AERO_ASSERT(b->data(b)[2] == 94.32);
   a->free(a);
   b->free(b);
 

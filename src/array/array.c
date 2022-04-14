@@ -32,6 +32,14 @@ static void aero_array_copy_out(const aero_array_t *array, aero_real_t *to) {
   for (int i=0; i<array->data_->size_; ++i) to[i] = array->data_->values_[i];
 }
 
+static const aero_real_t* aero_array_const_data(const aero_array_t *array) {
+  return array->data_->values_;
+}
+
+static aero_real_t* aero_array_data(aero_array_t *array) {
+  return array->data_->values_;
+}
+
 static size_t aero_array_size(const aero_array_t *array) {
   return array->data_->size_;
 }
@@ -44,6 +52,8 @@ static aero_array_t* aero_array_create(aero_array_data_t *array_data) {
   array->free = aero_array_free;
   array->copy_in = aero_array_copy_in;
   array->copy_out = aero_array_copy_out;
+  array->const_data = aero_array_const_data;
+  array->data = aero_array_data;
   array->size = aero_array_size;
   return array;
 }
@@ -58,7 +68,7 @@ aero_array_t* aero_array_from_dimensions(size_t size,
 }
 
 aero_array_t* aero_array_from_array(size_t size,
-    aero_real_t *values) {
+    const aero_real_t *values) {
   aero_array_data_t *array_data = malloc(sizeof(aero_array_data_t));
   array_data->size_ = size;
   array_data->values_ = malloc(sizeof(aero_real_t)*array_data->size_);

@@ -3,7 +3,7 @@
 //
 // Tests for the C++ Interpolator
 
-#include <aero/aero.h>
+#include <aero/aero.hpp>
 #include <aero/array/array.hpp>
 #include <aero/grid/grid.hpp>
 #include <aero/interpolator/interpolator.hpp>

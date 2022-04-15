@@ -29,7 +29,7 @@ contains
 
     call c_f_pointer( from_c_ptr, from_ptr )
     allocate( to_ptr )
-    allocate( to_ptr%ptr_, SOURCE = from_ptr%ptr_ )
+    to_ptr%ptr_ => from_ptr%ptr_%clone( )
     to_c_ptr = c_loc( to_ptr )
 
   end function aero_bridge_fortran_array_clone

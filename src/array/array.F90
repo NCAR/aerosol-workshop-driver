@@ -15,12 +15,14 @@ module aero_array
 
   type :: array_t
     private
-    real(kind=real_kind), allocatable :: data_(:)
+    real(kind=real_kind), pointer :: data_(:) => null( )
   contains
     procedure, pass(from) :: clone
     procedure, pass(to) :: copy_in
     procedure, pass(from) :: copy_out
+    procedure :: data => array_data
     procedure :: size => array_size
+    final :: finalize
   end type array_t
 
   interface array_t
@@ -64,7 +66,7 @@ contains
     real(kind=real_kind), intent(in) :: from_array(:)
 
     allocate( array )
-    array%data_ = from_array
+    allocate( array%data_, SOURCE = from_array )
 
   end function constructor_array
 
@@ -76,7 +78,17 @@ contains
     class(array_t), pointer :: clone
     class(array_t), intent(in) :: from
 
-    allocate( clone, SOURCE = from )
+    select type(from)
+    type is(array_t)
+      ! for concrete base class, copy data_ from source
+      allocate( clone )
+      if( associated( from%data_ ) ) then
+        allocate( clone%data_, SOURCE = from%data_ )
+      end if
+    class default
+      ! provide default clone functionality for subclasses
+      allocate( clone, SOURCE = from )
+    end select
 
   end function clone
 
@@ -106,17 +118,40 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  !> Returns a pointer to the underlying data
+  function array_data( this )
+
+    real(kind=real_kind), pointer       :: array_data(:)
+    class(array_t),       intent(inout) :: this
+
+    array_data => this%data_
+
+  end function array_data
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   !> Returns the number of elements in an Array
   integer function array_size( this )
 
     class(array_t), intent(in) :: this
 
     array_size = 0
-    if( allocated( this%data_ ) ) then
+    if( associated( this%data_ ) ) then
       array_size = size( this%data_ )
     end if
 
   end function array_size
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Finalize an array
+  subroutine finalize( this )
+
+    type(array_t), intent(inout) :: this
+
+    if( associated( this%data_ ) ) deallocate( this%data_ )
+
+  end subroutine finalize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

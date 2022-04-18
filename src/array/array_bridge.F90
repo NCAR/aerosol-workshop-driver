@@ -29,7 +29,7 @@ contains
 
     call c_f_pointer( from_c_ptr, from_ptr )
     allocate( to_ptr )
-    allocate( to_ptr%ptr_, SOURCE = from_ptr%ptr_ )
+    to_ptr%ptr_ => from_ptr%ptr_%clone( )
     to_c_ptr = c_loc( to_ptr )
 
   end function aero_bridge_fortran_array_clone
@@ -83,6 +83,22 @@ contains
     call array_ptr%ptr_%copy_out( output_ptr )
 
   end subroutine aero_bridge_fortran_array_copy_out
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns a pointer to the underlying data
+  function aero_bridge_fortran_array_data( array_c_ptr ) result( data_c_ptr ) &
+      bind(c)
+
+    type(c_ptr)                    :: data_c_ptr
+    type(c_ptr), value, intent(in) :: array_c_ptr
+
+    type(array_ptr),      pointer :: array_ptr
+
+    call c_f_pointer( array_c_ptr, array_ptr )
+    data_c_ptr = c_loc( array_ptr%ptr_%data( ) )
+
+  end function aero_bridge_fortran_array_data
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

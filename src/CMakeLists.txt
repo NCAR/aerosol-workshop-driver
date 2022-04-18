@@ -4,6 +4,7 @@
 add_subdirectory(model)
 add_subdirectory(array)
 add_subdirectory(grid)
+add_subdirectory(interpolator)
 add_subdirectory(state)
 
 ################################################################################
@@ -21,6 +22,7 @@ add_library(aero
             ${model_src}
             ${array_src}
             ${grid_src}
+            ${interpolator_src}
             ${state_src})
 
 target_include_directories(aero PUBLIC ${CMAKE_CURRENT_BINARY_DIR})

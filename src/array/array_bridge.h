@@ -53,6 +53,15 @@ void aero_bridge_c_array_copy_out(void *array, aero_real_t *output);
 /// Copies data out of the given C++ array
 void aero_bridge_cpp_array_copy_out(void *array, aero_real_t *output);
 
+/// Returns a pointer to the underlying data in a Fortran array
+aero_real_t* aero_bridge_fortran_array_data(void *array);
+
+/// Returns a pointer to the underlying data in a C array
+aero_real_t* aero_bridge_c_array_data(void *array);
+
+/// Returns a pointer to the underlying data in a C++ array
+aero_real_t* aero_bridge_cpp_array_data(void *array);
+
 /// Copies data out of the given Fortran array
 void aero_bridge_fortran_array_copy_out(void *array, aero_real_t *output);
 

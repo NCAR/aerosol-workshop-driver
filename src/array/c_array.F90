@@ -22,6 +22,7 @@ module aero_c_array
     procedure, pass(from) :: clone
     procedure, pass(to)   :: copy_in
     procedure, pass(from) :: copy_out
+    procedure :: data => array_data
     procedure :: size => array_size
     final :: finalize
   end type c_array_t
@@ -61,6 +62,14 @@ interface
     type(c_ptr), value :: array_c
     type(c_ptr), value :: output_c
   end subroutine aero_bridge_c_array_copy_out
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function aero_bridge_c_array_data( array_c ) result( data_c ) bind(c)
+    use iso_c_binding
+    type(c_ptr)        :: data_c
+    type(c_ptr), value :: array_c
+  end function aero_bridge_c_array_data
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -136,6 +145,19 @@ contains
     call aero_bridge_c_array_copy_out( from%array_, to_c )
 
   end subroutine copy_out
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns a pointer to the underlying array data
+  function array_data( this )
+
+    real(kind=real_kind), pointer       :: array_data(:)
+    class(c_array_t),     intent(inout) :: this
+
+    call c_f_pointer( aero_bridge_c_array_data( this%array_ ), array_data,    &
+                      shape = [ aero_bridge_c_array_size( this%array_ ) ] )
+
+  end function array_data
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

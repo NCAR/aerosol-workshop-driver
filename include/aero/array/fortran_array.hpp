@@ -34,6 +34,11 @@ public:
   void copy_in(const Real *input) override;
   /// Copies data out of an Array
   void copy_out(Real *output) const override;
+  /// Returns a pointer to the array data
+  /// @{
+  const Real* data() const override;
+  Real* data() override;
+  /// @}
   /// Returns the number of elements in an Array
   std::size_t size() const override;
 

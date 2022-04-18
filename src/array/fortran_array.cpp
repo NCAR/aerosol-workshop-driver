@@ -42,10 +42,8 @@ FortranArray& FortranArray::operator=(FortranArray&& other) {
 }
 
 aero::Array* FortranArray::clone() const {
-  if (f_ptr_) {
-    return new aero::FortranArray(aero_bridge_fortran_array_clone(f_ptr_));
-  }
-  return nullptr;
+  AERO_ASSERT(f_ptr_ != nullptr);
+  return new aero::FortranArray(aero_bridge_fortran_array_clone(f_ptr_));
 }
 
 const Real* FortranArray::data() const {

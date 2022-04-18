@@ -41,8 +41,8 @@ CArray& CArray::operator=(CArray&& other) {
 }
 
 Array* CArray::clone() const {
-  if (c_ptr_) return new CArray(aero_bridge_c_array_clone(c_ptr_));
-  return nullptr;
+  AERO_ASSERT(c_ptr_ != nullptr);
+  return new CArray(aero_bridge_c_array_clone(c_ptr_));
 }
 
 void CArray::copy_in(const Real *input) {

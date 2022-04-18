@@ -24,7 +24,6 @@ module aero_interpolator
     private
     type(interpolator_map_t), allocatable :: map_(:)
   contains
-    procedure, pass(from) :: clone
     procedure :: interpolate
   end type interpolator_t
 
@@ -79,18 +78,6 @@ contains
     end do
 
   end function constructor
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  !> Returns a clone (deep-copy) of an interpolator
-  function clone( from )
-
-    class(interpolator_t), pointer    :: clone
-    class(interpolator_t), intent(in) :: from
-
-    allocate( clone, SOURCE = from )
-
-  end function clone
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

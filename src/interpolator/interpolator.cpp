@@ -25,10 +25,6 @@ void Interpolator::operator()(const Array& from, Array& to) const {
   this->interpolate(from, to);
 }
 
-Interpolator* Interpolator::clone() const {
-  return new Interpolator(this->map_);
-}
-
 void Interpolator::interpolate(const Array& from, Array& to) const {
   const Real *from_a = from.data();
   Real *to_a = to.data();
@@ -38,7 +34,7 @@ void Interpolator::interpolate(const Array& from, Array& to) const {
   }
 }
 
-Interpolator::Interpolator(const std::vector<std::tuple<int, int, Real>> map) :
+Interpolator::Interpolator(const std::vector<std::tuple<int, int, Real>> &map) :
   map_(map) {}
 
 } // namespace aero

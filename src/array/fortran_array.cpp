@@ -41,8 +41,21 @@ FortranArray& FortranArray::operator=(FortranArray&& other) {
   return *this;
 }
 
-Array* FortranArray::clone() const {
-  return new FortranArray(aero_bridge_fortran_array_clone(f_ptr_));
+aero::Array* FortranArray::clone() const {
+  if (f_ptr_) {
+    return new aero::FortranArray(aero_bridge_fortran_array_clone(f_ptr_));
+  }
+  return nullptr;
+}
+
+const Real* FortranArray::data() const {
+  if (f_ptr_) return aero_bridge_fortran_array_data(f_ptr_);
+  return nullptr;
+}
+
+Real* FortranArray::data() {
+  if (f_ptr_) return aero_bridge_fortran_array_data(f_ptr_);
+  return nullptr;
 }
 
 void FortranArray::copy_in(const Real *input) {

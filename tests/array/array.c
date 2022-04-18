@@ -35,6 +35,7 @@ int main(const int argc, const char *argv[]) {
   b->copy_out(b, rb);
   AERO_ASSERT(rb[2] == 94.32);
   AERO_ASSERT(b->data(b)[2] == 94.32);
+  AERO_ASSERT(b->const_data(b)[2] == 94.32);
   a->free(a);
   b->free(b);
 
@@ -50,6 +51,8 @@ int main(const int argc, const char *argv[]) {
   rb[2] = 0.0;
   b->copy_out(b, rb);
   AERO_ASSERT(rb[2] == -132.45);
+  AERO_ASSERT(b->data(b)[2] == -132.45);
+  AERO_ASSERT(b->const_data(b)[2] == -132.45);
   a->free(a);
   b->free(b);
 
@@ -65,6 +68,8 @@ int main(const int argc, const char *argv[]) {
   rb[2] = 0.0;
   b->copy_out(b, rb);
   AERO_ASSERT(rb[2] == -132.45);
+  AERO_ASSERT(b->data(b)[2] == -132.45);
+  AERO_ASSERT(b->const_data(b)[2] == -132.45);
   a->free(a);
   b->free(b);
 

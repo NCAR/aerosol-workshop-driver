@@ -44,8 +44,8 @@ public:
   void copy_out(std::vector<Real> &output) const;
   /// Returns a pointer to the array data
   /// @{
-  const Real* data() const;
-  Real* data();
+  virtual const Real* data() const;
+  virtual Real* data();
   /// @}
   /// Returns the number of elements in an Array
   virtual std::size_t size() const;

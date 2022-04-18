@@ -86,6 +86,22 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  !> Returns a pointer to the underlying data
+  function aero_bridge_fortran_array_data( array_c_ptr ) result( data_c_ptr ) &
+      bind(c)
+
+    type(c_ptr)                    :: data_c_ptr
+    type(c_ptr), value, intent(in) :: array_c_ptr
+
+    type(array_ptr),      pointer :: array_ptr
+
+    call c_f_pointer( array_c_ptr, array_ptr )
+    data_c_ptr = c_loc( array_ptr%ptr_%data( ) )
+
+  end function aero_bridge_fortran_array_data
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   !> Returns the number of elements in the given Fortran array
   integer(kind=c_size_t) function aero_bridge_fortran_array_size(             &
       array_c_ptr ) result( array_size ) bind(c)

@@ -13,7 +13,7 @@ class Interpolator {
 public:
   /// No default constructor
   Interpolator() = delete;
-  /// Copy constructor
+  /// Deleted copy constructor
   Interpolator(const Interpolator&) = delete;
   /// Move constructor
   Interpolator(Interpolator&&) = default;
@@ -23,10 +23,10 @@ public:
   /// Destructor
   virtual ~Interpolator() {}
 
-  /// Assignment operator
+  /// Deleted assignment operator
   Interpolator& operator=(const Interpolator&) = delete;
-  /// Default move assignment operator
-  Interpolator& operator=(Interpolator&&) = default;
+  /// Deleted move assignment operator
+  Interpolator& operator=(Interpolator&&) = delete;
   /// Function call operator
   void operator()(const Array& from, Array& to) const;
 

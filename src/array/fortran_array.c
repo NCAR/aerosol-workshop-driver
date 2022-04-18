@@ -29,6 +29,14 @@ static void aero_fortran_array_copy_out(const aero_array_t *array, aero_real_t *
   aero_bridge_fortran_array_copy_out(array->data_->fortran_array_, to);
 }
 
+static const aero_real_t *aero_fortran_array_const_data(const aero_array_t* array) {
+  return aero_bridge_fortran_array_data(array->data_->fortran_array_);
+}
+
+static aero_real_t *aero_fortran_array_data(aero_array_t *array) {
+  return aero_bridge_fortran_array_data(array->data_->fortran_array_);
+}
+
 static size_t aero_fortran_array_size(const aero_array_t *array) {
   return aero_bridge_fortran_array_size(array->data_->fortran_array_);
 }
@@ -41,6 +49,8 @@ static aero_array_t* aero_fortran_array_create(aero_array_data_t *array_data) {
   array->free = aero_fortran_array_free;
   array->copy_in = aero_fortran_array_copy_in;
   array->copy_out = aero_fortran_array_copy_out;
+  array->const_data = aero_fortran_array_const_data;
+  array->data = aero_fortran_array_data;
   array->size = aero_fortran_array_size;
   return array;
 }

@@ -59,6 +59,7 @@ int main(const int argc, const char *argv[]) {
   a->copy_out(rb);
   AERO_ASSERT(rb[7] == 12.3);
   AERO_ASSERT(a->data()[7] == 12.3);
+  AERO_ASSERT((reinterpret_cast<const aero::Array*>(a))->data()[7] == 12.3);
   delete a;
   delete b;
 
@@ -75,6 +76,8 @@ int main(const int argc, const char *argv[]) {
   rb[2] = 0.0;
   b->copy_out(rb);
   AERO_ASSERT(rb[2] == -132.45);
+  AERO_ASSERT(a->data()[2] == -132.45);
+  AERO_ASSERT((reinterpret_cast<const aero::Array*>(a))->data()[2] == -132.45);
   delete a;
   delete b;
 
@@ -91,6 +94,8 @@ int main(const int argc, const char *argv[]) {
   rb[2] = 0.0;
   b->copy_out(rb);
   AERO_ASSERT(rb[2] == -132.45);
+  AERO_ASSERT(a->data()[2] == -132.45);
+  AERO_ASSERT((reinterpret_cast<const aero::Array*>(a))->data()[2] == -132.45);
   delete a;
   delete b;
 

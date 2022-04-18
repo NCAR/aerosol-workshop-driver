@@ -43,6 +43,14 @@ void Array::copy_out(std::vector<Real> &output) const {
   this->copy_out(output.data());
 }
 
+const Real* Array::data() const {
+  return this->values_.data();
+}
+
+Real* Array::data() {
+  return this->values_.data();
+}
+
 std::size_t Array::size() const {
   return this->values_.size();
 }

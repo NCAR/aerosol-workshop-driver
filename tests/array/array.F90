@@ -41,6 +41,7 @@ contains
 
     class(array_t), pointer :: a, b
     real(kind=rk) :: ra(4), rb(4)
+    real(kind=rk), pointer :: rp(:)
 
     ra = (/ 12.5_rk, 32.6_rk, -132.45_rk, 0.0_rk /)
 
@@ -58,6 +59,8 @@ contains
     call assert( 772446711, rb(3) == -132.45_rk )
     b => a%clone()
     call assert( 865135504, rb(3) == -132.45_rk )
+    rp => b%data()
+    call assert( 418683137, rp(3) == -132.45_rk )
     deallocate( a )
     deallocate( b )
 
@@ -73,6 +76,8 @@ contains
     rb(:) = 0.0_rk
     call b%copy_out( rb )
     call assert( 368839302, rb(3) == -132.45_rk )
+    rp => b%data()
+    call assert( 890250635, rp(3) == -132.45_rk )
     deallocate( a )
     deallocate( b )
 
@@ -88,6 +93,8 @@ contains
     rb(:) = 0.0_rk
     call b%copy_out( rb )
     call assert( 544384881, rb(3) == -132.45_rk )
+    rp => b%data()
+    call assert( 444788323, rp(3) == -132.45_rk )
     deallocate( a )
     deallocate( b )
 

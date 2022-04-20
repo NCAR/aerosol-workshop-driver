@@ -84,16 +84,22 @@ contains
   !> Interpolates data from the input grid to the output grid
   subroutine interpolate( this, from, to )
 
+    use aero_array,                    only : array_t
+
     class(interpolator_t), intent(in)    :: this
-    real(kind=real_kind),  intent(in)    :: from(:)
-    real(kind=real_kind),  intent(inout) :: to(:)
+    class(array_t),        intent(in)    :: from
+    class(array_t),        intent(inout) :: to
 
     integer :: i_map
+    real(kind=real_kind), pointer :: to_a(:)
+    real(kind=real_kind), pointer :: from_a(:)
 
-    to(:) = 0.0
+    to_a   => to%data( )
+    from_a => from%data( )
+    to_a(:) = 0.0
     do i_map = 1, size( this%map_ )
-      to( this%map_( i_map )%to_ ) = to( this%map_( i_map )%to_ ) +      &
-          from( this%map_( i_map )%from_ ) * this%map_( i_map )%weight_
+      to_a( this%map_( i_map )%to_ ) = to_a( this%map_( i_map )%to_ ) +      &
+          from_a( this%map_( i_map )%from_ ) * this%map_( i_map )%weight_
     end do
 
   end subroutine interpolate

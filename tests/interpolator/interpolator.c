@@ -26,10 +26,10 @@ int main(const int argc, const char *argv[]) {
   aero_interpolator_t *interp = aero_linear_interpolator(from_grid, to_grid);
   interp->interpolate(interp, from_data, to_data);
   aero_real_t *to_a = to_data->data(to_data);
-  AERO_ASSERT(to_a[0] == 2.5);
-  AERO_ASSERT(to_a[1] == 2.5);
-  AERO_ASSERT(to_a[2] == 11.0);
-  AERO_ASSERT(to_a[3] == 0.2);
+  AERO_ASSERT(almost_equal(to_a[0], 2.5));
+  AERO_ASSERT(almost_equal(to_a[1], 2.5));
+  AERO_ASSERT(almost_equal(to_a[2], 11.0));
+  AERO_ASSERT(almost_equal(to_a[3], 0.2));
 
   interp->free(interp);
   from_data->free(from_data);

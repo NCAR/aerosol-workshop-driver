@@ -121,8 +121,8 @@ contains
   !> Returns a pointer to the underlying data
   function array_data( this )
 
-    real(kind=real_kind), pointer       :: array_data(:)
-    class(array_t),       intent(inout) :: this
+    real(kind=real_kind), pointer    :: array_data(:)
+    class(array_t),       intent(in) :: this
 
     array_data => this%data_
 

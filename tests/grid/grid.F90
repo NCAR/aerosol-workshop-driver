@@ -38,7 +38,7 @@ contains
   subroutine test_grid_t( )
 
     use aero_constants,                only : rk => real_kind
-    use aero_util,                     only : assert
+    use aero_util,                     only : assert, almost_equal
 
     real(kind=rk)           :: points(11)
     class(array_t), pointer :: interfaces, ifaces, midpts
@@ -53,8 +53,8 @@ contains
     midpts => f_grid%midpoints()
     call assert( 535729854, ifaces%size() == 11)
     call assert( 535729853, midpts%size() == 10)
-    call assert( 535729852, abs(f_grid%lower_bound()) < epsilon(0._rk))
-    call assert( 535729851, abs(f_grid%upper_bound() - 1_rk) < epsilon(0._rk))
+    call assert( 535729852, almost_equal( f_grid%lower_bound(), 0._rk ) )
+    call assert( 535729851, almost_equal( f_grid%upper_bound(), 1._rk ) )
 
     ! Now use C grid interfaces
     interfaces => c_array_t( test_grid_create_c_interfaces( ) )
@@ -63,8 +63,8 @@ contains
     midpts => c_grid%midpoints()
     call assert( 635729854, ifaces%size() == 11)
     call assert( 635729853, midpts%size() == 10)
-    call assert( 635729852, abs(c_grid%lower_bound()) < epsilon(0._rk))
-    call assert( 635729851, abs(c_grid%upper_bound() - 1_rk) < epsilon(0._rk))
+    call assert( 635729852, almost_equal( c_grid%lower_bound(), 0._rk ) )
+    call assert( 635729851, almost_equal( c_grid%upper_bound(), 1._rk ) )
 
     ! Now use C++ grid interfaces
     interfaces => cpp_array_t( test_grid_create_cpp_interfaces( ) )
@@ -73,8 +73,8 @@ contains
     midpts => cpp_grid%midpoints()
     call assert( 735729854, ifaces%size() == 11)
     call assert( 735729853, midpts%size() == 10)
-    call assert( 735729852, abs(cpp_grid%lower_bound()) < epsilon(0._rk))
-    call assert( 735729851, abs(cpp_grid%upper_bound() - 1_rk) < epsilon(0._rk))
+    call assert( 735729852, almost_equal( cpp_grid%lower_bound(), 0._rk ) )
+    call assert( 735729851, almost_equal( cpp_grid%upper_bound(), 1._rk ) )
 
   end subroutine test_grid_t
 

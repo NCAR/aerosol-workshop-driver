@@ -26,8 +26,8 @@ int main(const int argc, const char *argv[]) {
     aero::Grid grid(interfaces);
     AERO_ASSERT(grid.interfaces().size() == 11);
     AERO_ASSERT(grid.midpoints().size() == 10);
-    AERO_ASSERT(abs(grid.lower_bound()) < aero::epsilon);
-    AERO_ASSERT(abs(grid.upper_bound() - 1.0) < aero::epsilon);
+    AERO_ASSERT(aero::almost_equal(grid.lower_bound(), 0.0));
+    AERO_ASSERT(aero::almost_equal(grid.upper_bound(), 1.0));
   }
 
   // Now let's create a grid from a Fortran array.
@@ -36,8 +36,8 @@ int main(const int argc, const char *argv[]) {
     aero::Grid grid(interfaces);
     AERO_ASSERT(grid.interfaces().size() == 11);
     AERO_ASSERT(grid.midpoints().size() == 10);
-    AERO_ASSERT(abs(grid.lower_bound()) < aero::epsilon);
-    AERO_ASSERT(abs(grid.upper_bound() - 1.0) < aero::epsilon);
+    AERO_ASSERT(aero::almost_equal(grid.lower_bound(), 0.0));
+    AERO_ASSERT(aero::almost_equal(grid.upper_bound(), 1.0));
   }
 
   // Do the same with a C array.
@@ -46,8 +46,8 @@ int main(const int argc, const char *argv[]) {
     aero::Grid grid(interfaces);
     AERO_ASSERT(grid.interfaces().size() == 11);
     AERO_ASSERT(grid.midpoints().size() == 10);
-    AERO_ASSERT(abs(grid.lower_bound()) < aero::epsilon);
-    AERO_ASSERT(abs(grid.upper_bound() - 1.0) < aero::epsilon);
+    AERO_ASSERT(aero::almost_equal(grid.lower_bound(), 0.0));
+    AERO_ASSERT(aero::almost_equal(grid.upper_bound(), 1.0));
   }
 
   return 0;

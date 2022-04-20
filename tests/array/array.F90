@@ -37,7 +37,7 @@ contains
   subroutine test_array_t( )
 
     use aero_constants,                only : rk => real_kind
-    use aero_util,                     only : assert
+    use aero_util,                     only : assert, almost_equal
 
     class(array_t), pointer :: a, b
     real(kind=rk) :: ra(4), rb(4)
@@ -48,19 +48,19 @@ contains
     a => array_t( ra )
     call assert( 117236040, a%size( ) == 4 )
     call a%copy_out( rb )
-    call assert( 454191075, rb(3) == -132.45_rk )
+    call assert( 454191075, almost_equal( rb(3), -132.45_rk ) )
     deallocate( a )
     a => array_t( 4, 32.4_rk )
     call assert( 496689008, a%size( ) == 4 )
     call a%copy_out( rb )
-    call assert( 609007353, rb(3) == 32.4_rk )
+    call assert( 609007353, almost_equal( rb(3), 32.4_rk ) )
     call a%copy_in( ra )
     call a%copy_out( rb )
-    call assert( 772446711, rb(3) == -132.45_rk )
+    call assert( 772446711, almost_equal( rb(3), -132.45_rk ) )
     b => a%clone()
-    call assert( 865135504, rb(3) == -132.45_rk )
+    call assert( 865135504, almost_equal( rb(3), -132.45_rk ) )
     rp => b%data()
-    call assert( 418683137, rp(3) == -132.45_rk )
+    call assert( 418683137, almost_equal( rp(3), -132.45_rk ) )
     deallocate( a )
     deallocate( b )
 
@@ -68,16 +68,16 @@ contains
     a => c_array_t( test_array_create_c_array( ) )
     call assert( 389444235, a%size( ) == 4 )
     call a%copy_out( rb )
-    call assert( 378915621, rb(3) == 0.523_rk )
+    call assert( 378915621, almost_equal( rb(3), 0.523_rk ) )
     call a%copy_in( ra )
     call a%copy_out( rb )
-    call assert( 717776190, rb(3) == -132.45_rk )
+    call assert( 717776190, almost_equal( rb(3), -132.45_rk ) )
     b => a%clone( )
     rb(:) = 0.0_rk
     call b%copy_out( rb )
-    call assert( 368839302, rb(3) == -132.45_rk )
+    call assert( 368839302, almost_equal( rb(3), -132.45_rk ) )
     rp => b%data()
-    call assert( 890250635, rp(3) == -132.45_rk )
+    call assert( 890250635, almost_equal( rp(3), -132.45_rk ) )
     deallocate( a )
     deallocate( b )
 
@@ -85,16 +85,16 @@ contains
     a => cpp_array_t( test_array_create_cpp_array( ) )
     call assert( 437330843, a%size( ) == 4 )
     call a%copy_out( rb )
-    call assert( 267173939, rb(3) == -1.0e9_rk )
+    call assert( 267173939, almost_equal( rb(3), -1.0e9_rk ) )
     call a%copy_in( ra )
     call a%copy_out( rb )
-    call assert( 714541785, rb(3) == -132.45_rk )
+    call assert( 714541785, almost_equal( rb(3), -132.45_rk ) )
     b => a%clone( )
     rb(:) = 0.0_rk
     call b%copy_out( rb )
-    call assert( 544384881, rb(3) == -132.45_rk )
+    call assert( 544384881, almost_equal( rb(3), -132.45_rk ) )
     rp => b%data()
-    call assert( 444788323, rp(3) == -132.45_rk )
+    call assert( 444788323, almost_equal( rp(3), -132.45_rk ) )
     deallocate( a )
     deallocate( b )
 

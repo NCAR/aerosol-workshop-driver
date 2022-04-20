@@ -6,6 +6,9 @@
 
 #include <assert.h>
 #include <float.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <math.h>
 
 /// Floating point type (with proper precision).
 typedef @AERO_REAL_TYPE@ aero_real_t;
@@ -13,4 +16,25 @@ typedef @AERO_REAL_TYPE@ aero_real_t;
 /// Machine-precision "epsilon" for select floating point type.
 static const aero_real_t aero_epsilon = @AERO_C_EPSILON@;
 
+/// Compares floating-point numbers
+///
+/// If the absolute relative difference between the numbers is within a
+/// tolerance based on the precision of \c aero_real_t, the function returns
+/// true. Otherwise, it returns false.
+static bool almost_equal( const aero_real_t a, const aero_real_t b ) {
+  if (a == 0.0 && b == 0.0) return true;
+  if (fabs(a - b) * 2.0 / fabs(a + b) < 5.0 * aero_epsilon ) return true;
+  return false;
+}
+
+/// Compares floating-point numbers
+///
+/// If the absolute relative difference between the numbers is within the
+/// given tolerance, the function returns true. Otherwise, it returns false.
+static bool almost_equal_with_tolerance( const aero_real_t a, const aero_real_t b,
+    const aero_real_t tolerance ) {
+  if (a == 0.0 && b == 0.0) return true;
+  if (fabs(a - b) * 2.0 / fabs(a + b) < fabs( tolerance ) ) return true;
+  return false;
+}
 #endif

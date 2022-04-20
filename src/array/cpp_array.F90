@@ -151,8 +151,8 @@ contains
   !> Returns a pointer to the underlying array data
   function array_data( this )
 
-    real(kind=real_kind), pointer       :: array_data(:)
-    class(cpp_array_t),   intent(inout) :: this
+    real(kind=real_kind), pointer    :: array_data(:)
+    class(cpp_array_t),   intent(in) :: this
 
     call c_f_pointer( aero_bridge_cpp_array_data( this%array_ ), array_data,  &
                       shape = [ aero_bridge_cpp_array_size( this%array_ ) ] )

@@ -42,8 +42,11 @@ public:
   /// Returns the name of the aerosol model/package.
   virtual std::string name() const = 0;
 
+  /// Returns a newly created aerosol state.
+  virtual State* create_state() const = 0;
+
   /// Returns the aerosol optics grid, discretized in wavelength space.
-  virtual Grid optics_grid() const = 0;
+  virtual const Grid& optics_grid() const = 0;
 
   /// Computes optical property data, given an aerosol state and destination
   /// arrays.

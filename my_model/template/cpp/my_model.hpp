@@ -18,10 +18,19 @@ class MyModel : public aero::Model {
 
 public:
   MyModel();
-  virtual ~MyModel() {}
-  void GetOptics(double *optics);
+  ~MyModel();
+  std::string name() const override;
+  aero::State* create_state() const override;
+  const aero::Grid& optics_grid() const override;
+  void compute_optics(const aero::State& state,
+                      aero::Array& od,
+                      aero::Array& od_ssa,
+                      aero::Array& od_asym) const override;
 
 private:
+
+  aero::Grid* create_grid_();
+  aero::Grid* grid_;
 };
 
 } // mya project

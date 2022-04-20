@@ -28,7 +28,9 @@ public:
                       aero::Array& od_asym) const override;
 
 private:
-  aero::Grid *grid_;
+
+  aero::Grid* create_grid_();
+  aero::Grid* grid_;
 };
 
 } // mya project

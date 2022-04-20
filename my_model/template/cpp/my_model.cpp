@@ -40,7 +40,7 @@ public:
 
 MyModel::MyModel()
   : aero::Model(),
-    grid_(nullptr) {
+    grid_(create_grid_()) {
 
   // Initialize the aerosol grid with wavelength data pulled from
   // https://acp.copernicus.org/articles/18/7815/2018/acp-18-7815-2018-f03.pdf
@@ -59,6 +59,23 @@ MyModel::MyModel()
 
 MyModel::~MyModel() {
   delete grid_;
+}
+
+// This helper method creates the grid for optical properties.
+aero::Grid* MyModel::create_grid_() {
+  // Initialize the aerosol grid with wavelength data pulled from
+  // https://acp.copernicus.org/articles/18/7815/2018/acp-18-7815-2018-f03.pdf
+  aero::Real wavelengths[] = {440.0, 675.0, 870.0, 1020.0}; // [nm]
+
+  // Convert to wave numbers for the grid's interfaces.
+  std::vector<aero::Real> wave_numbers;
+  for (size_t i = 0; i < 4; ++i) {
+    wave_numbers.push_back(1e-9 / wavelengths[i]); // [m-1]
+  }
+
+  // Create an interfaces array and, from it, a grid.
+  aero::Array *interfaces = new aero::Array(wave_numbers);
+  return new aero::Grid(interfaces);
 }
 
 std::string MyModel::name() const {

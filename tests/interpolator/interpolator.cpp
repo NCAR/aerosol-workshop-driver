@@ -29,10 +29,10 @@ int main(const int argc, const char *argv[]) {
     auto *interp = new aero::Interpolator(*from_grid, *to_grid);
     (*interp)(*from_data, *to_data);
     auto *to_a = to_data->data();
-    AERO_ASSERT(to_a[0] == 2.5);
-    AERO_ASSERT(to_a[1] == 2.5);
-    AERO_ASSERT(to_a[2] == 11.0);
-    AERO_ASSERT(to_a[3] == 0.2);
+    AERO_ASSERT(aero::almost_equal(to_a[0], 2.5));
+    AERO_ASSERT(aero::almost_equal(to_a[1], 2.5));
+    AERO_ASSERT(aero::almost_equal(to_a[2], 11.0));
+    AERO_ASSERT(aero::almost_equal(to_a[3], 0.2));
     delete interp;
   }
 

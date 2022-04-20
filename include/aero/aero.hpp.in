@@ -6,6 +6,8 @@
 
 #include <assert.h>
 #include <limits>
+#include <stdlib.h>
+#include <math.h>
 
 namespace aero {
 
@@ -14,6 +16,28 @@ using Real = @AERO_REAL_TYPE@;
 
 // Machine-precision "epsilon" for select floating point type.
 static const Real epsilon = std::numeric_limits<Real>::epsilon();
+
+/// Compares floating-point numbers
+///
+/// If the absolute relative difference between the numbers is within a
+/// tolerance based on the precision of \c Real, the function returns
+/// true. Otherwise, it returns false.
+static bool almost_equal( const Real a, const Real b ) {
+  if (a == 0.0 && b == 0.0) return true;
+  if (fabs(a - b) * 2.0 / fabs(a + b) < 5.0 * epsilon ) return true;
+  return false;
+}
+
+/// Compares floating-point numbers
+///
+/// If the absolute relative difference between the numbers is within the
+/// given tolerance, the function returns true. Otherwise, it returns false.
+static bool almost_equal( const Real a, const Real b,
+    const Real tolerance ) {
+  if (a == 0.0 && b == 0.0) return true;
+  if (fabs(a - b) * 2.0 / fabs(a + b) < fabs( tolerance ) ) return true;
+  return false;
+}
 
 }
 

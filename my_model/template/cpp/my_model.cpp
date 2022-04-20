@@ -80,8 +80,8 @@ void MyModel::compute_optics(const aero::State& state,
   // We simply copy the state's optics data into place.
   const MyState& my_state = dynamic_cast<const MyState&>(state);
   od.copy_in(my_state.od);
-  od.copy_in(my_state.od_ssa);
-  od.copy_in(my_state.od_asym);
+  od_ssa.copy_in(my_state.od_ssa);
+  od_asym.copy_in(my_state.od_asym);
 }
 
 } // namespace mya

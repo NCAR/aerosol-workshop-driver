@@ -56,7 +56,7 @@ contains
 
   !> Creates a C++ aerosol model
   !!
-  !! If the model is not a supported model in C, a null pointer is returned
+  !! If the model is not a supported model in C++, a null pointer is returned
   function constructor( package_name, description_file ) result( model )
 
     type(cpp_model_t),  pointer    :: model

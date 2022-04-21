@@ -13,7 +13,7 @@ void usage(const char *exe_name) {
   exit(1);
 }
 
-// This helper creates a grid used by the host model.
+// This helper creates a grid used by the host model. For simplicity.
 aero_grid_t* create_host_wavelength_grid(void) {
   return NULL;
 }
@@ -26,10 +26,47 @@ aero_array_t* create_array_from_grid(aero_grid_t *grid) {
   return aero_array_from_dimensions(n, 0.0);
 }
 
+static void write_array_data(FILE *fp,
+                             const char *array_name,
+                             const aero_array_t *array) {
+  size_t size = array->size(array);
+  fprintf(fp, "%s = [", array_name);
+  aero_real_t data[size];
+  array->copy_out(array, data);
+  for (size_t i = 0; i < size; ++i) {
+    fprintf(fp, "%g, ", data[i]);
+  }
+  fprintf(fp, "]\n");
+}
+
 // This helper plots the aerosol optics data on the given grid.
-void plot_optics(aero_grid_t *grid, aero_array_t *od, aero_array_t *od_ssa,
-                 aero_array_t *od_asym) {
-  // TODO
+static void write_optics_data(const char *filename,
+                              const aero_grid_t *grid,
+                              const aero_array_t *od,
+                              const aero_array_t *od_ssa,
+                              const aero_array_t *od_asym) {
+  FILE *fp = fopen(filename, "w");
+
+  // Check that the arrays are properly sized.
+  const aero_array_t *ifaces = aero_grid_interfaces(grid);
+  size_t num_ifaces = ifaces->size(ifaces);
+  AERO_ASSERT(num_ifaces == od->size(od));
+  AERO_ASSERT(num_ifaces == od_ssa->size(od));
+  AERO_ASSERT(num_ifaces == od_asym->size(od));
+
+  // Write out grid interfaces.
+  fprintf(fp, "# Grid interfaces\n");
+  write_array_data(fp, "interfaces", ifaces);
+
+  // Write out data.
+  fprintf(fp, "# Aerosol optical depth [m]\n");
+  write_array_data(fp, "od", od);
+  fprintf(fp, "# Aerosol scattering optical depth [m]\n");
+  write_array_data(fp, "od_ssa", od_ssa);
+  fprintf(fp, "# Aerosol asymmetric scattering optical depth [m]\n");
+  write_array_data(fp, "od_asym", od_asym);
+
+  fclose(fp);
 }
 
 int main(int argc, char *argv[]) {
@@ -73,8 +110,10 @@ int main(int argc, char *argv[]) {
   interp->interpolate(interp, aero_od_ssa, host_od_ssa);
   interp->interpolate(interp, aero_od_asym, host_od_asym);
 
-  // Plot the results.
-  plot_optics(host_grid, host_od, host_od_ssa, host_od_asym);
+  // Write the data to a Python module named after the aerosol package.
+  char filename[FILENAME_MAX];
+  snprintf(filename, FILENAME_MAX, "%s.py", package_name);
+  write_optics_data(filename, host_grid, host_od, host_od_ssa, host_od_asym);
 
   // Clean up.
   aero_od->free(aero_od);

@@ -19,7 +19,10 @@ module aero_c_model
   type, extends(model_t) :: c_model_t
     type(c_ptr) :: model_
   contains
-    procedure :: get_optics
+    procedure :: name => model_name
+    procedure :: create_state
+    procedure :: optics_grid
+    procedure :: compute_optics
   end type
 
   interface c_model_t
@@ -57,8 +60,8 @@ contains
   function constructor( package_name, description_file ) result( model )
 
     type(c_model_t),  pointer    :: model
-    character(len=*),   intent(in) :: package_name
-    character(len=*),   intent(in) :: description_file
+    character(len=*), intent(in) :: package_name
+    character(len=*), intent(in) :: description_file
 
     if( aero_bridge_c_supports_model( trim( package_name )//c_null_char ) )   &
       then
@@ -74,15 +77,66 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine get_optics( this, optics )
+  !> Returns the name of the aerosol model/package
+  function model_name( this )
 
-    !> Aerosol model
-    class(c_model_t),     intent(inout) :: this
-    !> Calculated optics properties
-    real(kind=real_kind), intent(out)   :: optics(:)
+    !> Unique model name
+    character(len=:), allocatable :: model_name
+    !> C aerosol model
+    class(c_model_t), intent(in) :: this
 
-  end subroutine
+  end function model_name
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns a newly created aerosol state
+  function create_state( this ) result( state )
+
+    use aero_state,                    only : state_t
+
+    !> New aerosol state
+    class(state_t),    pointer    :: state
+    !> C aerosol model
+    class(c_model_t), intent(in) :: this
+
+  end function create_state
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns the aerosol optics grid, discretized in wavenumber space
+  function optics_grid( this )
+
+    use aero_grid,                     only : grid_t
+
+    !> Aerosol optical property wave number grid
+    type(grid_t) :: optics_grid
+    !> C aerosol model
+    class(c_model_t), intent(in) :: this
+
+  end function optics_grid
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Computes optical property data, given an aerosol state and destination
+  !! arrays
+  subroutine compute_optics( this, state, od, od_ssa, od_asym )
+
+    use aero_array,                    only : array_t
+    use aero_state,                    only : state_t
+
+    !> C aerosol model
+    class(c_model_t), intent(inout) :: this
+    !> Aerosol state
+    class(state_t),   intent(inout) :: state
+    !> Aerosol optical depth [m]
+    class(array_t),   intent(inout) :: od
+    !> Aerosol scattering optical depth [m]
+    class(array_t),   intent(inout) :: od_ssa
+    !> Aerosol asymmetric scattering optical depth [m]
+    class(array_t),   intent(inout) :: od_asym
+
+  end subroutine compute_optics
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-end module
+end module aero_c_model

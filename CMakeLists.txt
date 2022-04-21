@@ -52,8 +52,9 @@ include_directories(${PROJECT_BINARY_DIR}/src)
 
 if (NOT AERO_TESTS_ONLY)
   add_subdirectory(my_model)
+else ()
+  add_subdirectory(my_model/template)
 endif ()
-add_subdirectory(my_model/template)
 
 ################################################################################
 # aerosol interface library

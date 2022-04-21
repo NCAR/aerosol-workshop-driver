@@ -61,7 +61,7 @@ interface
     use aero_grid,                     only : grid_t
     import :: model_t
 
-    !> Copy of optical property wave number grid
+    !> Optical property wave number grid
     type(grid_t) :: optics_grid
     !> Aerosol model
     class(model_t), intent(in) :: this

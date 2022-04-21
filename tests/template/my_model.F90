@@ -51,8 +51,11 @@ contains
     call assert( 359278219, almost_equal( od_ssa_a(4),  0.92_rk * 0.75_rk * 0.88_rk ) )
     call assert( 754071813, almost_equal( od_asym_a(1), 0.92_rk * 0.27_rk * 0.88_rk * 0.3_rk ) )
 
-    deallocate( state )
-    deallocate( model )
+    deallocate( od      )
+    deallocate( od_ssa  )
+    deallocate( od_asym )
+    deallocate( state   )
+    deallocate( model   )
 
   end subroutine test_my_model_t
 

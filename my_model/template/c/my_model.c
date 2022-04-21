@@ -75,13 +75,19 @@ static void my_compute_optics(void *context,
   od_asym->copy_in(od_asym, state->od_asym_);
 }
 
+static void my_free(void *context) {
+  my_model_data_t *data = context;
+  aero_grid_free(data->grid_);
+}
+
 aero_model_t* my_model_new(const char *description_file) {
 
   aero_model_behaviors behaviors = {
     .name = my_name,
     .create_state = my_create_state,
     .optics_grid = my_optics_grid,
-    .compute_optics = my_compute_optics
+    .compute_optics = my_compute_optics,
+    .free = my_free
   };
 
   // Define the model's data based on the contents of the description file.

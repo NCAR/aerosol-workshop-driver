@@ -32,6 +32,8 @@ typedef struct aero_model_behaviors {
   const char* (*name)(void *aerosol);
   /// returns a newly created aerosol state
   aero_state_t* (*create_state)(void *aerosol);
+  /// frees a state created by create_state
+  void (*free_state)(void *aerosol, aero_state_t *state);
   /// returns the grid on which the aerosol's optical properties are computed
   aero_grid_t* (*optics_grid)(void *aerosol);
   /// computes optical properties given the model, an aerosol state, and
@@ -39,14 +41,25 @@ typedef struct aero_model_behaviors {
   void (*compute_optics)(void *aerosol, aero_state_t *state,
                          aero_array_t *od, aero_array_t *od_ssa,
                          aero_array_t *od_asym);
+  /// Destroys the model's contextual data, freeing any associated resources.
+  void (*free)(void *aerosol);
 } aero_model_behaviors;
 
 /// Creates and returns an aerosol model implemented in C with the given data
 /// (context) pointer and set of behaviors.
 aero_model_t* aero_model_new(void *data, aero_model_behaviors behaviors);
 
+/// Destroys the given aerosol model, freeing all resources allocated.
+void aero_model_free(aero_model_t *model);
+
 /// Returns the name of the aerosol package that provides this model.
 const char* aero_model_name(aero_model_t *model);
+
+/// Creates an aerosol state compatible with this model.
+aero_state_t* aero_model_create_state(aero_model_t *model);
+
+/// Frees the aerosol state created by this model
+void aero_model_free_state(aero_model_t *model, aero_state_t *state);
 
 /// Returns the optics grid on which this model computes optical properties.
 aero_grid_t* aero_model_optics_grid(aero_model_t *model);

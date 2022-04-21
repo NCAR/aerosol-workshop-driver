@@ -22,10 +22,10 @@ module aero_grid
   type :: grid_t
     private
     !> array storing interface coordinates (in ascending order)
-    class(array_t), pointer :: interfaces_
+    class(array_t), pointer :: interfaces_ => null( )
     !> array storing coordinates of midpoints between interfaces (in ascending
     !> order)
-    class(array_t), pointer :: midpoints_
+    class(array_t), pointer :: midpoints_ => null( )
     !> lower bound (minimum interface coordinate), provided for convenience
     real(kind=real_kind) :: lower_bound_
     !> upper bound (maximum interface coordinate), provided for convenience

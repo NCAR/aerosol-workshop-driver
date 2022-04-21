@@ -6,6 +6,8 @@ RUN dnf -y install \
     gcc \
     cmake \
     make \
+    man \
+    diffutils \
     netcdf-fortran-devel \
     git \
     valgrind \

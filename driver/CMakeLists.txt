@@ -50,7 +50,7 @@ foreach (model_lang fortran cpp c)
     target_include_directories(${driver_name} PUBLIC ${CMAKE_BINARY_DIR}/my_model/template)
 
     # Add tests to the test suite
-    add_test(NAME ${test_name} COMMAND ${driver_name} "my aerosol" none)
+    add_test(NAME ${test_name} COMMAND ${driver_name} "my model" none)
   endforeach()
 endforeach()
 

@@ -1,0 +1,10 @@
+#include <my_model/create_model.hpp>
+#include <my_model/@AERO_MODEL_HEADER@>
+
+namespace aero {
+
+aero::Model* create_model(const char *description_file) {
+  return new @AERO_MODEL_TYPE@(description_file);
+}
+
+} // namespace aero

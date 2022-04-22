@@ -1,5 +1,5 @@
 // Include your aerosol model here.
-#include "../my_model/template/c/my_model.h"
+#include "../my_model/template/c/create_model.h"
 
 #include <aero/grid/grid.h>
 #include <aero/interpolator/interpolator.h>
@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
   const char *desc_file    = (const char*)argv[2];
 
   // Construct your aerosol model from the given description file.
-  aero_model_t *model = my_model_new(desc_file);
+  aero_model_t *model = create_model(desc_file);
 
   // Use the model to create an aerosol state.
   aero_state_t *state = aero_model_create_state(model);

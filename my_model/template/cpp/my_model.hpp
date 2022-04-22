@@ -11,13 +11,11 @@
 
 #include <aero/model/model.hpp>
 
-namespace mya {
-
 /// \brief My aerosol model
 class MyModel : public aero::Model {
 
 public:
-  MyModel();
+  MyModel(const char* description_file);
   ~MyModel();
   std::string name() const override;
   aero::State* create_state() const override;
@@ -32,5 +30,3 @@ private:
   aero::Grid* create_grid_();
   aero::Grid* grid_;
 };
-
-} // mya project

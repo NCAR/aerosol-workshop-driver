@@ -11,8 +11,6 @@
 
 #include "my_model.hpp"
 
-namespace mya {
-
 // Aerosol state specific to this model
 class MyState : public aero::State {
 public:
@@ -43,7 +41,7 @@ public:
   }
 };
 
-MyModel::MyModel()
+MyModel::MyModel(const char* description_file)
   : aero::Model(),
     grid_(create_grid_()) {
 
@@ -107,5 +105,3 @@ void MyModel::compute_optics(const aero::State& state,
   od_ssa.copy_in(my_state.od_ssa);
   od_asym.copy_in(my_state.od_asym);
 }
-
-} // namespace mya

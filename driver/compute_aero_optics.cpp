@@ -1,4 +1,4 @@
-#include "../my_model/template/cpp/my_model.hpp"
+#include "../my_model/template/cpp/create_model.hpp"
 
 #include <aero/interpolator/interpolator.hpp>
 
@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 
   // Construct an aerosol model from the given package name and
   // descriptor file.
-  aero::Model* model = new mya::MyModel();
+  aero::Model* model = aero::create_model(desc_file.c_str());
 
   // Use the model to create an aerosol state.
   aero::State* state = model->create_state();

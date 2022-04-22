@@ -7,15 +7,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Prints usage information.
 void usage(const char *exe_name) {
   fprintf(stderr, "%s: Usage:\n", exe_name);
   fprintf(stderr, "%s <package_name> <input_file>\n", exe_name);
   exit(1);
 }
 
-// This helper creates a grid used by the host model. For simplicity.
+// This helper creates a grid used by the host model. For simplicity, we
+// use a grid with twice the resolution of the aerosol wavelength grid in
+// the template example. The grid's interfaces are wave numbers [m-1]; we
+// specify wavelengths in descending order so their wave numbers appear in
+// ascending order in the grid interfaces array.
 aero_grid_t* create_host_wavelength_grid(void) {
-  return NULL;
+  aero_real_t wavelengths[] = {
+    1020.0, 945.0, 870.0, 777.5, 675.0, 557.5, 440.0 // [nm]
+  };
+
+  // Convert to wave numbers [m-1] for the grid's interfaces.
+  aero_real_t wave_numbers[7];
+  for (size_t i = 0; i < 7; ++i) {
+    wave_numbers[i] = 1e-9 / wavelengths[i];
+  }
+
+  aero_array_t *ifaces = aero_array_from_array(7, wave_numbers);
+  return aero_grid_from_interfaces(ifaces);
 }
 
 // This helper creates an array whose data conforms to the interfaces in the
@@ -26,6 +42,8 @@ aero_array_t* create_array_from_grid(aero_grid_t *grid) {
   return aero_array_from_dimensions(n, 0.0);
 }
 
+// This helper is called by write_optics_data (below) to write array data to
+// a Python module.
 static void write_array_data(FILE *fp,
                              const char *array_name,
                              const aero_array_t *array) {
@@ -39,7 +57,8 @@ static void write_array_data(FILE *fp,
   fprintf(fp, "]\n");
 }
 
-// This helper plots the aerosol optics data on the given grid.
+// This helper writes aerosol optics data to a Python module with the given
+// filename.
 static void write_optics_data(const char *filename,
                               const aero_grid_t *grid,
                               const aero_array_t *od,

@@ -32,7 +32,7 @@ struct aero_state_t {
 
 // Returns the name of this aerosol model.
 static const char* my_name(void *context) {
-  return "My Model";
+  return "My C Model";
 }
 
 // Returns a newly created aerosol state related to this model.
@@ -45,9 +45,15 @@ static aero_state_t* my_create_state(void *context) {
   // Note the units in the fields of the aero_state_t struct at the top of
   // this file. The data here corresponds to the grid interfaces shown in the
   // figure.
-  aero_real_t od_data[]      = {0.75, 0.5, 0.35, 0.27};       // top left
-  aero_real_t od_ssa_data[]  = {0.88, 0.905, 0.895, 0.88};    // middle left
-  aero_real_t od_asym_data[] = {0.09, 0.045, 0.035, 0.3};     // top right
+  //
+  // The data arrays are ordered so they correspond to the following
+  // wavelengths, expressed in descending order:
+  // {1020.0, 870.0, 675.0, 440.0} [nm]
+  // This corresponds to a grid with interfaces expressed in ascending
+  // wave numbers [m-1].
+  aero_real_t od_data[]      = {0.27, 0.35, 0.5, 0.75};       // top left
+  aero_real_t od_ssa_data[]  = {0.88, 0.895, 0.905, 0.88};    // middle left
+  aero_real_t od_asym_data[] = {0.3, 0.035, 0.045, 0.09};     // top right
   state->od_      = malloc(sizeof(aero_real_t) * 4);
   state->od_ssa_  = malloc(sizeof(aero_real_t) * 4);
   state->od_asym_ = malloc(sizeof(aero_real_t) * 4);
@@ -95,13 +101,16 @@ aero_model_t* my_model_new(const char *description_file) {
 
   // Initialize the aerosol grid with wavelength data pulled from
   // https://acp.copernicus.org/articles/18/7815/2018/acp-18-7815-2018-f03.pdf
-  aero_real_t wavelengths[] = {440.0, 675.0, 870.0, 1020.0}; // [nm]
+  // We specify wavelengths in descending order so their wave numbers appear in
+  // ascending order in the grid interfaces array.
+  aero_real_t wavelengths[] = {1020.0, 870.0, 675.0, 440.0}; // [nm]
 
   // Convert to wave numbers for the grid's interfaces.
   aero_real_t wave_numbers[4];
   for (size_t i = 0; i < 4; ++i) {
     wave_numbers[i] = 1e-9 / wavelengths[i]; // [m-1]
   }
+
   aero_array_t *interfaces = aero_array_from_array(4, wave_numbers);
   data->grid_ = aero_grid_from_interfaces(interfaces);
 

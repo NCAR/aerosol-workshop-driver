@@ -101,9 +101,9 @@ contains
 
     ! Load the averaged optical properties from
     ! https://acp.copernicus.org/articles/18/7815/2018/acp-18-7815-2018-f03.pdf
-    allocate( model%tau_(   interfaces%size() - 1 ) )
-    allocate( model%omega_( interfaces%size() - 1 ) )
-    allocate( model%g_(     interfaces%size() - 1 ) )
+    allocate( model%tau_(   interfaces%size()  ) )
+    allocate( model%omega_( interfaces%size()  ) )
+    allocate( model%g_(     interfaces%size()  ) )
 
     model%tau_(:)   = (/ 0.27_rk,  0.35_rk,   0.5_rk, 0.75_rk /)
     model%omega_(:) = (/ 0.88_rk, 0.895_rk, 0.905_rk, 0.88_rk /)
@@ -156,7 +156,7 @@ contains
     !> My aerosol model
     class(my_model_t), intent(in) :: this
 
-    optics_grid = this%grid_
+    optics_grid = this%grid_%clone( )
 
   end function optics_grid
 

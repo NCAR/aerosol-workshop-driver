@@ -7,6 +7,9 @@
 !> The c_model_t type and related functions
 module aero_c_model
 
+  use aero_array,                      only : array_t
+  use aero_c_array,                    only : c_array_t
+  use aero_cpp_array,                  only : cpp_array_t
   use aero_model,                      only : model_t
   use aero_constants,                  only : real_kind
   use iso_c_binding
@@ -121,7 +124,6 @@ contains
   !! arrays
   subroutine compute_optics( this, state, od, od_ssa, od_asym )
 
-    use aero_array,                    only : array_t
     use aero_state,                    only : state_t
 
     !> C aerosol model

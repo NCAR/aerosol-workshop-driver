@@ -9,6 +9,8 @@ module aero_grid
 
   use aero_constants,              only : real_kind
   use aero_array,                  only : array_t
+  use aero_c_array,                only : c_array_t
+  use aero_cpp_array,              only : cpp_array_t
   use iso_c_binding
 
   implicit none
@@ -22,15 +24,16 @@ module aero_grid
   type :: grid_t
     private
     !> array storing interface coordinates (in ascending order)
-    class(array_t), pointer :: interfaces_
+    class(array_t), pointer :: interfaces_ => null( )
     !> array storing coordinates of midpoints between interfaces (in ascending
     !> order)
-    class(array_t), pointer :: midpoints_
+    class(array_t), pointer :: midpoints_ => null( )
     !> lower bound (minimum interface coordinate), provided for convenience
     real(kind=real_kind) :: lower_bound_
     !> upper bound (maximum interface coordinate), provided for convenience
     real(kind=real_kind) :: upper_bound_
   contains
+    procedure :: clone       => grid_clone
     procedure :: interfaces  => grid_interfaces
     procedure :: midpoints   => grid_midpoints
     procedure :: lower_bound => grid_lower_bound
@@ -69,6 +72,16 @@ contains
 
     deallocate(iface_data, midpt_data)
   end function grid_from_interfaces
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Copies a grid
+  type(grid_t) function grid_clone( this ) result( clone )
+    class(grid_t),  intent(in) :: this
+    class(array_t), pointer    :: ifaces
+    ifaces => this%interfaces_%clone( )
+    clone = grid_t( ifaces )
+  end function grid_clone
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

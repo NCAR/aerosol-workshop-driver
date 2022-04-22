@@ -73,7 +73,8 @@ interface
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  integer(kind=c_int) function aero_bridge_cpp_array_size( array_c ) bind(c)
+  pure integer(kind=c_int) function aero_bridge_cpp_array_size( array_c )     &
+      bind(c)
     use iso_c_binding
     type(c_ptr), value :: array_c
   end function aero_bridge_cpp_array_size
@@ -162,7 +163,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Returns the number of elements in an Array
-  integer function array_size( this )
+  pure integer function array_size( this )
 
     class(cpp_array_t), intent(in) :: this
 

@@ -131,7 +131,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Returns the number of elements in an Array
-  integer function array_size( this )
+  pure integer function array_size( this )
 
     class(array_t), intent(in) :: this
 

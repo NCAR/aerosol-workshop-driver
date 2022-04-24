@@ -91,8 +91,8 @@ aero::State* MyModel::create_state() const {
   return new MyState();
 }
 
-const aero::Grid& MyModel::optics_grid() const {
-  return *grid_;
+aero::Grid* MyModel::optics_grid() const {
+  return new aero::Grid(grid_->interfaces().clone());
 }
 
 void MyModel::compute_optics(const aero::State& state,

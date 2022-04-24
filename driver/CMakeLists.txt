@@ -59,5 +59,5 @@ foreach (model_lang fortran cpp c)
     # Add tests to the test suite
     add_test(NAME ${test_name} COMMAND ${driver_name} "my model" none)
   endforeach()
-endif()
+endforeach()
 

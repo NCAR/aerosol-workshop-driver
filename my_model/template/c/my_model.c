@@ -19,9 +19,9 @@
 
 // Store your data here. It's available via the context pointer argument to
 // methods.
-typedef struct my_model_data_t {
+struct aero_model_data_t {
   aero_grid_t *grid_;   // radiation wave number ("wavelength") grid [m-1]
-} my_model_data_t;
+};
 
 // Aerosol state data for this model is defined here.
 struct aero_state_t {
@@ -30,13 +30,15 @@ struct aero_state_t {
   aero_real_t *od_asym_; // aerosol asymmetric scattering optical depth [m]
 };
 
+static aero_model_t* my_model_create(aero_model_data_t *model_data);
+
 // Returns the name of this aerosol model.
-static const char* my_name(void *context) {
+static const char* my_model_name(const aero_model_t *model) {
   return "My C Model";
 }
 
 // Returns a newly created aerosol state related to this model.
-static aero_state_t* my_create_state(void *context) {
+static aero_state_t* my_model_create_state(const aero_model_t *model) {
   aero_state_t *state = malloc(sizeof(aero_state_t));
 
   // We initialize C arrays with data pulled from
@@ -64,40 +66,42 @@ static aero_state_t* my_create_state(void *context) {
 }
 
 // Returns the grid associated with this model
-static aero_grid_t* my_optics_grid(void *context) {
-  // extract grid from data stashed in context.
-  my_model_data_t *data = context;
-  return data->grid_;
+static aero_grid_t* my_model_optics_grid(aero_model_t *model) {
+  return model->data_->grid_;
 }
 
-static void my_compute_optics(void *context,
-                              aero_state_t *state,
-                              aero_array_t *od,
-                              aero_array_t *od_ssa,
-                              aero_array_t *od_asym) {
+static void my_model_compute_optics(const aero_model_t *model,
+                                    aero_state_t *state,
+                                    aero_array_t *od,
+                                    aero_array_t *od_ssa,
+                                    aero_array_t *od_asym) {
   // We simply copy the state's optics data into place.
   od->copy_in(od, state->od_);
   od_ssa->copy_in(od_ssa, state->od_ssa_);
   od_asym->copy_in(od_asym, state->od_asym_);
 }
 
-static void my_free(void *context) {
-  my_model_data_t *data = context;
-  aero_grid_free(data->grid_);
+static void my_model_free(aero_model_t *model) {
+  aero_grid_free(model->data_->grid_);
+  free(model->data_);
+  free(model);
+}
+
+static aero_model_t* my_model_create(aero_model_data_t *model_data) {
+  aero_model_t *model;
+  model = malloc(sizeof(aero_model_t));
+  model->data_ = model_data;
+  model->name = my_model_name;
+  model->create_state = my_model_create_state;
+  model->compute_optics = my_model_compute_optics;
+  model->free = my_model_free;
+  return model;
 }
 
 aero_model_t* my_model_new(const char *description_file) {
 
-  aero_model_behaviors behaviors = {
-    .name = my_name,
-    .create_state = my_create_state,
-    .optics_grid = my_optics_grid,
-    .compute_optics = my_compute_optics,
-    .free = my_free
-  };
-
   // Define the model's data based on the contents of the description file.
-  my_model_data_t *data = malloc(sizeof(my_model_data_t));
+  aero_model_data_t *data = malloc(sizeof(aero_model_data_t));
 
   // Initialize the aerosol grid with wavelength data pulled from
   // https://acp.copernicus.org/articles/18/7815/2018/acp-18-7815-2018-f03.pdf
@@ -114,6 +118,6 @@ aero_model_t* my_model_new(const char *description_file) {
   aero_array_t *interfaces = aero_array_from_array(4, wave_numbers);
   data->grid_ = aero_grid_from_interfaces(interfaces);
 
-  return aero_model_new(data, behaviors);
+  return my_model_create(data);
 }
 

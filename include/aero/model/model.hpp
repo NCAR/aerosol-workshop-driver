@@ -46,7 +46,7 @@ public:
   virtual State* create_state() const = 0;
 
   /// Returns the aerosol optics grid, discretized in wavelength space.
-  virtual const Grid& optics_grid() const = 0;
+  virtual Grid* optics_grid() const = 0;
 
   /// Computes optical property data, given an aerosol state and destination
   /// arrays.
@@ -55,35 +55,7 @@ public:
                               Array& od_ssa,
                               Array& od_asym) const = 0;
 };
-#if 0
-/// This Model subclass allows access to aerosol models implemented in
-/// Fortran.
-class FortranModel: public Model {
-public:
 
-  /// Construct an aerosol model wrapped around a Fortran implementation
-  /// that can be accessed with the given pointer.
-  explicit FortranModel(void *fortran_pointer);
-
-  /// Move constructor (Aerosol models cannot be deep copied)
-  FortranModel(FortranModel&& other);
-
-  /// Destructor
-  ~FortranModel() override;
-
-  /// Move assignment operator
-  FortranModel& operator=(FortranModel&& other);
-
-  // Overridden methods
-  Grid optics_grid() const override;
-  void compute_optics(const State& state,
-                      Array& od,
-                      Array& od_ssa,
-                      Array& od_asym) const override;
-
-  void *f_ptr_; // pointer to Fortran aerosol implementation
-};
-#endif
 } // namespace aero
 
 #endif

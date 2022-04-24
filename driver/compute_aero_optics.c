@@ -89,7 +89,7 @@ static void write_optics_data(const char *filename,
 }
 
 int main(int argc, char *argv[]) {
-
+#if 0
   if (argc < 3) {
     usage((const char*)argv[0]);
   }
@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
   aero_grid_free(host_grid);
   aero_model_free_state(model, state);
   aero_model_free(model);
-
+#endif
   printf("\nFinished!\n\n");
   return 0;
 }

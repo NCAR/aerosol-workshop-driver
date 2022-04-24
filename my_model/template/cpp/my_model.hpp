@@ -19,7 +19,7 @@ public:
   ~MyModel();
   std::string name() const override;
   aero::State* create_state() const override;
-  const aero::Grid& optics_grid() const override;
+  aero::Grid* optics_grid() const override;
   void compute_optics(const aero::State& state,
                       aero::Array& od,
                       aero::Array& od_ssa,

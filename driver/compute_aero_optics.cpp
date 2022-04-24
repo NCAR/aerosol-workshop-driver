@@ -81,7 +81,7 @@ void write_optics_data(const std::string& filename,
 } // anonymous namespace
 
 int main(int argc, char *argv[]) {
-
+#if 0
   if (argc < 3) {
     usage(argv[0]);
   }
@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
   // Clean up.
   delete state;
   delete model;
-
+#endif
   std::cout << "Finished!" << std::endl;
   return 0;
 }

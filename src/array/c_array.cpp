@@ -1,30 +1,21 @@
 #include "array_bridge.h"
+#include "wrap_array.h"
 #include <aero/array/c_array.hpp>
 
 namespace aero {
 
-CArray::CArray(const CArray& other):
-  c_ptr_(aero_bridge_c_array_clone(other.c_ptr_)) {}
+CArray::CArray(void *c_array):
+  Array(c_array, nullptr),
+  owns_array_(false) {}
 
-CArray::CArray(CArray&& other):
-  c_ptr_(other.c_ptr_) {
-  other.c_ptr_ = nullptr;
-}
-
-CArray::CArray(void *c_array) : c_ptr_(c_array) {}
+CArray::CArray(void *c_array, bool owns_array):
+  Array(c_array, nullptr),
+  owns_array_(owns_array) {}
 
 CArray::~CArray() {
-  aero_bridge_c_array_free(c_ptr_);
-}
-
-CArray& CArray::operator=(CArray& other) {
-  if (this != &other) {
-    if (c_ptr_) {
-      aero_bridge_c_array_free(c_ptr_);
-    }
-    c_ptr_ = aero_bridge_c_array_clone(other.c_ptr_);
-  }
-  return *this;
+  if (f_ptr_) aero_c_array_unwrap_fortran(f_ptr_);
+  if (owns_array_) aero_bridge_c_array_free(c_ptr_);
+  c_ptr_ = nullptr;
 }
 
 CArray& CArray::operator=(const std::vector<Real> &values) {
@@ -32,17 +23,9 @@ CArray& CArray::operator=(const std::vector<Real> &values) {
   return *this;
 }
 
-CArray& CArray::operator=(CArray&& other) {
-  if (this != &other) {
-    c_ptr_ = other.c_ptr_;
-    other.c_ptr_ = nullptr;
-  }
-  return *this;
-}
-
 Array* CArray::clone() const {
   AERO_ASSERT(c_ptr_ != nullptr);
-  return new CArray(aero_bridge_c_array_clone(c_ptr_));
+  return new CArray(aero_bridge_c_array_clone(c_ptr_), true);
 }
 
 void CArray::copy_in(const Real *input) {
@@ -68,5 +51,21 @@ std::size_t CArray::size() const {
   return 0;
 }
 
-
 } // namespace aero
+
+#if __cplusplus
+extern "C" {
+#endif
+
+void* aero_c_array_wrap_cpp(void *c_array) {
+  return reinterpret_cast<void*>(new aero::CArray(c_array));
+}
+
+void aero_c_array_unwrap_cpp(void *cpp_array) {
+  delete(reinterpret_cast<aero::CArray*>(cpp_array));
+}
+
+#if __cplusplus
+} // extern "C"
+#endif
+

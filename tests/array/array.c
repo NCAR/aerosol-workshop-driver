@@ -40,7 +40,7 @@ int main(const int argc, const char *argv[]) {
   b->free(b);
 
   // fortran array
-  a = aero_fortran_array_wrap(test_array_create_fortran_array());
+  a = aero_new_fortran_array(test_array_create_fortran_array(), true);
   AERO_ASSERT(a->size(a) == 4);
   a->copy_out(a, rb);
   AERO_ASSERT(almost_equal(rb[2], 0.623));
@@ -57,7 +57,7 @@ int main(const int argc, const char *argv[]) {
   b->free(b);
 
   // cpp array
-  a = aero_cpp_array_wrap(test_array_create_cpp_array());
+  a = aero_new_cpp_array(test_array_create_cpp_array(), true);
   AERO_ASSERT(a->size(a) == 4);
   a->copy_out(a, rb);
   AERO_ASSERT(almost_equal(rb[2], -1e9));

@@ -11,20 +11,23 @@ public:
   /// Default constructor
   CArray() = delete;
   /// Copy constructor
-  CArray(const CArray& other);
+  CArray(const CArray& other) = delete;
   /// Move constructor
   CArray(CArray&& other);
   /// Construct from a pointer to a C-backed Array
   explicit CArray(void *c_array);
+  /// Construct from a pointer to a C-backed Array with a flag indicating
+  /// whether this wrapper owns the underlying Array
+  CArray(void *c_array, bool owns_array);
 
   /// Destructor
   ~CArray() override;
 
   /// Copy assignment operator
-  CArray& operator=(CArray& other);
+  CArray& operator=(CArray& other) = delete;
   /// Assignment from a vector of Reals
   CArray& operator=(const std::vector<Real> &values);
-  /// Default move assignment operator
+  /// Move assignment operator
   CArray& operator=(CArray&&);
 
   /// Returns a clone (deep-copy) of an array
@@ -42,7 +45,7 @@ public:
   std::size_t size() const override;
 
 private:
-  void *c_ptr_; // pointer to C array implementation
+  bool owns_array_;
 };
 
 } // namespace aero

@@ -32,7 +32,7 @@ int main(const int argc, const char *argv[]) {
 
   // Now let's create a grid from a Fortran array.
   {
-    auto *interfaces = new aero::FortranArray(test_grid_create_fortran_interfaces());
+    auto *interfaces = new aero::FortranArray(test_grid_create_fortran_interfaces(), true);
     aero::Grid grid(interfaces);
     AERO_ASSERT(grid.interfaces().size() == 11);
     AERO_ASSERT(grid.midpoints().size() == 10);
@@ -42,7 +42,7 @@ int main(const int argc, const char *argv[]) {
 
   // Do the same with a C array.
   {
-    auto *interfaces = new aero::CArray(aero_array_from_array(11, points.data()));
+    auto *interfaces = new aero::CArray(aero_array_from_array(11, points.data()), true);
     aero::Grid grid(interfaces);
     AERO_ASSERT(grid.interfaces().size() == 11);
     AERO_ASSERT(grid.midpoints().size() == 10);

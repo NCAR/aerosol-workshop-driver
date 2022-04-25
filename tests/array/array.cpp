@@ -53,7 +53,7 @@ int main(const int argc, const char *argv[]) {
   rb[7] = 0.0;
   a->copy_out(rb);
   AERO_ASSERT(aero::almost_equal(rb[7], 12.3));
-  b = new aero::Array(*a);
+  b = a->clone();
   AERO_ASSERT(a->size() == 8);
   rb[7] = 0.0;
   a->copy_out(rb);
@@ -64,7 +64,7 @@ int main(const int argc, const char *argv[]) {
   delete b;
 
   // fortran array
-  a = new aero::FortranArray(test_array_create_fortran_array());
+  a = new aero::FortranArray(test_array_create_fortran_array(), true);
   AERO_ASSERT(a->size() == 4);
   rb = std::vector<Real>(4);
   a->copy_out(rb);
@@ -82,7 +82,7 @@ int main(const int argc, const char *argv[]) {
   delete b;
 
   // c array
-  a = new aero::CArray(test_array_create_c_array());
+  a = new aero::CArray(test_array_create_c_array(), true);
   AERO_ASSERT(a->size() == 4);
   rb = std::vector<Real>(4);
   a->copy_out(rb);

@@ -65,7 +65,7 @@ contains
     deallocate( b )
 
     ! c array
-    a => c_array_t( test_array_create_c_array( ) )
+    a => c_array_t( test_array_create_c_array( ), owns_array = .true. )
     call assert( 389444235, a%size( ) == 4 )
     call a%copy_out( rb )
     call assert( 378915621, almost_equal( rb(3), 0.523_rk ) )
@@ -82,7 +82,7 @@ contains
     deallocate( b )
 
     ! cpp array
-    a => cpp_array_t( test_array_create_cpp_array( ) )
+    a => cpp_array_t( test_array_create_cpp_array( ), owns_array = .true. )
     call assert( 437330843, a%size( ) == 4 )
     call a%copy_out( rb )
     call assert( 267173939, almost_equal( rb(3), -1.0e9_rk ) )

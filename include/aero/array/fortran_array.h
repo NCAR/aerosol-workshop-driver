@@ -1,19 +1,16 @@
 #ifndef AERO_FORTRAN_ARRAY_H
 #define AERO_FORTRAN_ARRAY_H
 
-#include <aero/aero.h>
-#include "array.h"
+#include <aero/array/array.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/// Creates an array by wrapping a Fortran-backed array
-aero_array_t* aero_fortran_array_wrap(void *array);
-
-/// "Unwraps" a wrapped Fortran-backed array, freeing the wrapper resources but
-/// leaving the original Fortran array intact.
-void aero_fortran_array_unwrap(aero_array_t *array);
+/// Creates a new Fortran-backed C array
+/// The flag \c owns_array is used to indicate whether this wrapper owns
+/// the underlying array
+aero_array_t* aero_new_fortran_array(void *fortran_array, bool owns_array);
 
 #ifdef __cplusplus
 } // extern "C"

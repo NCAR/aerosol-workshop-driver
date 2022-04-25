@@ -57,7 +57,7 @@ contains
     call assert( 535729851, almost_equal( f_grid%upper_bound(), 1._rk ) )
 
     ! Now use C grid interfaces
-    interfaces => c_array_t( test_grid_create_c_interfaces( ) )
+    interfaces => c_array_t( test_grid_create_c_interfaces( ), .true. )
     c_grid = grid_t(interfaces)
     ifaces => c_grid%interfaces()
     midpts => c_grid%midpoints()
@@ -67,7 +67,7 @@ contains
     call assert( 635729851, almost_equal( c_grid%upper_bound(), 1._rk ) )
 
     ! Now use C++ grid interfaces
-    interfaces => cpp_array_t( test_grid_create_cpp_interfaces( ) )
+    interfaces => cpp_array_t( test_grid_create_cpp_interfaces( ), .true. )
     cpp_grid = grid_t(interfaces)
     ifaces => cpp_grid%interfaces()
     midpts => cpp_grid%midpoints()

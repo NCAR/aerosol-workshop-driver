@@ -19,6 +19,24 @@
 extern "C" {
 #endif
 
+/// Returns a pointer to a C wrapper of a C++ array
+void* aero_bridge_new_c_cpp_array(void *cpp_array);
+
+/// Returns a pointer to a C wrapper of a Fortran array
+void* aero_bridge_new_c_fortran_array(void *fortran_array);
+
+/// Returns a pointer to a C++ wrapper of a C array
+void* aero_bridge_new_cpp_c_array(void *c_array);
+
+/// Returns a pointer to a C++ wrapper of a Fortran array
+void* aero_bridge_new_cpp_fortran_array(void *fortran_array);
+
+/// Returns a pointer to a Fortran wrapper of a C array
+void* aero_bridge_new_fortran_c_array(void *c_array);
+
+/// Returns a pointer to a Fortran wrapper of a C++ array
+void* aero_bridge_new_fortran_cpp_array(void *cpp_array);
+
 /// Returns a pointer to a newly cloned (deep-copied) array implemented in C.
 void* aero_bridge_c_array_clone(void *array);
 
@@ -34,6 +52,10 @@ void aero_bridge_c_array_free(void *array);
 
 /// Frees resources associated with the given C++ array.
 void aero_bridge_cpp_array_free(void *array);
+
+/// Frees resources associated with the given Fortran array wrapper leaving
+/// the underlying array intact
+void aero_bridge_fortran_array_free_wrapper(void *array);
 
 /// Frees resources associated with the given Fortran array.
 void aero_bridge_fortran_array_free(void *array);

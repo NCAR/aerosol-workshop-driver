@@ -30,6 +30,18 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  !> Errors immediately and prints a generic messgae
+  subroutine die( code )
+
+    !> Unique code for the failure
+    integer, intent(in) :: code
+
+    call die_msg( code, "Internal error" )
+
+  end subroutine die
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   !> Asserts condition to be true or fails
   subroutine assert( code, condition )
 

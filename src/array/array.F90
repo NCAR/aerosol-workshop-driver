@@ -7,6 +7,7 @@
 module aero_array
 
   use aero_constants,                  only : real_kind
+  use iso_c_binding
 
   implicit none
   private
@@ -16,12 +17,17 @@ module aero_array
   type :: array_t
     private
     real(kind=real_kind), pointer :: data_(:) => null( )
+    type(c_ptr) :: base_c_ptr_   = c_null_ptr
+    type(c_ptr) :: base_cpp_ptr_ = c_null_ptr
+    logical :: destructing_ = .false.
   contains
     procedure, pass(from) :: clone
     procedure, pass(to) :: copy_in
     procedure, pass(from) :: copy_out
     procedure :: data => array_data
     procedure :: size => array_size
+    procedure :: get_c_ptr
+    procedure :: get_cpp_ptr
     final :: finalize
   end type array_t
 
@@ -36,7 +42,57 @@ module aero_array
     final :: array_ptr_finalize
   end type array_ptr
 
+interface
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  type(c_ptr) function aero_fortran_array_wrap_c( f_array ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: f_array
+  end function aero_fortran_array_wrap_c
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  type(c_ptr) function aero_fortran_array_wrap_cpp( f_array ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: f_array
+  end function aero_fortran_array_wrap_cpp
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine aero_fortran_array_unwrap_c( c_array ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: c_array
+  end subroutine aero_fortran_array_unwrap_c
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine aero_fortran_array_unwrap_cpp( cpp_array ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: cpp_array
+  end subroutine aero_fortran_array_unwrap_cpp
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+end interface
+
 contains
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine create_pointers( array )
+
+    type(array_t), target, intent(inout) :: array
+
+    type(array_ptr), pointer :: c_wrap, cpp_wrap
+    allocate( c_wrap   )
+    allocate( cpp_wrap )
+    c_wrap%ptr_   => array
+    cpp_wrap%ptr_ => array
+    array%base_c_ptr_   = aero_fortran_array_wrap_c(   c_loc( c_wrap   ) )
+    array%base_cpp_ptr_ = aero_fortran_array_wrap_cpp( c_loc( cpp_wrap ) )
+
+  end subroutine create_pointers
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -54,6 +110,7 @@ contains
     else
       array%data_(:) = 0.0
     end if
+    call create_pointers( array )
 
   end function constructor
 
@@ -67,6 +124,7 @@ contains
 
     allocate( array )
     allocate( array%data_, SOURCE = from_array )
+    call create_pointers( array )
 
   end function constructor_array
 
@@ -74,6 +132,8 @@ contains
 
   !> Creates a clone (deep-copy) of an array
   function clone( from )
+
+    use aero_util,                     only : die
 
     class(array_t), pointer :: clone
     class(array_t), intent(in) :: from
@@ -85,9 +145,9 @@ contains
       if( associated( from%data_ ) ) then
         allocate( clone%data_, SOURCE = from%data_ )
       end if
+      call create_pointers( clone )
     class default
-      ! provide default clone functionality for subclasses
-      allocate( clone, SOURCE = from )
+      call die(604199939)
     end select
 
   end function clone
@@ -144,12 +204,43 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  !> Returns a pointer to the Array for use in C
+  type(c_ptr) function get_c_ptr( this )
+
+    class(array_t), intent(in) :: this
+
+    get_c_ptr = this%base_c_ptr_
+
+  end function get_c_ptr
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns a pointer to the Array for use in C++
+  type(c_ptr) function get_cpp_ptr( this )
+
+    class(array_t), intent(in) :: this
+
+    get_cpp_ptr = this%base_cpp_ptr_
+
+  end function get_cpp_ptr
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   !> Finalize an array
   subroutine finalize( this )
 
     type(array_t), intent(inout) :: this
 
-    if( associated( this%data_ ) ) deallocate( this%data_ )
+    if( .not. this%destructing_ ) then
+      this%destructing_ = .true.
+      if( associated( this%data_ ) ) deallocate( this%data_ )
+      if( c_associated( this%base_c_ptr_ ) ) then
+        call aero_fortran_array_unwrap_c(   this%base_c_ptr_   )
+      end if
+      if( c_associated( this%base_cpp_ptr_ ) ) then
+        call aero_fortran_array_unwrap_cpp( this%base_cpp_ptr_ )
+      end if
+    end if
 
   end subroutine finalize
 

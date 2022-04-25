@@ -51,9 +51,9 @@ public:
   virtual std::size_t size() const;
   /// Returns pointers to the array for use in each language
   const void* c_ptr() const;
-  const void* f_ptr() const;
+  const void* fortran_ptr() const;
   void* c_ptr();
-  void* f_ptr();
+  void* fortran_ptr();
   /// @}
 
 protected:

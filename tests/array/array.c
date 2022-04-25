@@ -12,6 +12,7 @@
 #include "array_helper.h"
 
 void *test_array_create_fortran_array();
+void test_array_check_fortran_array(void* f_array, int index, aero_real_t value);
 
 int main(const int argc, const char *argv[]) {
 
@@ -36,6 +37,8 @@ int main(const int argc, const char *argv[]) {
   AERO_ASSERT(almost_equal(rb[2], 94.32));
   AERO_ASSERT(almost_equal(b->data(b)[2], 94.32));
   AERO_ASSERT(almost_equal(b->const_data(b)[2], 94.32));
+  test_array_check_cpp_array(b->cpp_ptr(b), 2, 94.32);
+  test_array_check_fortran_array(b->fortran_ptr(b), 2+1, 94.32);
   a->free(a);
   b->free(b);
 
@@ -53,6 +56,7 @@ int main(const int argc, const char *argv[]) {
   AERO_ASSERT(almost_equal(rb[2], -132.45));
   AERO_ASSERT(almost_equal(b->data(b)[2], -132.45));
   AERO_ASSERT(almost_equal(b->const_data(b)[2], -132.45));
+  test_array_check_fortran_array(b->fortran_ptr(b), 2+1, -132.45);
   a->free(a);
   b->free(b);
 
@@ -70,6 +74,7 @@ int main(const int argc, const char *argv[]) {
   AERO_ASSERT(almost_equal(rb[2], -132.45));
   AERO_ASSERT(almost_equal(b->data(b)[2], -132.45));
   AERO_ASSERT(almost_equal(b->const_data(b)[2], -132.45));
+  test_array_check_cpp_array(b->cpp_ptr(b), 2, -132.45);
   a->free(a);
   b->free(b);
 

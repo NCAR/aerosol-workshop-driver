@@ -71,7 +71,7 @@ const void* Array::c_ptr() const {
   return this->c_ptr_;
 }
 
-const void* Array::f_ptr() const {
+const void* Array::fortran_ptr() const {
   return this->f_ptr_;
 }
 
@@ -79,7 +79,7 @@ void* Array::c_ptr() {
   return this->c_ptr_;
 }
 
-void* Array::f_ptr() {
+void* Array::fortran_ptr() {
   return this->f_ptr_;
 }
 

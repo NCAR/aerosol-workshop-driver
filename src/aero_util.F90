@@ -107,4 +107,28 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  !> Converts a c string to a fortran string
+  subroutine c_f_string( c_str, f_str )
+
+    use iso_c_binding
+
+    character(kind=c_char), dimension(*), intent(in)  :: c_str
+    character(len=:),       allocatable,  intent(out) :: f_str
+
+    integer :: i, l_str
+
+    l_str = 0
+    do
+      if( c_str( l_str + 1 ) == c_null_char ) exit
+      l_str = l_str + 1
+    end do
+    allocate( character(len=l_str) :: f_str )
+    do i = 1, l_str
+      f_str(i:i) = c_str(i)
+    end do
+
+  end subroutine c_f_string
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 end module aero_util

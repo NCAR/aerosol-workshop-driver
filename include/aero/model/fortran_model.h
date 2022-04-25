@@ -7,12 +7,10 @@
 extern "C" {
 #endif
 
-/// Creates a model by wrapping a Fortran-backed model
-aero_model_t* aero_fortran_array_wrap(void *array);
-
-/// "Unwraps" a wrapped Fortran-backed model, freeing the wrapper resources but
-/// leaving the original Fortran model intact.
-void aero_fortran_model_unwrap(aero_model_t *model);
+/// Creates a new Fortran-backed C Model
+/// The flag \c owns_model is used to indicate whether this wrapper owns
+/// the underlying model
+aero_model_t* aero_new_fortran_model(void *cpp_model, bool owns_model);
 
 #ifdef __cplusplus
 } // extern "C"

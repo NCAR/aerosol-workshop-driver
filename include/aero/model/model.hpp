@@ -22,14 +22,13 @@ namespace aero {
 
 /// Aerosol model base class
 class Model {
-
 public:
   /// Default constructor
   Model() = default;
   /// Copy constructor is disabled (no deep copies)
   Model(const Model&) = delete;
   /// Default move constructor
-  Model(Model&&) = default;
+  Model(Model&&) = delete;
 
   /// Destructor
   virtual ~Model() {}
@@ -37,7 +36,7 @@ public:
   /// Assignment operator is disabled (no deep copies)
   Model& operator=(const Model&) = delete;
   /// Default move assignment operator
-  Model& operator=(Model&&) = default;
+  Model& operator=(Model&&) = delete;
 
   /// Returns the name of the aerosol model/package.
   virtual std::string name() const = 0;

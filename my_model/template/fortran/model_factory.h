@@ -4,15 +4,27 @@
 #ifndef AERO_MODEL_FACTORY_H
 #define AERO_MODEL_FACTORY_H
 
-#include <stdbool.h>
+#include <aero/model/model.h>
 
-/// Builder of all-language aerosol model objects in C
-aero_model_t* create_model(const char* package_name, const char* description_file);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-/// Returns whether an aerosol model is supported in C
-bool is_c_model(const char* package_name);
+/// Creates a new model from any langauge in C
+aero_model_t* aero_c_factory_new_model(const char* package_name,
+    const char* description_file);
 
-/// Builder of C aerosol model objects
-aero_model_t* create_c_model(const char* package_name, const char* description_file);
+/// Returns a pointer to a newly created Model in the given language
+/// @{
+void* aero_factory_new_c_model(const char* package_name,
+    const char* description_file);
+void* aero_factory_new_cpp_model(const char* package_name,
+    const char* description_file);
+void* aero_factory_new_fortran_model(const char* package_name,
+    const char* description_file);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif // AERO_MODEL_FACTORY_H

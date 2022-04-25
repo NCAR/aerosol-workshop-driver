@@ -29,7 +29,7 @@ contains
     use aero_array,                    only : array_t
     use aero_constants,                only : rk => real_kind
     use aero_grid,                     only : grid_t
-  
+
     real(kind=rk) :: wavelengths(7) = & ! [nm]
       (/ 440.0_rk, 557.5_rk, 675.0_rk, 777.5_rk, 870.0_rk, 945.0_rk, 1020.0_rk /)
     real(kind=rk) :: wave_numbers(7) ! [m-1]
@@ -140,7 +140,7 @@ program compute_aero_optics
   use aero_model_factory,              only : create_model
   use aero_state,                      only : state_t
   use compute_aero_optics_mod
-#if 0
+
   character(len=255) :: package_name, desc_file
 
   class(model_t), pointer :: model
@@ -160,7 +160,7 @@ program compute_aero_optics
   ! Construct an aerosol model from the given package name and
   ! descriptor file.
   model => create_model( package_name, desc_file )
-
+#if 0
   ! Use the model to create an initial aerosol state.
   state => model%create_state( )
 
@@ -195,7 +195,6 @@ program compute_aero_optics
                           host_od_ssa, host_od_asym )
 
   ! Free memory
-  deallocate( model        )
   deallocate( state        )
   deallocate( host_od      )
   deallocate( host_od_ssa  )
@@ -204,6 +203,8 @@ program compute_aero_optics
   deallocate( aero_od_ssa  )
   deallocate( aero_od_asym )
 #endif
+  deallocate( model        )
+
   write(*,*) "Finished!"
 
 end program compute_aero_optics

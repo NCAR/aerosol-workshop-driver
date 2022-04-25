@@ -20,63 +20,91 @@ module aero_cpp_model
   public :: cpp_model_t
 
   type, extends(model_t) :: cpp_model_t
-    type(c_ptr) :: model_
+    private
+    logical :: owns_model_ = .false.
+    type(c_ptr) :: model_ = c_null_ptr
   contains
     procedure :: name => model_name
     procedure :: create_state
     procedure :: optics_grid
     procedure :: compute_optics
-  end type
+    final :: finalize
+  end type cpp_model_t
 
   interface cpp_model_t
     module procedure :: constructor
   end interface
 
-  interface
+interface
 
-    !> Returns whether a C++ aerosol model is supported
-    function aero_bridge_cpp_supports_model( package_name )   &
-        result( exists ) bind (c)
-      use iso_c_binding
-      logical(kind=c_bool)                 :: exists
-      character(kind=c_char), dimension(*) :: package_name
-    end function
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    !> Builds a C++ aerosol model
-    function aero_bridge_cpp_new_model( package_name, description_file )   &
-        result( model ) bind (c)
-      use iso_c_binding
-      type(c_ptr)                          :: model
-      character(kind=c_char), dimension(*) :: package_name
-      character(kind=c_char), dimension(*) :: description_file
-    end function aero_bridge_cpp_new_model
+  subroutine aero_bridge_cpp_model_free( model_cpp ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: model_cpp
+  end subroutine aero_bridge_cpp_model_free
 
-  end interface
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+end interface
 
 contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  !> Creates a C++ aerosol model
-  !!
-  !! If the model is not a supported model in C++, a null pointer is returned
-  function constructor( package_name, description_file ) result( model )
+  !> Wraps a C++-backed model for use in Fortran
+  type(c_ptr) function aero_cpp_model_wrap_fortran( cpp_model )               &
+      result( f_model ) bind(c)
 
-    type(cpp_model_t),  pointer    :: model
-    character(len=*), intent(in) :: package_name
-    character(len=*), intent(in) :: description_file
+    use aero_model,                    only : model_ptr
+    use iso_c_binding
 
-    if( aero_bridge_cpp_supports_model( trim( package_name )//c_null_char ) )   &
-      then
-      allocate( model )
-      model%model_ = aero_bridge_cpp_new_model(                  &
-                       trim( package_name )//c_null_char,      &
-                       trim( description_file )//c_null_char )
-    else
-      model => null( )
-    end if
+    type(c_ptr), value, intent(in) :: cpp_model
 
-  end function
+    type(model_ptr), pointer :: cpp_wrap
+
+    allocate( cpp_wrap )
+    cpp_wrap%ptr_ => cpp_model_t( cpp_model )
+    f_model = c_loc( cpp_wrap )
+
+  end function aero_cpp_model_wrap_fortran
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Destroys a Fortran wrapper of a C++-backed model
+  subroutine aero_cpp_model_unwrap_fortran( f_model ) bind(c)
+
+    use aero_model,                    only : model_ptr
+    use iso_c_binding
+
+    type(c_ptr), value, intent(in) :: f_model
+
+    type(model_ptr), pointer :: cpp_wrap
+
+    call c_f_pointer( f_model, cpp_wrap )
+    deallocate( cpp_wrap )
+
+  end subroutine aero_cpp_model_unwrap_fortran
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns a pointer to a new Fortran wrapper of C++-backed model
+  function constructor( cpp_model_c_ptr, owns_model ) result( model )
+
+    class(model_t),    pointer    :: model
+    !> Void pointer to a C++-backed model instance
+    type(c_ptr),       intent(in) :: cpp_model_c_ptr
+    !> Flag indicating whether this wrapper owns the underlying model
+    logical, optional, intent(in) :: owns_model
+
+    allocate( cpp_model_t :: model )
+    select type( model )
+    type is( cpp_model_t )
+      model%model_ = cpp_model_c_ptr
+      if( present( owns_model ) ) model%owns_model_ = owns_model
+    end select
+
+  end function constructor
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -138,6 +166,18 @@ contains
     class(array_t),    intent(inout) :: od_asym
 
   end subroutine compute_optics
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Frees memory assicated with the given array wrapper
+  subroutine finalize( this )
+
+    type(cpp_model_t), intent(inout) :: this
+
+    if( this%owns_model_ ) call aero_bridge_cpp_model_free( this%model_ )
+    this%model_ = c_null_ptr
+
+  end subroutine finalize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

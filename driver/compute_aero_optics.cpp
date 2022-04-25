@@ -1,4 +1,4 @@
-#include "../my_model/template/cpp/create_model.hpp"
+#include <model_factory.hpp>
 
 #include <aero/interpolator/interpolator.hpp>
 
@@ -81,7 +81,7 @@ void write_optics_data(const std::string& filename,
 } // anonymous namespace
 
 int main(int argc, char *argv[]) {
-#if 0
+
   if (argc < 3) {
     usage(argv[0]);
   }
@@ -91,8 +91,8 @@ int main(int argc, char *argv[]) {
 
   // Construct an aerosol model from the given package name and
   // descriptor file.
-  aero::Model* model = aero::create_model(desc_file.c_str());
-
+  aero::Model* model = aero::cpp_factory_new_model(package_name, desc_file);
+#if 0
   // Use the model to create an aerosol state.
   aero::State* state = model->create_state();
 
@@ -130,8 +130,9 @@ int main(int argc, char *argv[]) {
 
   // Clean up.
   delete state;
-  delete model;
 #endif
+  delete model;
+
   std::cout << "Finished!" << std::endl;
   return 0;
 }

@@ -1,5 +1,5 @@
 // Include your aerosol model here.
-#include "../my_model/template/c/create_model.h"
+#include <model_factory.h>
 
 #include <aero/grid/grid.h>
 #include <aero/interpolator/interpolator.h>
@@ -89,7 +89,7 @@ static void write_optics_data(const char *filename,
 }
 
 int main(int argc, char *argv[]) {
-#if 0
+
   if (argc < 3) {
     usage((const char*)argv[0]);
   }
@@ -98,8 +98,8 @@ int main(int argc, char *argv[]) {
   const char *desc_file    = (const char*)argv[2];
 
   // Construct your aerosol model from the given description file.
-  aero_model_t *model = create_model(desc_file);
-
+  aero_model_t *model = aero_c_factory_new_model(package_name, desc_file);
+#if 0
   // Use the model to create an aerosol state.
   aero_state_t *state = aero_model_create_state(model);
 
@@ -146,8 +146,9 @@ int main(int argc, char *argv[]) {
   aero_grid_free(aero_grid);
   aero_grid_free(host_grid);
   aero_model_free_state(model, state);
-  aero_model_free(model);
 #endif
+  model->free(model);
+
   printf("\nFinished!\n\n");
   return 0;
 }

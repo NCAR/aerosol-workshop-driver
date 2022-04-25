@@ -7,12 +7,10 @@
 extern "C" {
 #endif
 
-/// Creates a model by wrapping a C++-backed model
-aero_model_t* aero_cpp_model_wrap(void *model);
-
-/// "Unwraps" a wrapped C++-backed model, freeing the wrapper resources but
-/// leaving the original C++ model intact.
-void aero_cpp_model_unwrap(aero_model_t *model);
+/// Creates a new C++-backed Model
+/// The flag \c owns_model is used to indicate whether this wrapper owns
+/// the underlying model
+aero_model_t* aero_new_cpp_model(void *cpp_model, bool owns_model);
 
 #ifdef __cplusplus
 } // extern "C"

@@ -44,7 +44,9 @@ endforeach(lang)
 ################################################################################
 # tests built from template code
 
-foreach (model_lang fortran cpp c)
+include(test_util)
+
+foreach (model_lang fortran )# cpp c)
   foreach (driver_lang fortran cpp c)
     # Define test executables.
     get_suffix_from_language(${driver_lang} suffix)
@@ -57,7 +59,8 @@ foreach (model_lang fortran cpp c)
     target_include_directories(${driver_name} PUBLIC ${CMAKE_BINARY_DIR}/my_model/template)
 
     # Add tests to the test suite
-    add_test(NAME ${test_name} COMMAND ${driver_name} "my model" none)
+    set(driver_args [[my model]] none)
+    add_aero_test(${test_name} ${driver_name} "${driver_args}")
   endforeach()
 endforeach()
 

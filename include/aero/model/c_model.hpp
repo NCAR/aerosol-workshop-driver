@@ -8,18 +8,23 @@ namespace aero {
 /// This model subclass allows access to models implemented in C
 class CModel: public Model {
 public:
-  CModel(CModel&& other);
   CModel(void *c_model);
+  CModel(void *c_model, bool owns_model);
   ~CModel();
-  CModel& operator=(CModel&& other);
   std::string name() const override;
   aero::State* create_state() const override;
-  const aero::Grid& optics_grid() const override;
+  aero::Grid* optics_grid() const override;
   void compute_optics(const aero::State& state,
                       aero::Array& od,
                       aero::Array& od_ssa,
                       aero::Array& od_asym) const override;
 
 private:
+  bool owns_model_; // Indicates whether the underlying model is owned
+                    // by this wrapper
   void *c_ptr_; // pointer to C model implementation
 };
+
+}
+
+#endif // AERO_C_MODEL_HPP

@@ -1,4 +1,3 @@
-// Include your aerosol model here.
 #include <model_factory.h>
 
 #include <aero/grid/grid.h>

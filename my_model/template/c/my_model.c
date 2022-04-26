@@ -28,6 +28,7 @@ struct aero_state_t {
   aero_real_t *od_;      // aerosol optical depth [m]
   aero_real_t *od_ssa_;  // aerosol single scattering albedo [-]
   aero_real_t *od_asym_; // aerosol asymmetric scattering optical depth [m]
+  aero_real_t *od_work_; // working array for computing optics
 };
 
 static aero_model_t* my_model_create(aero_model_data_t *model_data);
@@ -59,14 +60,24 @@ static aero_state_t* my_model_create_state(const aero_model_t *model) {
   state->od_      = malloc(sizeof(aero_real_t) * 4);
   state->od_ssa_  = malloc(sizeof(aero_real_t) * 4);
   state->od_asym_ = malloc(sizeof(aero_real_t) * 4);
+  state->od_work_ = malloc(sizeof(aero_real_t) * 4);
   memcpy(state->od_, od_data, sizeof(aero_real_t) * 4);
   memcpy(state->od_ssa_, od_ssa_data, sizeof(aero_real_t) * 4);
   memcpy(state->od_asym_, od_asym_data, sizeof(aero_real_t) * 4);
   return state;
 }
 
+/// Frees resources of a state object
+static void my_model_free_state(const aero_model_t *model, aero_state_t *state) {
+  free(state->od_);
+  free(state->od_ssa_);
+  free(state->od_asym_);
+  free(state->od_work_);
+  free(state);
+}
+
 // Returns the grid associated with this model
-static aero_grid_t* my_model_optics_grid(aero_model_t *model) {
+static aero_grid_t* my_model_optics_grid(const aero_model_t *model) {
   return model->data_->grid_;
 }
 
@@ -76,9 +87,12 @@ static void my_model_compute_optics(const aero_model_t *model,
                                     aero_array_t *od_ssa,
                                     aero_array_t *od_asym) {
   // We simply copy the state's optics data into place.
-  od->copy_in(od, state->od_);
-  od_ssa->copy_in(od_ssa, state->od_ssa_);
-  od_asym->copy_in(od_asym, state->od_asym_);
+  for (int i=0; i<4; ++i) state->od_work_[i] = state->od_[i];
+  od->copy_in(od, state->od_work_);
+  for (int i=0; i<4; ++i) state->od_work_[i] *= state->od_ssa_[i];
+  od_ssa->copy_in(od_ssa, state->od_work_);
+  for (int i=0; i<4; ++i) state->od_work_[i] *= state->od_asym_[i];
+  od_asym->copy_in(od_asym, state->od_work_);
 }
 
 static void my_model_free(aero_model_t *model) {
@@ -93,6 +107,8 @@ static aero_model_t* my_model_create(aero_model_data_t *model_data) {
   model->data_ = model_data;
   model->name = my_model_name;
   model->create_state = my_model_create_state;
+  model->free_state = my_model_free_state;
+  model->optics_grid = my_model_optics_grid;
   model->compute_optics = my_model_compute_optics;
   model->free = my_model_free;
   return model;

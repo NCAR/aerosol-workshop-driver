@@ -47,6 +47,7 @@ static aero_model_t* aero_fortran_model_create(aero_model_data_t *model_data) {
   model->optics_grid = aero_fortran_model_optics_grid;
   model->compute_optics = aero_fortran_model_compute_optics;
   model->free = aero_fortran_model_free;
+  return model;
 }
 
 void* aero_fortran_model_wrap(void *fortran_model) {
@@ -56,9 +57,9 @@ void* aero_fortran_model_wrap(void *fortran_model) {
   return (void*)aero_fortran_model_create(model_data);
 }
 
-void aero_fortran_model_unwrap(aero_model_t *fortran_model) {
-  free(fortran_model->data_);
-  free(fortran_model);
+void aero_fortran_model_unwrap(void *c_model) {
+  aero_model_t *model = (aero_model_t*) c_model;
+  model->free(model);
 }
 
 aero_model_t* aero_new_fortran_model(void *fortran_model, bool owns_model) {

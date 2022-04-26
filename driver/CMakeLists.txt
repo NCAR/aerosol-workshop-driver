@@ -46,7 +46,7 @@ endforeach(lang)
 
 include(test_util)
 
-foreach (model_lang fortran cpp )# c)
+foreach (model_lang fortran cpp c)
   foreach (driver_lang fortran cpp c)
     # Define test executables.
     get_suffix_from_language(${driver_lang} suffix)

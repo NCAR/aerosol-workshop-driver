@@ -50,6 +50,7 @@ static aero_model_t* aero_cpp_model_create(aero_model_data_t *model_data) {
   model->optics_grid = aero_cpp_model_optics_grid;
   model->compute_optics = aero_cpp_model_compute_optics;
   model->free = aero_cpp_model_free;
+  return model;
 }
 
 void* aero_cpp_model_wrap(void *cpp_model) {
@@ -59,9 +60,9 @@ void* aero_cpp_model_wrap(void *cpp_model) {
   return (void*)aero_cpp_model_create(model_data);
 }
 
-void aero_cpp_model_unwrap(aero_model_t *cpp_model) {
-  free(cpp_model->data_);
-  free(cpp_model);
+void aero_cpp_model_unwrap(void *c_model) {
+  aero_model_t *model = (aero_model_t*) c_model;
+  model->free(model);
 }
 
 aero_model_t* aero_new_cpp_model(void *cpp_model, bool owns_model) {

@@ -59,9 +59,7 @@ static size_t lower_bound(const aero_real_t *data,
     }
   }
 
-  if((low < size) && (data[low] < value)) {
-    ++low;
-  }
+  if ((low < size) && (data[low] < value)) ++low;
   return low;
 }
 
@@ -73,7 +71,7 @@ aero_interpolator_t* aero_linear_interpolator(const aero_grid_t *from,
   const aero_real_t *to_x   = to_array->const_data(to_array);
 
   // Build the "from" -> "to" mapping.
-  size_t from_n = to_array->size(from_array);
+  size_t from_n = from_array->size(from_array);
   size_t to_n = to_array->size(to_array);
   aero_interpolator_impl_t *impl = malloc(sizeof(aero_interpolator_impl_t));
   impl->from_points_ = malloc(sizeof(size_t) * 2 * to_n);
@@ -81,7 +79,12 @@ aero_interpolator_t* aero_linear_interpolator(const aero_grid_t *from,
   for (size_t i=0; i < to_n; ++i) {
     // Find the "from" points to the left and right of this "to" point.
     size_t lb = lower_bound(from_x, from_n, to_x[i]);
-    if (lb >= from_n-1) { // off the end!
+    if ((lb == 0) && (to_x[i] < from_x[0])) { // off the lower end!
+      impl->from_points_[2*i]    = 0; // no left neighbor
+      impl->from_weights_[2*i]   = 0.0;
+      impl->from_points_[2*i+1]  = 0; // right neighbor
+      impl->from_weights_[2*i+1] = 1.0;
+    } else if (lb >= from_n-1) { // off the upper end!
       impl->from_points_[2*i]    = from_n-1; // left neighbor
       impl->from_weights_[2*i]   = 1.0;
       impl->from_points_[2*i+1]  = from_n-1; // no right neighbor

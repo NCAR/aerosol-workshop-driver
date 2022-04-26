@@ -35,7 +35,7 @@ static aero_model_t* my_model_create(aero_model_data_t *model_data);
 
 // Returns the name of this aerosol model.
 static const char* my_model_name(const aero_model_t *model) {
-  return "My C Model";
+  return "my model";
 }
 
 // Returns a newly created aerosol state related to this model.

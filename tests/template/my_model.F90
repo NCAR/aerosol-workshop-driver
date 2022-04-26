@@ -51,6 +51,7 @@ contains
     optics_grid = model%optics_grid( )
     interfaces => optics_grid%interfaces( )
 
+    call assert( 463830121, model%name( ) .eq. "my model" )
     call assert( 158605235, interfaces%size( ) == 4 )
     od      => array_t( interfaces%size( ), 0.0_rk )
     od_ssa  => array_t( interfaces%size( ), 0.0_rk )
@@ -77,10 +78,14 @@ contains
     ! c model
     model => c_model_t( test_my_model_create_c_model( ), owns_model = .true. )
 
+    ! call assert( 630628252, model%name( ) .eq. "my model" )
+
     deallocate( model )
 
     ! c++ model
     model => cpp_model_t( test_my_model_create_cpp_model( ), owns_model = .true. )
+
+    ! call assert( 125421847, model%name( ) .eq. "my model" )
 
     deallocate( model )
 

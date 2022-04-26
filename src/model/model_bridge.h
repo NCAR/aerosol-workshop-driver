@@ -20,7 +20,7 @@ extern "C" {
 /// @{
 const char* aero_bridge_c_model_name(void *model);
 const char* aero_bridge_cpp_model_name(void *model);
-const char* aero_brige_fortran_model_name(void *model);
+void* aero_bridge_fortran_model_name(void *model);
 /// @}
 
 /// Creates a new state for use with a given aerosol model.

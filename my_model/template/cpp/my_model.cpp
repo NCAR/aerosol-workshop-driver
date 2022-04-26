@@ -82,7 +82,7 @@ aero::Grid* MyModel::create_grid_() {
 }
 
 std::string MyModel::name() const {
-  return "My Model";
+  return "my model";
 }
 
 aero::State* MyModel::create_state() const {

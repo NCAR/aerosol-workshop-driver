@@ -10,7 +10,8 @@ struct aero_model_data_t {
 static aero_model_t* aero_cpp_model_create(aero_model_data_t *model_data);
 
 static const char* aero_cpp_model_name(const aero_model_t *model) {
-  return NULL; //aero_bridge_cpp_model_name(model->data_->cpp_model_);
+  AERO_ASSERT(false); // not implemented yet
+  return aero_bridge_cpp_model_name(model->data_->cpp_model_);
 }
 
 static aero_state_t* aero_cpp_model_create_state(const aero_model_t *model) {

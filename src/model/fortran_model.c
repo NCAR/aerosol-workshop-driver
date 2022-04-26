@@ -10,7 +10,8 @@ struct aero_model_data_t {
 static aero_model_t* aero_fortran_model_create(aero_model_data_t *array_data);
 
 static const char* aero_fortran_model_name(const aero_model_t *model) {
-  return NULL; //aero_bridge_fortran_model_name(model->data_->fortran_model_);
+  AERO_ASSERT(false); // not implemented yet
+  return (char*) aero_bridge_fortran_model_name(model->data_->fortran_model_);
 }
 
 static aero_state_t* aero_fortran_model_create_state(const aero_model_t *model) {

@@ -9,7 +9,6 @@ module aero_c_model
 
   use aero_array,                      only : array_t
   use aero_c_array,                    only : c_array_t
-  use aero_c_array,                  only : c_array_t
   use aero_model,                      only : model_t
   use aero_constants,                  only : real_kind
   use iso_c_binding
@@ -43,6 +42,13 @@ interface
     use iso_c_binding
     type(c_ptr), value :: model_c
   end subroutine aero_bridge_c_model_free
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  type(c_ptr) function aero_bridge_c_model_name( model_c ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: model_c
+  end function aero_bridge_c_model_name
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -111,10 +117,15 @@ contains
   !> Returns the name of the aerosol model/package
   function model_name( this )
 
+    use aero_util,                     only : die_msg, c_f_string
+
     !> Unique model name
     character(len=:), allocatable :: model_name
     !> C aerosol model
     class(c_model_t), intent(in) :: this
+
+    call die_msg( 174548945, "not implemented yet" )
+    !call c_f_string( aero_bridge_c_model_name( this%model_ ), model_name )
 
   end function model_name
 

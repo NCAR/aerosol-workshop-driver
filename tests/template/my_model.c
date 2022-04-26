@@ -7,6 +7,7 @@
 #include <my_model.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "my_model_helper.h"
 
 void* test_my_model_create_fortran_model();
@@ -22,6 +23,7 @@ void test_my_model_t() {
   aero_real_t *od_a, *od_ssa_a, *od_asym_a;
   int size;
 
+  AERO_ASSERT(strcmp(model->name(model), "my model") == 0);
   size = interfaces->size(interfaces);
   AERO_ASSERT(size == 4);
   od      = aero_array_from_dimensions(size, 0.0);
@@ -52,10 +54,14 @@ void test_my_model_t() {
   // c++ model
   model = aero_new_cpp_model(test_my_model_create_cpp_model(), true);
 
+  // AERO_ASSERT(strcmp(model->name(model), "my model") == 0);
+
   model->free(model);
 
   // fortran model
   model = aero_new_fortran_model(test_my_model_create_fortran_model(), true);
+
+  // AERO_ASSERT(strcmp(model->name(model), "my model") == 0);
 
   model->free(model);
 

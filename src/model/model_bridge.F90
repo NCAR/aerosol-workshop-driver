@@ -30,6 +30,22 @@ contains
   end subroutine aero_bridge_fortran_model_free
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns the name of an aerosol package
+  type(c_ptr) function aero_bridge_fortran_model_name( model_c_ptr )          &
+      result( model_name ) bind(c)
+
+    type(c_ptr), value, intent(in) :: model_c_ptr
+
+    type(model_ptr), pointer :: model_ptr
+    character(kind=c_char, len=:), allocatable, target :: f_name
+
+    call c_f_pointer( model_c_ptr, model_ptr )
+    f_name = model_ptr%ptr_%name( )//c_null_char
+    model_name = c_loc( f_name )
+
+  end function aero_bridge_fortran_model_name
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

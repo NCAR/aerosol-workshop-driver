@@ -12,6 +12,7 @@
 #include <aero/model/model.hpp>
 #include "model_bridge.h"
 #include <iostream>
+#include <string.h>
 
 #if __cplusplus
 extern "C" {
@@ -24,7 +25,7 @@ const char* aero_bridge_c_model_name(void *model) {
 
 const char* aero_bridge_cpp_model_name(void *model) {
   aero::Model *cpp_model = reinterpret_cast<aero::Model*>(model);
-  return cpp_model->name().c_str();
+  return strdup(cpp_model->name().c_str());
 }
 
 void* aero_bridge_c_model_create_state(void *model) {

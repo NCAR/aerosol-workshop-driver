@@ -17,7 +17,8 @@ CModel::~CModel() {
 }
 
 std::string CModel::name() const {
-  return nullptr; //aero_bridge_c_model_name(c_ptr_);
+  AERO_ASSERT(false); // not implemented yet
+  return std::string(aero_bridge_c_model_name(c_ptr_));
 }
 
 aero::State* CModel::create_state() const {

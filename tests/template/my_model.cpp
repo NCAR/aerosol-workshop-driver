@@ -6,6 +6,7 @@
 #include <aero/model/fortran_model.hpp>
 #include <my_model.hpp>
 #include <iostream>
+#include <cstring>
 #include "my_model_helper.h"
 
 extern "C" {
@@ -21,6 +22,7 @@ void test_my_model() {
   int size;
 
   size = model_grid->interfaces().size();
+  AERO_ASSERT(model->name() == "my model");
   AERO_ASSERT(size == 4);
   od      = new aero::Array(size, 0.0);
   od_ssa  = new aero::Array(size, 0.0);
@@ -49,10 +51,14 @@ void test_my_model() {
   // C model
   model = new aero::CModel(test_my_model_create_c_model(), true);
 
+  // AERO_ASSERT(model->name() == "my model");
+
   delete(model);
 
   // Fortran model
   model = new aero::FortranModel(test_my_model_create_fortran_model(), true);
+
+  // AERO_ASSERT(model->name() == "my model");
 
   delete(model);
 

@@ -17,7 +17,8 @@ FortranModel::~FortranModel() {
 }
 
 std::string FortranModel::name() const {
-  return nullptr; //aero_bridge_fortran_model_name(f_ptr_);
+  AERO_ASSERT(false); // not implemented yet
+  return std::string(reinterpret_cast<char*>(aero_bridge_fortran_model_name(f_ptr_)));
 }
 
 aero::State* FortranModel::create_state() const {

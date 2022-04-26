@@ -46,6 +46,13 @@ interface
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  type(c_ptr) function aero_bridge_cpp_model_name( model_cpp ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: model_cpp
+  end function aero_bridge_cpp_model_name
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 end interface
 
 contains
@@ -111,10 +118,15 @@ contains
   !> Returns the name of the aerosol model/package
   function model_name( this )
 
+    use aero_util,                     only : die_msg, c_f_string
+
     !> Unique model name
     character(len=:), allocatable :: model_name
     !> C++ aerosol model
     class(cpp_model_t), intent(in) :: this
+
+    call die_msg( 174548945, "not implemented yet" )
+    !call c_f_string( aero_bridge_cpp_model_name( this%model_ ), model_name )
 
   end function model_name
 

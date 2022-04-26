@@ -1,11 +1,19 @@
 #include <aero/aero.hpp>
 #include <aero/array/array.hpp>
 #include <aero/grid/grid.hpp>
+#include <aero/model/model.hpp>
+#include <aero/model/c_model.hpp>
+#include <aero/model/fortran_model.hpp>
 #include <my_model.hpp>
 #include <iostream>
+#include "my_model_helper.h"
 
+extern "C" {
+  void *test_my_model_create_fortran_model();
+}
 void test_my_model() {
 
+  // C++ model
   aero::Model *model = new MyModel("");
   aero::State *state = model->create_state();
   const aero::Grid *model_grid = model->optics_grid();
@@ -36,6 +44,16 @@ void test_my_model() {
   delete(od_asym);
   delete(model_grid);
   delete(state);
+  delete(model);
+
+  // C model
+  model = new aero::CModel(test_my_model_create_c_model(), true);
+
+  delete(model);
+
+  // Fortran model
+  model = new aero::FortranModel(test_my_model_create_fortran_model(), true);
+
   delete(model);
 
 }

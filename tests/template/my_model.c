@@ -1,12 +1,19 @@
 #include <aero/aero.h>
 #include <aero/array/array.h>
 #include <aero/grid/grid.h>
+#include <aero/model/model.h>
+#include <aero/model/cpp_model.h>
+#include <aero/model/fortran_model.h>
 #include <my_model.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "my_model_helper.h"
+
+void* test_my_model_create_fortran_model();
 
 void test_my_model_t() {
 
+  // c model
   aero_model_t *model = my_model_new("");
   aero_state_t *state = model->create_state(model);
   const aero_grid_t *model_grid = model->optics_grid(model);
@@ -41,6 +48,16 @@ void test_my_model_t() {
   free(od_a);
   free(od_ssa_a);
   free(od_asym_a);
+
+  // c++ model
+  model = aero_new_cpp_model(test_my_model_create_cpp_model(), true);
+
+  model->free(model);
+
+  // fortran model
+  model = aero_new_fortran_model(test_my_model_create_fortran_model(), true);
+
+  model->free(model);
 
 }
 

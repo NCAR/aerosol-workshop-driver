@@ -7,6 +7,20 @@ program test_my_model
 
   implicit none
 
+  ! c support functions
+  interface
+    type(c_ptr) function test_my_model_create_c_model() bind(c)
+      use iso_c_binding
+    end function test_my_model_create_c_model
+  end interface
+
+  ! c++ support functions
+  interface
+    type(c_ptr) function test_my_model_create_cpp_model() bind(c)
+      use iso_c_binding
+    end function test_my_model_create_cpp_model
+  end interface
+
   call test_my_model_t( )
 
 contains
@@ -20,6 +34,8 @@ contains
     use aero_constants,                  only : rk => real_kind
     use aero_grid,                       only : grid_t
     use aero_model,                      only : model_t
+    use aero_c_model,                    only : c_model_t
+    use aero_cpp_model,                  only : cpp_model_t
     use aero_state,                      only : state_t
     use aero_util,                       only : assert, almost_equal
 
@@ -29,6 +45,7 @@ contains
     class(array_t), pointer :: interfaces, od, od_ssa, od_asym
     real(kind=rk), allocatable :: od_a(:), od_ssa_a(:), od_asym_a(:)
 
+    ! fortran model
     model => my_model_t( "" )
     state => model%create_state( )
     optics_grid = model%optics_grid( )
@@ -56,6 +73,16 @@ contains
     deallocate( od_asym )
     deallocate( state   )
     deallocate( model   )
+
+    ! c model
+    model => c_model_t( test_my_model_create_c_model( ), owns_model = .true. )
+
+    deallocate( model )
+
+    ! c++ model
+    model => cpp_model_t( test_my_model_create_cpp_model( ), owns_model = .true. )
+
+    deallocate( model )
 
   end subroutine test_my_model_t
 

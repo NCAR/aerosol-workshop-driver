@@ -84,18 +84,18 @@ aero_interpolator_t* aero_linear_interpolator(const aero_grid_t *from,
       impl->from_weights_[2*i]   = 0.0;
       impl->from_points_[2*i+1]  = 0; // right neighbor
       impl->from_weights_[2*i+1] = 1.0;
-    } else if (lb >= from_n-1) { // off the upper end!
+    } else if (lb >= from_n) { // off the upper end!
       impl->from_points_[2*i]    = from_n-1; // left neighbor
       impl->from_weights_[2*i]   = 1.0;
       impl->from_points_[2*i+1]  = from_n-1; // no right neighbor
       impl->from_weights_[2*i+1] = 0.0;
     } else {
-      impl->from_points_[2*i]    = lb;   // left neighbor
+      impl->from_points_[2*i]    = lb-1;   // left neighbor
       impl->from_weights_[2*i]   =
-        1.0 - (to_x[i] - from_x[lb])/(from_x[lb+1]-from_x[lb]);
-      impl->from_points_[2*i+1]  = lb+1; // right neighbor
+        1.0 - (to_x[i] - from_x[lb-1])/(from_x[lb]-from_x[lb-1]);
+      impl->from_points_[2*i+1]  = lb; // right neighbor
       impl->from_weights_[2*i+1] =
-        1.0 - (from_x[lb+1] - to_x[i])/(from_x[lb+1]-from_x[lb]);
+        1.0 - (from_x[lb] - to_x[i])/(from_x[lb]-from_x[lb-1]);
     }
   }
   return aero_interpolator_create(impl);

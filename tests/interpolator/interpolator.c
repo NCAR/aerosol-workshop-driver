@@ -12,8 +12,8 @@
 int main(const int argc, const char *argv[]) {
 
   aero_real_t from_points[4] = {1.0, 11.0, 51.0, 61.0};
+  aero_real_t from_values[4] = {5.0, 10.0, 2.0, 0.0};
   aero_real_t to_points[5]   = {0.0,  6.0, 11.0, 56.0, 57.0};
-  aero_real_t from_values[3] = {5.0, 10.0, 2.0};
 
   aero_array_t *from_interfaces = aero_array_from_array(4, from_points);
   aero_array_t *to_interfaces   = aero_array_from_array(5, to_points);
@@ -21,15 +21,16 @@ int main(const int argc, const char *argv[]) {
   aero_grid_t  *to_grid   = aero_grid_from_interfaces(to_interfaces);
 
   aero_array_t *from_data = aero_array_from_array(3, from_values);
-  aero_array_t *to_data   = aero_array_from_dimensions(4, 0.0);
+  aero_array_t *to_data   = aero_array_from_dimensions(5, 0.0);
 
   aero_interpolator_t *interp = aero_linear_interpolator(from_grid, to_grid);
   interp->interpolate(interp, from_data, to_data);
   aero_real_t *to_a = to_data->data(to_data);
-  AERO_ASSERT(almost_equal(to_a[0], 2.5));
-  AERO_ASSERT(almost_equal(to_a[1], 2.5));
-  AERO_ASSERT(almost_equal(to_a[2], 11.0));
-  AERO_ASSERT(almost_equal(to_a[3], 0.2));
+  AERO_ASSERT(almost_equal(to_a[0], 5.0));
+  AERO_ASSERT(almost_equal(to_a[1], 7.5));
+  AERO_ASSERT(almost_equal(to_a[2], 10.0));
+  AERO_ASSERT(almost_equal(to_a[3], 1.0));
+  AERO_ASSERT(almost_equal(to_a[4], 0.8));
 
   interp->free(interp);
   from_data->free(from_data);

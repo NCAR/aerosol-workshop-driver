@@ -24,18 +24,23 @@ Interpolator::Interpolator(const Grid& from, const Grid& to)
     // Find the "from" points to the left and right of this "to" point.
     auto lb_iter = std::lower_bound(from_x, from_x + from_n, to_x[i]);
     size_t lb = std::distance(from_x, lb_iter);
-    if (lb >= from_n-1) { // off the end!
+    if ((lb == 0) && (to_x[i] < from_x[0])) { // off the lower end!
+      impl_->from_points_[2*i]    = 0; // no left neighbor
+      impl_->from_weights_[2*i]   = 0.0;
+      impl_->from_points_[2*i+1]  = 0; // right neighbor
+      impl_->from_weights_[2*i+1] = 1.0;
+    } else if (lb >= from_n) { // off the upper end!
       impl_->from_points_[2*i]    = from_n-1; // left neighbor
       impl_->from_weights_[2*i]   = 1.0;
       impl_->from_points_[2*i+1]  = from_n-1; // no right neighbor
       impl_->from_weights_[2*i+1] = 0.0;
     } else {
-      impl_->from_points_[2*i]    = lb;   // left neighbor
+      impl_->from_points_[2*i]    = lb-1;     // left neighbor
       impl_->from_weights_[2*i]   =
-        1.0 - (to_x[i] - from_x[lb])/(from_x[lb+1]-from_x[lb]);
-      impl_->from_points_[2*i+1]  = lb+1; // right neighbor
+        1.0 - (to_x[i] - from_x[lb-1])/(from_x[lb]-from_x[lb-1]);
+      impl_->from_points_[2*i+1]  = lb;       // right neighbor
       impl_->from_weights_[2*i+1] =
-        1.0 - (from_x[lb+1] - to_x[i])/(from_x[lb+1]-from_x[lb]);
+        1.0 - (from_x[lb] - to_x[i])/(from_x[lb]-from_x[lb-1]);
     }
   }
 }

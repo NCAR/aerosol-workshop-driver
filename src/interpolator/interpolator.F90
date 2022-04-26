@@ -78,35 +78,37 @@ contains
     class(array_t), pointer :: to_interfaces, from_interfaces
     real(kind=real_kind), pointer :: to_x(:), from_x(:)
     type(interpolator_impl_t) :: impl
-    integer :: i, lb
+    integer :: i, lb, from_n, to_n
 
     from_interfaces => from%interfaces( )
     to_interfaces   => to%interfaces( )
     from_x => from_interfaces%data( )
+    from_n =  from_interfaces%size( )
     to_x   => to_interfaces%data( )
+    to_n   =  to_interfaces%size( )
 
     ! Build the "from" -> "to" mapping.
-    allocate(interp%impl_%from_points_(2*size(to_x)))
-    allocate(interp%impl_%from_points_(2*size(to_x)))
-    do i = 1, size( from_x )
+    allocate(impl%from_points_(2*to_n))
+    allocate(impl%from_weights_(2*to_n))
+    do i = 1, to_n
       lb = lower_bound(from_x, to_x(i))
       if ((lb == 1) .and. (to_x(i) < from_x(1))) then ! off the lower end!
         impl%from_points_(2*i)    = 1   ! no left neighbor
         impl%from_weights_(2*i)   = 0.0
         impl%from_points_(2*i+1)  = 1   ! right neighbor
         impl%from_weights_(2*i+1) = 1.0
-      elseif (lb >= size(from_x)) then ! off the upper end!
-        impl%from_points_(2*i)    = size(from_x) ! left neighbor
+      elseif (lb >= from_n+1) then ! off the upper end!
+        impl%from_points_(2*i)    = from_n ! left neighbor
         impl%from_weights_(2*i)   = 1.0
-        impl%from_points_(2*i+1)  = size(from_x) ! no right neighbor
+        impl%from_points_(2*i+1)  = from_n ! no right neighbor
         impl%from_weights_(2*i+1) = 0.0
       else
-        impl%from_points_(2*i)    = lb       ! left neighbor
+        impl%from_points_(2*i)    = lb-1       ! left neighbor
         impl%from_weights_(2*i)   = &
-          1.0 - (to_x(i) - from_x(lb))/(from_x(lb+1)-from_x(lb))
-        impl%from_points_(2*i+1)  = lb+1    ! right neighbor
+          1.0 - (to_x(i) - from_x(lb-1))/(from_x(lb)-from_x(lb-1))
+        impl%from_points_(2*i+1)  = lb         ! right neighbor
         impl%from_weights_(2*i+1) = &
-          1.0 - (from_x(lb+1) - to_x(i))/(from_x(lb+1)-from_x(lb))
+          1.0 - (from_x(lb) - to_x(i))/(from_x(lb)-from_x(lb-1))
       end if
     end do
     interp%impl_ = impl

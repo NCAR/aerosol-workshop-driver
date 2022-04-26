@@ -49,7 +49,7 @@ public:
 
   /// Computes optical property data, given an aerosol state and destination
   /// arrays.
-  virtual void compute_optics(const State& state,
+  virtual void compute_optics(State& state,
                               Array& od,
                               Array& od_ssa,
                               Array& od_asym) const = 0;

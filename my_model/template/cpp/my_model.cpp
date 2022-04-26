@@ -17,8 +17,9 @@ public:
   // (All data in the state is public for simplicity.)
   std::vector<aero::Real> od,      // aerosol optical depth [m]
                           od_ssa,  // aerosol single scattering albedo [-]
-                          od_asym; // aerosol asymmetric scattering optical
+                          od_asym, // aerosol asymmetric scattering optical
                                    // depth [m]
+                          od_work; // working array for optical depths
 
   // Constructor
   MyState()
@@ -38,6 +39,7 @@ public:
     od      = {0.27, 0.35, 0.5, 0.75};       // top left
     od_ssa  = {0.88, 0.895, 0.905, 0.88};    // middle left
     od_asym = {0.3, 0.035, 0.045, 0.09};     // top right
+    od_work = std::vector<aero::Real>(4, 0.0);
   }
 };
 
@@ -91,13 +93,19 @@ aero::Grid* MyModel::optics_grid() const {
   return new aero::Grid(grid_->interfaces().clone());
 }
 
-void MyModel::compute_optics(const aero::State& state,
+void MyModel::compute_optics(aero::State& state,
                              aero::Array& od,
                              aero::Array& od_ssa,
                              aero::Array& od_asym) const {
   // We simply copy the state's optics data into place.
-  const MyState& my_state = dynamic_cast<const MyState&>(state);
-  od.copy_in(my_state.od);
-  od_ssa.copy_in(my_state.od_ssa);
-  od_asym.copy_in(my_state.od_asym);
+  MyState& my_state = dynamic_cast<MyState&>(state);
+  for (size_t i=0; i<my_state.od_work.size(); ++i)
+    my_state.od_work[i] = my_state.od[i];
+  od.copy_in(my_state.od_work);
+  for (size_t i=0; i<my_state.od_work.size(); ++i)
+    my_state.od_work[i] *= my_state.od_ssa[i];
+  od_ssa.copy_in(my_state.od_work);
+  for (size_t i=0; i<my_state.od_work.size(); ++i)
+    my_state.od_work[i] *= my_state.od_asym[i];
+  od_asym.copy_in(my_state.od_work);
 }

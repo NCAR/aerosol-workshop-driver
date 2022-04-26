@@ -28,10 +28,10 @@ aero::Grid* FortranModel::optics_grid() const {
   return nullptr; //aero_bridge_fortran_model_optics_grid(f_ptr_);
 }
 
-void FortranModel::compute_optics(const aero::State& state,
-                            aero::Array& od,
-                            aero::Array& od_ssa,
-                            aero::Array& od_asym) const {
+void FortranModel::compute_optics(aero::State& state,
+                                  aero::Array& od,
+                                  aero::Array& od_ssa,
+                                  aero::Array& od_asym) const {
   //aero_bridge_fortran_model_compute_optics(state, od, od_ssa, od_asym);
 }
 

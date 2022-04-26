@@ -28,7 +28,7 @@ aero::Grid* CModel::optics_grid() const {
   return nullptr; //reinterpret_cast<aero::Grid*>(aero_bridge_c_model_optics_grid(c_ptr_));
 }
 
-void CModel::compute_optics(const aero::State& state,
+void CModel::compute_optics(aero::State& state,
                             aero::Array& od,
                             aero::Array& od_ssa,
                             aero::Array& od_asym) const {

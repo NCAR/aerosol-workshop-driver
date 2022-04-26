@@ -16,7 +16,11 @@ class MyModel : public aero::Model {
 
 public:
   MyModel(const char* description_file);
+  MyModel(const MyModel& other) = delete;
+  MyModel(MyModel&& other) = delete;
   ~MyModel();
+  MyModel& operator=(const MyModel& other) = delete;
+  MyModel& operator=(MyModel&& other) = delete;
   std::string name() const override;
   aero::State* create_state() const override;
   aero::Grid* optics_grid() const override;

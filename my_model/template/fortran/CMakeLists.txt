@@ -2,7 +2,6 @@
 # Aerosol source code
 
 add_library(my_model my_model.F90
-                     model_factory.c
                      model_factory.cpp
                      model_factory.F90)
 

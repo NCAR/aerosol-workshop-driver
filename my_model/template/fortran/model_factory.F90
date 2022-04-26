@@ -56,22 +56,25 @@ contains
     character(len=*), intent(in) :: description_file
 
     type(c_ptr) :: c_model_ptr
+    character(kind=c_char, len=:), allocatable :: c_name, c_file
 
+    c_name = trim( package_name )//c_null_char
+    c_file = trim( description_file )//c_null_char
     if( trim( package_name ) == "my model" ) then
       model => my_model_t( description_file )
       return
     end if
-    c_model_ptr = aero_factory_new_c_model( package_name, description_file )
+    c_model_ptr = aero_factory_new_c_model( c_name, c_file )
     if( c_associated( c_model_ptr ) ) then
-      model => c_model_t( c_model_ptr )
+      model => c_model_t( c_model_ptr, owns_model = .true. )
       return
     endif
-    c_model_ptr = aero_factory_new_cpp_model( package_name, description_file )
+    c_model_ptr = aero_factory_new_cpp_model( c_name, c_file )
     if( c_associated( c_model_ptr ) ) then
-      model => cpp_model_t( c_model_ptr )
+      model => cpp_model_t( c_model_ptr, owns_model = .true. )
       return
     endif
-    call die_msg( 743895691, "Aerosol package '"//package_name//              &
+    call die_msg( 743895691, "Aerosol package '"//trim( package_name )//      &
                                "'not supported" )
 
   end function create_model

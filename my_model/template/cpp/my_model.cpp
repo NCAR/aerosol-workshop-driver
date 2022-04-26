@@ -56,10 +56,6 @@ MyModel::MyModel(const char* description_file)
   for (size_t i = 0; i < 4; ++i) {
     wave_numbers.push_back(1e-9 / wavelengths[i]); // [m-1]
   }
-
-  // Create an interfaces array and, from it, a grid.
-  aero::Array *interfaces = new aero::Array(wave_numbers);
-  grid_ = new aero::Grid(interfaces);
 }
 
 MyModel::~MyModel() {

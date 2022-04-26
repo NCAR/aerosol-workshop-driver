@@ -86,7 +86,7 @@ void aero_bridge_c_model_free(void *model) {
 
 void aero_bridge_cpp_model_free(void *model) {
   aero::Model* cpp_model = reinterpret_cast<aero::Model*>(model);
-  free(model);
+  delete(cpp_model);
 }
 
 #if __cplusplus

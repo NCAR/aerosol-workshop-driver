@@ -2,7 +2,6 @@
 # Aerosol model library
 
 add_library(my_model my_model.c
-                     model_factory.c
                      model_factory.cpp
                      model_factory.F90)
 

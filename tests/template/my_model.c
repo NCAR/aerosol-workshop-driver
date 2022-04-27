@@ -17,7 +17,7 @@ void test_my_model_t() {
   // c model
   aero_model_t *model = my_model_new("");
   aero_state_t *state = model->create_state(model);
-  const aero_grid_t *model_grid = model->optics_grid(model);
+  aero_grid_t *model_grid = model->optics_grid(model);
   const aero_array_t *interfaces = aero_grid_interfaces(model_grid);
   aero_array_t *od, *od_ssa, *od_asym;
   aero_real_t *od_a, *od_ssa_a, *od_asym_a;
@@ -45,6 +45,7 @@ void test_my_model_t() {
   od->free(od);
   od_ssa->free(od_ssa);
   od_asym->free(od_asym);
+  aero_grid_free(model_grid);
   state->free(state);
   model->free(model);
   free(od_a);

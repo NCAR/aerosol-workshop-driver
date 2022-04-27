@@ -11,7 +11,7 @@ struct aero_array_data_t {
 
 static aero_array_t* aero_array_create(aero_array_data_t *array_data);
 
-static aero_array_t* aero_array_clone(aero_array_t *from) {
+static aero_array_t* aero_array_clone(const aero_array_t *from) {
   aero_array_data_t *array_data = malloc(sizeof(aero_array_data_t));
   array_data->size_ = from->data_->size_;
   array_data->values_ = malloc(sizeof(aero_real_t)*array_data->size_);

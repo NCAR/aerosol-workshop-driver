@@ -85,7 +85,9 @@ static aero_state_t* my_model_create_state(const aero_model_t *model) {
 
 // Returns the grid associated with this model
 static aero_grid_t* my_model_optics_grid(const aero_model_t *model) {
-  return model->data_->grid_;
+  const aero_array_t *grid_ifaces = aero_grid_interfaces(model->data_->grid_);
+  aero_array_t *ifaces = grid_ifaces->clone(grid_ifaces);
+  return aero_grid_from_interfaces(ifaces);
 }
 
 static void my_model_compute_optics(const aero_model_t *model,

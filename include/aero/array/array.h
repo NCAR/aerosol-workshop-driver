@@ -18,7 +18,7 @@ typedef struct aero_array_t {
   /// pointer to the array data
   aero_array_data_t *data_;
   /// returns a clone (deep-copy) of an array
-  aero_array_t* (*clone)(aero_array_t *from);
+  aero_array_t* (*clone)(const aero_array_t *from);
   /// frees resources associated with an array
   void (*free)(aero_array_t *array);
   /// copies data into an array

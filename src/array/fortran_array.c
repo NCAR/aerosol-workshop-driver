@@ -11,7 +11,7 @@ struct aero_array_data_t {
 
 static aero_array_t* aero_fortran_array_create(aero_array_data_t *array_data);
 
-static aero_array_t* aero_fortran_array_clone(aero_array_t *from) {
+static aero_array_t* aero_fortran_array_clone(const aero_array_t *from) {
   aero_array_data_t *array_data = malloc(sizeof(aero_array_data_t));
   array_data->f_ptr_ =
     aero_bridge_fortran_array_clone(from->data_->f_ptr_);

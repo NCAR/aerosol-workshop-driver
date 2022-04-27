@@ -1,31 +1,25 @@
 #include "array_bridge.h"
+#include "wrap_array.h"
 #include <aero/array/fortran_array.hpp>
 
 namespace aero {
 
-FortranArray::FortranArray(const FortranArray& other):
-  f_ptr_(aero_bridge_fortran_array_clone(other.f_ptr_)) {}
+FortranArray::FortranArray(void *fortran_array):
+  Array(nullptr, fortran_array),
+  owns_array_(false) {}
 
-FortranArray::FortranArray(FortranArray&& other)
-  : f_ptr_(other.f_ptr_) {
-  other.f_ptr_ = nullptr;
-}
-
-FortranArray::FortranArray(void *fortran_array)
-  : f_ptr_(fortran_array) {}
+FortranArray::FortranArray(void *fortran_array, bool owns_array):
+  Array(nullptr, fortran_array),
+  owns_array_(owns_array) {}
 
 FortranArray::~FortranArray() {
-  aero_bridge_fortran_array_free(f_ptr_);
-}
-
-FortranArray& FortranArray::operator=(FortranArray& other) {
-  if (this != &other) {
-    if (f_ptr_) {
-      aero_bridge_fortran_array_free(f_ptr_);
-    }
-    f_ptr_ = aero_bridge_fortran_array_clone(other.f_ptr_);
+  if (c_ptr_) aero_fortran_array_unwrap_c(c_ptr_);
+  if (owns_array_) {
+    aero_bridge_fortran_array_free(f_ptr_);
+  } else {
+    aero_bridge_fortran_array_free_wrapper(f_ptr_);
   }
-  return *this;
+  f_ptr_ = nullptr;
 }
 
 FortranArray& FortranArray::operator=(const std::vector<Real> &values) {
@@ -33,17 +27,9 @@ FortranArray& FortranArray::operator=(const std::vector<Real> &values) {
   return *this;
 }
 
-FortranArray& FortranArray::operator=(FortranArray&& other) {
-  if (this != &other) {
-    f_ptr_ = other.f_ptr_;
-    other.f_ptr_ = nullptr;
-  }
-  return *this;
-}
-
 aero::Array* FortranArray::clone() const {
   AERO_ASSERT(f_ptr_ != nullptr);
-  return new aero::FortranArray(aero_bridge_fortran_array_clone(f_ptr_));
+  return new aero::FortranArray(aero_bridge_fortran_array_clone(f_ptr_), true);
 }
 
 const Real* FortranArray::data() const {
@@ -69,5 +55,21 @@ std::size_t FortranArray::size() const {
   return 0;
 }
 
-
 } // namespace aero
+
+#if __cplusplus
+extern "C" {
+#endif
+
+void* aero_fortran_array_wrap_cpp(void *f_array) {
+  return reinterpret_cast<void*>(new aero::FortranArray(f_array));
+}
+
+void aero_fortran_array_unwrap_cpp(void *cpp_array) {
+  delete(reinterpret_cast<aero::FortranArray*>(cpp_array));
+}
+
+#if __cplusplus
+} // extern "C"
+#endif
+

@@ -1,7 +1,6 @@
 #include <aero/array/array.h>
-#include <aero/array/cpp_array.h>
-#include <aero/array/fortran_array.h>
 #include <aero/grid/grid.h>
+#include "../array/wrap_array.h"
 
 #include "grid_bridge.h"
 
@@ -45,17 +44,19 @@ aero_grid_t* aero_grid_from_interfaces(aero_array_t *interfaces) {
 
 aero_grid_t* aero_grid_from_cpp_ptr(void *cpp_ptr) {
   void *cpp_array_ptr = aero_bridge_cpp_grid_interfaces(cpp_ptr);
-  aero_array_t *cpp_interfaces = aero_cpp_array_wrap(cpp_array_ptr);
+  aero_array_t *cpp_interfaces =
+    (aero_array_t*) aero_cpp_array_wrap_c(cpp_array_ptr);
   aero_grid_t *grid = aero_grid_from_interfaces(cpp_interfaces);
-  aero_cpp_array_unwrap(cpp_interfaces);
+  aero_cpp_array_unwrap_c(cpp_interfaces);
   return grid;
 }
 
 aero_grid_t* aero_grid_from_fortran_ptr(void *f_ptr) {
   void *f_array_ptr = aero_bridge_fortran_grid_interfaces(f_ptr);
-  aero_array_t *f_interfaces = aero_fortran_array_wrap(f_array_ptr);
+  aero_array_t *f_interfaces =
+    (aero_array_t*) aero_fortran_array_wrap_c(f_array_ptr);
   aero_grid_t *grid = aero_grid_from_interfaces(f_interfaces);
-  aero_fortran_array_unwrap(f_interfaces);
+  aero_fortran_array_unwrap_c(f_interfaces);
   return grid;
 }
 

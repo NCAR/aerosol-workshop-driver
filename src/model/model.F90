@@ -12,7 +12,7 @@ module aero_model
   implicit none
   private
 
-  public :: model_t
+  public :: model_t, model_ptr
 
   type, abstract :: model_t
   contains
@@ -21,6 +21,12 @@ module aero_model
     procedure(optics_grid),    deferred :: optics_grid
     procedure(compute_optics), deferred :: compute_optics
   end type model_t
+
+  type :: model_ptr
+    class(model_t), pointer :: ptr_ => null( )
+  contains
+    final :: model_ptr_finalize
+  end type model_ptr
 
 interface
 
@@ -94,5 +100,20 @@ interface
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 end interface
+
+contains
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Frees resources assocaited with a model pointer
+  subroutine model_ptr_finalize( this )
+
+    type(model_ptr), intent(inout) :: this
+
+    if( associated( this%ptr_ ) ) deallocate( this%ptr_ )
+
+  end subroutine model_ptr_finalize
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 end module aero_model

@@ -17,6 +17,7 @@ module aero_cpp_array
 
   type, extends(array_t) :: cpp_array_t
     private
+    logical :: owns_array_ = .false.
     type(c_ptr) :: array_ = c_null_ptr
   contains
     procedure, pass(from) :: clone
@@ -24,6 +25,8 @@ module aero_cpp_array
     procedure, pass(from) :: copy_out
     procedure :: data => array_data
     procedure :: size => array_size
+    procedure :: get_c_ptr
+    procedure :: get_cpp_ptr
     final :: finalize
   end type cpp_array_t
 
@@ -73,7 +76,8 @@ interface
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  integer(kind=c_int) function aero_bridge_cpp_array_size( array_c ) bind(c)
+  pure integer(kind=c_int) function aero_bridge_cpp_array_size( array_c )     &
+      bind(c)
     use iso_c_binding
     type(c_ptr), value :: array_c
   end function aero_bridge_cpp_array_size
@@ -86,16 +90,58 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  !> Wraps a C++ array for use in Fortran
+  type(c_ptr) function aero_cpp_array_wrap_fortran( cpp_array )               &
+      result ( f_array ) bind(c)
+
+    use aero_array,                    only : array_ptr
+    use iso_c_binding
+
+    type(c_ptr), value, intent(in) :: cpp_array
+
+    type(array_ptr), pointer :: cpp_wrap
+
+    allocate( cpp_wrap )
+    cpp_wrap%ptr_ => cpp_array_t( cpp_array )
+    f_array = c_loc( cpp_wrap )
+
+  end function aero_cpp_array_wrap_fortran
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Unwraps a Fortran wrapper of a C++ array, leaving the C aray intact
+  subroutine aero_cpp_array_unwrap_fortran( f_array ) bind(c)
+
+    use aero_array,                    only : array_ptr
+    use iso_c_binding
+
+    type(c_ptr), value, intent(in) :: f_array
+
+    type(array_ptr), pointer :: cpp_wrap
+
+    call c_f_pointer( f_array, cpp_wrap )
+    deallocate( cpp_wrap )
+
+  end subroutine aero_cpp_array_unwrap_fortran
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   !> Returns a pointer to a new C++ Array
-  function constructor( cpp_array_c_ptr ) result( array )
+  function constructor( cpp_array_c_ptr, owns_array ) result( array )
+
+    use aero_array,                    only : array_ptr
 
     class(array_t), pointer    :: array
+    !> Void pointer to underlying C++-backed array instance
     type(c_ptr),    intent(in) :: cpp_array_c_ptr
+    !> Flag indicating whether this wrapper owns the underlying array
+    logical, optional, intent(in) :: owns_array
 
     allocate( cpp_array_t :: array )
     select type( array )
     type is( cpp_array_t )
       array%array_ = cpp_array_c_ptr
+      if( present( owns_array ) ) array%owns_array_ = owns_array
     end select
 
   end function constructor
@@ -105,6 +151,8 @@ contains
   !> Clones an Array
   function clone( from )
 
+    use aero_array,                    only : array_ptr
+
     class(array_t),     pointer    :: clone
     class(cpp_array_t), intent(in) :: from
 
@@ -112,6 +160,7 @@ contains
     select type( clone )
     class is( cpp_array_t )
       clone%array_ =  aero_bridge_cpp_array_clone( from%array_ )
+      clone%owns_array_ = .true.
     end select
 
   end function clone
@@ -162,7 +211,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Returns the number of elements in an Array
-  integer function array_size( this )
+  pure integer function array_size( this )
 
     class(cpp_array_t), intent(in) :: this
 
@@ -172,12 +221,34 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  !> Returns a pointer to the Array for use in C
+  type(c_ptr) function get_c_ptr( this )
+
+    class(cpp_array_t), intent(in) :: this
+
+    get_c_ptr = c_null_ptr
+
+  end function get_c_ptr
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns a pointer to the Array for use in C++
+  type(c_ptr) function get_cpp_ptr( this )
+
+    class(cpp_array_t), intent(in) :: this
+
+    get_cpp_ptr = this%array_
+
+  end function get_cpp_ptr
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   !> Frees memory associated with the given array
   subroutine finalize( this )
 
     type(cpp_array_t), intent(inout) :: this
 
-    call aero_bridge_cpp_array_free( this%array_ )
+    if( this%owns_array_ ) call aero_bridge_cpp_array_free( this%array_ )
     this%array_ = c_null_ptr
 
   end subroutine finalize

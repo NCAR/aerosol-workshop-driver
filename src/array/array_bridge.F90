@@ -50,6 +50,22 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  !> Frees resources associated with the wrapper to a given Fortran array
+  !! leaving the underlying array intact
+  subroutine aero_bridge_fortran_array_free_wrapper( array_c_ptr ) bind(c)
+
+    type(c_ptr), value, intent(in) :: array_c_ptr
+
+    type(array_ptr), pointer :: array_ptr
+
+    call c_f_pointer( array_c_ptr, array_ptr )
+    nullify( array_ptr%ptr_ )
+    deallocate( array_ptr )
+
+  end subroutine aero_bridge_fortran_array_free_wrapper
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   !> Copies data into the given Fortran array
   subroutine aero_bridge_fortran_array_copy_in( array_c_ptr, input_c_ptr )    &
       bind(c)

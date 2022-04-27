@@ -14,7 +14,15 @@
 
 #include "aero/model/model.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /// Implement this function to create your aerosol model.
 aero_model_t* my_model_new(const char *description_file);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif // AI_MY_MODEL_H

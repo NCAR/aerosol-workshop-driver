@@ -12,21 +12,24 @@ public:
   /// Default constructor
   FortranArray() = delete;
   /// Copy constructor
-  FortranArray(const FortranArray& other);
+  FortranArray(const FortranArray& other) = delete;
   /// Move constructor
-  FortranArray(FortranArray&& other);
+  FortranArray(FortranArray&& other) = delete;
   /// Construct from a pointer to a Fortran-backed Array
   explicit FortranArray(void *fortran_array);
+  /// Construct from a pointer to a Fortran-backed Array with a flag indicating
+  /// whether this wrapper owns the underlying Array
+  FortranArray(void *fortran_array, bool owns_array);
 
   /// Destructor
   ~FortranArray() override;
 
   /// Copy assignment operator
-  FortranArray& operator=(FortranArray& other);
+  FortranArray& operator=(FortranArray& other) = delete;
   /// Assignment from a vector of Reals
   FortranArray& operator=(const std::vector<Real> &values);
   /// Default move assignment operator
-  FortranArray& operator=(FortranArray&&);
+  FortranArray& operator=(FortranArray&&) = delete;
 
   /// Returns a clone (deep-copy) of an array
   Array* clone() const override;
@@ -43,7 +46,7 @@ public:
   std::size_t size() const override;
 
 private:
-  void *f_ptr_; // pointer to Fortran array implementation
+  bool owns_array_;
 };
 
 } // namespace aero

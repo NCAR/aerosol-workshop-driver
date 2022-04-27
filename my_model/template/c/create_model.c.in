@@ -1,0 +1,7 @@
+#include "create_model.h"
+#include "@AERO_MODEL_HEADER@"
+
+aero_model_t* create_model(const char *description_file) {
+  return @AERO_MODEL_TYPE@(description_file);
+}
+

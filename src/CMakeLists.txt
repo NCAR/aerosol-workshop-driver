@@ -19,6 +19,7 @@ configure_file(
 add_library(aero
             ${CMAKE_CURRENT_BINARY_DIR}/aero_constants.F90
             aero_util.F90
+            aero_util.c
             ${model_src}
             ${array_src}
             ${grid_src}

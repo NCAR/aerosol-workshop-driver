@@ -24,8 +24,7 @@ void* aero_bridge_c_array_clone(void *array) {
 
 void* aero_bridge_cpp_array_clone(void *array) {
   aero::Array *cpp_array = reinterpret_cast<aero::Array*>(array);
-  aero::Array *new_array = new aero::Array(*cpp_array);
-  return reinterpret_cast<void*>(new_array);
+  return reinterpret_cast<void*>(cpp_array->clone());
 }
 
 void aero_bridge_c_array_free(void *array) {

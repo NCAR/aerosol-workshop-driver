@@ -16,41 +16,43 @@
 extern "C" {
 #endif
 
-/// Returns a pointer to a newly created aerosol model implemented in C
-/// with the given package name, initialized using the given description file.
-void* aero_bridge_c_new_model(const char *package_name,
-                              const char *description_file);
+/// Returns the name of an aerosol model
+/// @{
+const char* aero_bridge_c_model_name(void *model);
+const char* aero_bridge_cpp_model_name(void *model);
+void* aero_bridge_fortran_model_name(void *model);
+/// @}
 
-/// Returns a pointer to a newly created aerosol model implemented in C++
-/// with the given package name, initialized using the given description file.
-void* aero_bridge_cpp_new_model(const char *package_name,
-                                const char *description_file);
+/// Creates a new state for use with a given aerosol model.
+/// @{
+void* aero_bridge_c_model_create_state(void *model);
+void* aero_bridge_cpp_model_create_state(void *model);
+void* aero_bridge_fortran_model_create_state(void *model);
+/// @}
 
-/// Returns a pointer to a newly created aerosol model implemented in Fortran
-/// with the given package name, initialized using the given description file.
-void* aero_bridge_f_new_model(const char *package_name,
-                              const char *description_file);
+/// Returns a copy of the optics grid interfaces used by the aerosol model.
+/// @{
+void* aero_bridge_c_model_optics_grid(void *model);
+void* aero_bridge_cpp_model_optics_grid(void *model);
+void* aero_bridge_fortran_model_optics_grid(void *model);
+/// @}
 
-/// Returns whether an aerosol model is available in C with the given
-/// package name.
-bool aero_bridge_c_supports_model(const char *package_name);
+/// Computes aerosol optical properties for a given state
+/// @{
+void aero_bridge_c_model_compute_optics(void *model, void *state, void *od,
+    void *od_ssa, void* od_asym);
+void aero_bridge_cpp_model_compute_optics(void *model, void *state, void *od,
+    void *od_ssa, void* od_asym);
+void aero_bridge_fortran_model_compute_optics(void *model, void *state, void *od,
+    void *od_ssa, void* od_asym);
+/// @}
 
-/// Returns whether an aerosol model is available in C++ with the given
-/// package name.
-bool aero_bridge_cpp_supports_model(const char *package_name);
-
-/// Returns whether an aerosol model is available in Fortran with the given
-/// package name.
-bool aero_bridge_fortran_supports_model(const char *package_name);
-
-/// Frees resources associated with the given C aerosol model.
+/// Frees resources associated with the given aerosol model.
+/// @{
 void aero_bridge_c_model_free(void *aerosol);
-
-/// Frees resources associated with the given C++ aerosol model.
 void aero_bridge_cpp_model_free(void *aerosol);
-
-/// Frees resources associated with the given Fortran aerosol model.
 void aero_bridge_fortran_model_free(void *aerosol);
+/// @}
 
 #ifdef __cplusplus
 }

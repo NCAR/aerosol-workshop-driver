@@ -11,16 +11,15 @@
 
 #include "my_model.hpp"
 
-namespace mya {
-
 // Aerosol state specific to this model
 class MyState : public aero::State {
 public:
   // (All data in the state is public for simplicity.)
   std::vector<aero::Real> od,      // aerosol optical depth [m]
                           od_ssa,  // aerosol single scattering albedo [-]
-                          od_asym; // aerosol asymmetric scattering optical
+                          od_asym, // aerosol asymmetric scattering optical
                                    // depth [m]
+                          od_work; // working array for optical depths
 
   // Constructor
   MyState()
@@ -32,29 +31,33 @@ public:
     // Note the units in the fields of the my_model_data_t struct at the top of
     // this file. The data here corresponds to the grid interfaces shown in the
     // figure.
-    od      = {0.75, 0.5, 0.35, 0.27};       // top left
-    od_ssa  = {0.88, 0.905, 0.895, 0.88};    // middle left
-    od_asym = {0.09, 0.045, 0.035, 0.3};     // top right
+    // The data arrays are ordered so they correspond to the following
+    // wavelengths, expressed in descending order:
+    // {1020.0, 870.0, 675.0, 440.0} [nm]
+    // This corresponds to a grid with interfaces expressed in ascending
+    // wave numbers [m-1].
+    od      = {0.27, 0.35, 0.5, 0.75};       // top left
+    od_ssa  = {0.88, 0.895, 0.905, 0.88};    // middle left
+    od_asym = {0.3, 0.035, 0.045, 0.09};     // top right
+    od_work = std::vector<aero::Real>(4, 0.0);
   }
 };
 
-MyModel::MyModel()
+MyModel::MyModel(const char* description_file)
   : aero::Model(),
     grid_(create_grid_()) {
 
   // Initialize the aerosol grid with wavelength data pulled from
   // https://acp.copernicus.org/articles/18/7815/2018/acp-18-7815-2018-f03.pdf
-  aero::Real wavelengths[] = {440.0, 675.0, 870.0, 1020.0}; // [nm]
+  // We specify wavelengths in descending order so their wave numbers appear in
+  // ascending order in the grid interfaces array.
+  aero::Real wavelengths[] = {1020.0, 870.0, 675.0, 440.0}; // [nm]
 
   // Convert to wave numbers for the grid's interfaces.
   std::vector<aero::Real> wave_numbers;
   for (size_t i = 0; i < 4; ++i) {
     wave_numbers.push_back(1e-9 / wavelengths[i]); // [m-1]
   }
-
-  // Create an interfaces array and, from it, a grid.
-  aero::Array *interfaces = new aero::Array(wave_numbers);
-  grid_ = new aero::Grid(interfaces);
 }
 
 MyModel::~MyModel() {
@@ -79,26 +82,30 @@ aero::Grid* MyModel::create_grid_() {
 }
 
 std::string MyModel::name() const {
-  return "My Model";
+  return "my model";
 }
 
 aero::State* MyModel::create_state() const {
   return new MyState();
 }
 
-const aero::Grid& MyModel::optics_grid() const {
-  return *grid_;
+aero::Grid* MyModel::optics_grid() const {
+  return new aero::Grid(grid_->interfaces().clone());
 }
 
-void MyModel::compute_optics(const aero::State& state,
+void MyModel::compute_optics(aero::State& state,
                              aero::Array& od,
                              aero::Array& od_ssa,
                              aero::Array& od_asym) const {
   // We simply copy the state's optics data into place.
-  const MyState& my_state = dynamic_cast<const MyState&>(state);
-  od.copy_in(my_state.od);
-  od_ssa.copy_in(my_state.od_ssa);
-  od_asym.copy_in(my_state.od_asym);
+  MyState& my_state = dynamic_cast<MyState&>(state);
+  for (size_t i=0; i<my_state.od_work.size(); ++i)
+    my_state.od_work[i] = my_state.od[i];
+  od.copy_in(my_state.od_work);
+  for (size_t i=0; i<my_state.od_work.size(); ++i)
+    my_state.od_work[i] *= my_state.od_ssa[i];
+  od_ssa.copy_in(my_state.od_work);
+  for (size_t i=0; i<my_state.od_work.size(); ++i)
+    my_state.od_work[i] *= my_state.od_asym[i];
+  od_asym.copy_in(my_state.od_work);
 }
-
-} // namespace mya

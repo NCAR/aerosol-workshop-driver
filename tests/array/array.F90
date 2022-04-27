@@ -19,6 +19,14 @@ program test_array
     type(c_ptr) function test_array_create_c_array() bind(c)
       use iso_c_binding
     end function test_array_create_c_array
+
+    subroutine test_array_check_c_array(c_array, index, value) bind(c)
+      use aero_constants,              only : rk => real_kind
+      use iso_c_binding
+      type(c_ptr), value :: c_array
+      integer(c_int), value :: index
+      real(kind=rk), value :: value
+    end subroutine test_array_check_c_array
   end interface
 
   ! cpp support functions
@@ -26,6 +34,14 @@ program test_array
     type(c_ptr) function test_array_create_cpp_array() bind(c)
       use iso_c_binding
     end function test_array_create_cpp_array
+
+    subroutine test_array_check_cpp_array(cpp_array, index, value) bind(c)
+      use aero_constants,              only : rk => real_kind
+      use iso_c_binding
+      type(c_ptr), value :: cpp_array
+      integer(c_int), value :: index
+      real(kind=rk), value :: value
+    end subroutine test_array_check_cpp_array
   end interface
 
   call test_array_t( )
@@ -61,11 +77,13 @@ contains
     call assert( 865135504, almost_equal( rb(3), -132.45_rk ) )
     rp => b%data()
     call assert( 418683137, almost_equal( rp(3), -132.45_rk ) )
+    call test_array_check_c_array(   b%get_c_ptr( ),   3-1, -132.45_rk )
+    call test_array_check_cpp_array( b%get_cpp_ptr( ), 3-1, -132.45_rk )
     deallocate( a )
     deallocate( b )
 
     ! c array
-    a => c_array_t( test_array_create_c_array( ) )
+    a => c_array_t( test_array_create_c_array( ), owns_array = .true. )
     call assert( 389444235, a%size( ) == 4 )
     call a%copy_out( rb )
     call assert( 378915621, almost_equal( rb(3), 0.523_rk ) )
@@ -78,11 +96,12 @@ contains
     call assert( 368839302, almost_equal( rb(3), -132.45_rk ) )
     rp => b%data()
     call assert( 890250635, almost_equal( rp(3), -132.45_rk ) )
+    call test_array_check_c_array( b%get_c_ptr( ), 3-1, -132.45_rk )
     deallocate( a )
     deallocate( b )
 
     ! cpp array
-    a => cpp_array_t( test_array_create_cpp_array( ) )
+    a => cpp_array_t( test_array_create_cpp_array( ), owns_array = .true. )
     call assert( 437330843, a%size( ) == 4 )
     call a%copy_out( rb )
     call assert( 267173939, almost_equal( rb(3), -1.0e9_rk ) )
@@ -95,6 +114,7 @@ contains
     call assert( 544384881, almost_equal( rb(3), -132.45_rk ) )
     rp => b%data()
     call assert( 444788323, almost_equal( rp(3), -132.45_rk ) )
+    call test_array_check_cpp_array( b%get_cpp_ptr( ), 3-1, -132.45_rk )
     deallocate( a )
     deallocate( b )
 

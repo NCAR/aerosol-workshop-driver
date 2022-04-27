@@ -1,4 +1,4 @@
-/*===-- interface/aerosol/ai_aerosol.h ----------------------------*- C -*-===//
+/*===-- aero/model/model.h ----------------------------*- C -*-===//
  *
  * Copyright (C) 2022 National Center for Atmospheric Research
  * SPDX-License-Identifier: Apache-2.0
@@ -23,43 +23,33 @@ extern "C" {
 
 /// This opaque type represents an aerosol model implemented in C. The type
 /// has a name, data, and associated behaviors.
-typedef struct aero_model_t aero_model_t;
+typedef struct aero_model_data_t aero_model_data_t;
 
 /// Here are behaviors implemented by a C-backed aerosol model. All of these
 /// functions are passed the data pointer supplied to aero_model_new.
-typedef struct aero_model_behaviors {
+typedef struct aero_model_t aero_model_t;
+typedef struct aero_model_t {
+  /// Data members of the aero_model_t class
+  aero_model_data_t *data_;
   /// returns the name of the aerosol model
-  const char* (*name)(void *aerosol);
+  const char* (*name)(const aero_model_t *model);
   /// returns a newly created aerosol state
-  aero_state_t* (*create_state)(void *aerosol);
+  aero_state_t* (*create_state)(const aero_model_t *model);
+  /// frees a state created by create_state
+  void (*free_state)(const aero_model_t *model, aero_state_t *state);
   /// returns the grid on which the aerosol's optical properties are computed
-  aero_grid_t* (*optics_grid)(void *aerosol);
+  aero_grid_t* (*optics_grid)(const aero_model_t *model);
   /// computes optical properties given the model, an aerosol state, and
   /// destination arrays
-  void (*compute_optics)(void *aerosol, aero_state_t *state,
+  void (*compute_optics)(const aero_model_t* model, aero_state_t *state,
                          aero_array_t *od, aero_array_t *od_ssa,
                          aero_array_t *od_asym);
-} aero_model_behaviors;
-
-/// Creates and returns an aerosol model implemented in C with the given data
-/// (context) pointer and set of behaviors.
-aero_model_t* aero_model_new(void *data, aero_model_behaviors behaviors);
-
-/// Returns the name of the aerosol package that provides this model.
-const char* aero_model_name(aero_model_t *model);
-
-/// Returns the optics grid on which this model computes optical properties.
-aero_grid_t* aero_model_optics_grid(aero_model_t *model);
-
-/// Computes optical properties given an aerosol state and destination arrays.
-void aero_model_compute_optics(aero_model_t *model,
-                               aero_state_t *state,
-                               aero_array_t *od,
-                               aero_array_t *od_ssa,
-                               aero_array_t *od_asym);
+  /// Destroys the model's contextual data, freeing any associated resources.
+  void (*free)(aero_model_t* model);
+} aero_model_t;
 
 #ifdef __cplusplus
-}
+} // extern "C"
 #endif
 
 #endif

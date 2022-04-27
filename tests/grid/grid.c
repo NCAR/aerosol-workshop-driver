@@ -30,7 +30,7 @@ int main(const int argc, const char *argv[]) {
   aero_grid_free(grid);
 
   // Now let's create a grid from a Fortran array.
-  interfaces = aero_fortran_array_wrap(test_grid_create_fortran_interfaces());
+  interfaces = aero_new_fortran_array(test_grid_create_fortran_interfaces(), true);
   interfaces->copy_in(interfaces, points);
   grid = aero_grid_from_interfaces(interfaces);
   g_interfaces = aero_grid_interfaces(grid);
@@ -42,7 +42,7 @@ int main(const int argc, const char *argv[]) {
   aero_grid_free(grid);
 
   // Do the same with a C++ array.
-  interfaces = aero_cpp_array_wrap(test_grid_create_cpp_interfaces());
+  interfaces = aero_new_cpp_array(test_grid_create_cpp_interfaces(), true);
   interfaces->copy_in(interfaces, points);
   grid = aero_grid_from_interfaces(interfaces);
   g_interfaces = aero_grid_interfaces(grid);

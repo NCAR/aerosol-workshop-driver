@@ -2,23 +2,20 @@
 #include <stdlib.h>
 #include <tgmath.h>
 
-typedef struct aero_interpolator_map_elem_t {
-  int from_;
-  int to_;
-  aero_real_t weight_;
-} aero_interpolator_map_elem_t;
-
-struct aero_interpolator_weights_t {
-  aero_interpolator_map_elem_t *map_;
-  int n_map_elem_;
+// Linear interpolator implementation.
+struct aero_interpolator_impl_t {
+  // Both of these arrays are of length 2 * "to" grid size
+  size_t *from_points_;       // indices of pts from "from" grid
+  aero_real_t *from_weights_; // weights for "from" pts
 };
 
-static aero_interpolator_t* aero_interpolator_create(aero_interpolator_weights_t
-  *interpolator_weights);
+static aero_interpolator_t* aero_interpolator_create(aero_interpolator_impl_t
+  *interpolator_impl);
 
 static void aero_interpolator_free(aero_interpolator_t *interp) {
-  free(interp->weights_->map_);
-  free(interp->weights_);
+  free(interp->impl_->from_points_);
+  free(interp->impl_->from_weights_);
+  free(interp->impl_);
   free(interp);
 }
 
@@ -26,48 +23,81 @@ static void aero_interpolator_interpolate(const aero_interpolator_t *interp,
   const aero_array_t *from, aero_array_t *to) {
   const aero_real_t *from_a = from->const_data(from);
   aero_real_t *to_a = to->data(to);
-  for (int i=0; i<to->size(to); ++i) to_a[i] = 0.0;
-  for (int i=0; i<interp->weights_->n_map_elem_; ++i) {
-    to_a[interp->weights_->map_[i].to_] += from_a[interp->weights_->map_[i].from_] *
-      interp->weights_->map_[i].weight_;
+  size_t to_n = to->size(to);
+  for (size_t i=0; i < to_n; ++i) {
+    size_t j_left  = interp->impl_->from_points_[2*i];
+    aero_real_t w_left = interp->impl_->from_weights_[2*i];
+    size_t j_right = interp->impl_->from_points_[2*i+1];
+    aero_real_t w_right = interp->impl_->from_weights_[2*i+1];
+    to_a[i] = from_a[j_left] * w_left + from_a[j_right] * w_right;
   }
 }
 
-static aero_interpolator_t* aero_interpolator_create(aero_interpolator_weights_t
-  *interpolator_weights) {
+static aero_interpolator_t* aero_interpolator_create(aero_interpolator_impl_t
+  *interpolator_impl) {
   aero_interpolator_t *interp;
   interp = malloc(sizeof(aero_interpolator_t));
-  interp->weights_ = interpolator_weights;
+  interp->impl_ = interpolator_impl;
   interp->free = aero_interpolator_free;
   interp->interpolate = aero_interpolator_interpolate;
   return interp;
 }
 
+// This helper performs a binary search on sorted grid data, computing the index
+// of the first point within the grid data that is no larger than the desired
+// value.
+static size_t lower_bound(const aero_real_t *data,
+                          size_t size,
+                          aero_real_t value) {
+  // Till our paths cross...
+  int low = 0, high = size;
+  while (low < high) {
+    int mid = low + (high - low) / 2;
+    if (value <= data[mid]) {
+      high = mid;
+    } else {
+      low = mid + 1;
+    }
+  }
+
+  if ((low < size) && (data[low] < value)) ++low;
+  return low;
+}
+
 aero_interpolator_t* aero_linear_interpolator(const aero_grid_t *from,
   const aero_grid_t *to) {
-  aero_interpolator_weights_t *interp_weights = malloc(sizeof(aero_interpolator_weights_t));
-  size_t map_size = 0;
   const aero_array_t *from_array = aero_grid_interfaces(from);
   const aero_array_t *to_array   = aero_grid_interfaces(to);
-  const aero_real_t *from_a = from_array->const_data(from_array);
-  const aero_real_t *to_a   = to_array->const_data(to_array);
-  aero_real_t weight;
-  for (int i=0; i<from_array->size(from_array)-1; ++i) {
-    for (int j=0; j<to_array->size(to_array)-1; ++j) {
-      if (to_a[j] < from_a[i+1] && from_a[i] < to_a[j+1]) ++map_size;
+  const aero_real_t *from_x = from_array->const_data(from_array);
+  const aero_real_t *to_x   = to_array->const_data(to_array);
+
+  // Build the "from" -> "to" mapping.
+  size_t from_n = from_array->size(from_array);
+  size_t to_n = to_array->size(to_array);
+  aero_interpolator_impl_t *impl = malloc(sizeof(aero_interpolator_impl_t));
+  impl->from_points_ = malloc(sizeof(size_t) * 2 * to_n);
+  impl->from_weights_ = malloc(sizeof(aero_real_t) * 2 * to_n);
+  for (size_t i=0; i < to_n; ++i) {
+    // Find the "from" points to the left and right of this "to" point.
+    size_t lb = lower_bound(from_x, from_n, to_x[i]);
+    if (lb == 0) { // off the lower end!
+      impl->from_points_[2*i]    = 0; // no left neighbor
+      impl->from_weights_[2*i]   = 0.0;
+      impl->from_points_[2*i+1]  = 0; // right neighbor
+      impl->from_weights_[2*i+1] = 1.0;
+    } else if (lb >= from_n) { // off the upper end!
+      impl->from_points_[2*i]    = from_n-1; // left neighbor
+      impl->from_weights_[2*i]   = 1.0;
+      impl->from_points_[2*i+1]  = from_n-1; // no right neighbor
+      impl->from_weights_[2*i+1] = 0.0;
+    } else {
+      impl->from_points_[2*i]    = lb-1;   // left neighbor
+      impl->from_weights_[2*i]   =
+        1.0 - (to_x[i] - from_x[lb-1])/(from_x[lb]-from_x[lb-1]);
+      impl->from_points_[2*i+1]  = lb; // right neighbor
+      impl->from_weights_[2*i+1] =
+        1.0 - (from_x[lb] - to_x[i])/(from_x[lb]-from_x[lb-1]);
     }
   }
-  interp_weights->n_map_elem_ = map_size;
-  interp_weights->map_ = malloc(map_size*sizeof(aero_interpolator_map_elem_t));
-  for (int i=0, i_map=0; i<from_array->size(from_array)-1; ++i) {
-    for (int j=0; j<to_array->size(to_array)-1; ++j) {
-      if (to_a[j] < from_a[i+1] && from_a[i] < to_a[j+1]) {
-        weight = fmax(0.0, fmin(from_a[i+1], to_a[j+1]) - fmax(from_a[i], to_a[j]));
-        weight /= (from_a[i+1] - from_a[i]);
-        interp_weights->map_[i_map++] =
-          (aero_interpolator_map_elem_t){.from_=i, .to_=j, .weight_=weight};
-      }
-    }
-  }
-  return aero_interpolator_create(interp_weights);
+  return aero_interpolator_create(impl);
 }

@@ -12,6 +12,7 @@
 
 extern "C" {
   void *test_array_create_fortran_array();
+  void test_array_check_fortran_array(void* f_array, int index, aero::Real value);
 }
 
 using Real = aero::Real;
@@ -53,18 +54,20 @@ int main(const int argc, const char *argv[]) {
   rb[7] = 0.0;
   a->copy_out(rb);
   AERO_ASSERT(aero::almost_equal(rb[7], 12.3));
-  b = new aero::Array(*a);
+  b = a->clone();
   AERO_ASSERT(a->size() == 8);
   rb[7] = 0.0;
   a->copy_out(rb);
   AERO_ASSERT(aero::almost_equal(rb[7], 12.3));
   AERO_ASSERT(aero::almost_equal(a->data()[7], 12.3));
   AERO_ASSERT(aero::almost_equal((reinterpret_cast<const aero::Array*>(a))->data()[7], 12.3));
+  test_array_check_c_array(a->c_ptr(), 7, 12.3);
+  test_array_check_fortran_array(a->fortran_ptr(), 7+1, 12.3);
   delete a;
   delete b;
 
   // fortran array
-  a = new aero::FortranArray(test_array_create_fortran_array());
+  a = new aero::FortranArray(test_array_create_fortran_array(), true);
   AERO_ASSERT(a->size() == 4);
   rb = std::vector<Real>(4);
   a->copy_out(rb);
@@ -78,11 +81,12 @@ int main(const int argc, const char *argv[]) {
   AERO_ASSERT(aero::almost_equal(rb[2], -132.45));
   AERO_ASSERT(aero::almost_equal(a->data()[2], -132.45));
   AERO_ASSERT(aero::almost_equal((reinterpret_cast<const aero::Array*>(a))->data()[2], -132.45));
+  test_array_check_fortran_array(a->fortran_ptr(), 2+1, -132.45);
   delete a;
   delete b;
 
   // c array
-  a = new aero::CArray(test_array_create_c_array());
+  a = new aero::CArray(test_array_create_c_array(), true);
   AERO_ASSERT(a->size() == 4);
   rb = std::vector<Real>(4);
   a->copy_out(rb);
@@ -96,6 +100,7 @@ int main(const int argc, const char *argv[]) {
   AERO_ASSERT(aero::almost_equal(rb[2], -132.45));
   AERO_ASSERT(aero::almost_equal(a->data()[2], -132.45));
   AERO_ASSERT(aero::almost_equal((reinterpret_cast<const aero::Array*>(a))->data()[2], -132.45));
+  test_array_check_c_array(a->c_ptr(), 2, -132.45);
   delete a;
   delete b;
 

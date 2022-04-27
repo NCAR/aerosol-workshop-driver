@@ -12,6 +12,20 @@ module aero_util
   !> Error output id
   integer, parameter :: kErrorId = 0
 
+  interface c_f_string
+    module procedure :: c_f_string_char
+    module procedure :: c_f_string_ptr
+  end interface
+
+  ! c support functions
+  interface
+    type(c_ptr) function aero_util_offset_pointer( ptr, offset ) bind (c)
+      use iso_c_binding
+      type(c_ptr), value :: ptr
+      integer(kind=c_int), value :: offset
+    end function aero_util_offset_pointer
+  end interface
+
 contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -27,6 +41,18 @@ contains
     call assert_msg( code, .false., error_message )
 
   end subroutine die_msg
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Errors immediately and prints a generic messgae
+  subroutine die( code )
+
+    !> Unique code for the failure
+    integer, intent(in) :: code
+
+    call die_msg( code, "Internal error" )
+
+  end subroutine die
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -92,6 +118,70 @@ contains
     almost_equal = .false.
 
   end function almost_equal
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Converts a c string to a fortran string
+  subroutine c_f_string_char( c_str, f_str )
+
+    use iso_c_binding
+
+    character(kind=c_char), dimension(*), intent(in)  :: c_str
+    character(len=:),       allocatable,  intent(out) :: f_str
+
+    integer :: i, l_str
+
+    l_str = 0
+    do
+      if( c_str( l_str + 1 ) == c_null_char ) exit
+      l_str = l_str + 1
+    end do
+    allocate( character(len=l_str) :: f_str )
+    do i = 1, l_str
+      f_str(i:i) = c_str(i)
+    end do
+
+  end subroutine c_f_string_char
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Converts a c string void pointer to a fortran string
+  recursive subroutine c_f_string_ptr( c_str_ptr, f_str )
+
+    use iso_c_binding
+
+    type(c_ptr),                    intent(in)  :: c_str_ptr
+    character(len=:), allocatable,  intent(out) :: f_str
+
+    integer :: i
+    character(kind=c_char), dimension(:), pointer :: c_str
+    character(len=256) :: temp_str
+    logical :: found_end
+
+    nullify( c_str )
+    call c_f_pointer( c_str_ptr, c_str, [256] )
+    if( .not. associated( c_str ) ) then
+      f_str = ""
+      return
+    end if
+
+    found_end = .false.
+    temp_str = ""
+    do i = 1, 256
+      if( c_str( i ) == c_null_char ) then
+        found_end = .true.
+        exit
+      end if
+      temp_str(i:i) = c_str(i)
+    end do
+    if( found_end ) then
+      f_str = trim( temp_str )
+      return
+    end if
+    call c_f_string_ptr( aero_util_offset_pointer( c_str_ptr, 256 ), f_str )
+    f_str = temp_str // f_str
+
+  end subroutine c_f_string_ptr
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

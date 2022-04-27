@@ -11,9 +11,9 @@ public:
   /// Default constructor.
   Array() = default;
   /// Copy constructor
-  Array(const Array& other) = default;
+  Array(const Array& other) = delete;
   /// Move constructor
-  Array(Array&& other) = default;
+  Array(Array&& other) = delete;
   /// Constructor from dimensions. Array elements
   /// are initialized to zero.
   explicit Array(std::size_t size);
@@ -23,14 +23,14 @@ public:
   explicit Array(const std::vector<Real> &values);
 
   /// Destructor
-  virtual ~Array() {}
+  virtual ~Array();
 
   /// Assignment operator
-  Array& operator=(const Array&) = default;
+  Array& operator=(const Array&) = delete;
   /// Assignment from a vector of Reals
   Array& operator=(const std::vector<Real> &values);
   /// Default move assignment operator
-  Array& operator=(Array&&) = default;
+  Array& operator=(Array&&) = delete;
 
   /// Returns a clone (deep-copy) of an Array
   virtual Array* clone() const;
@@ -49,6 +49,17 @@ public:
   /// @}
   /// Returns the number of elements in an Array
   virtual std::size_t size() const;
+  /// Returns pointers to the array for use in each language
+  const void* c_ptr() const;
+  const void* fortran_ptr() const;
+  void* c_ptr();
+  void* fortran_ptr();
+  /// @}
+
+protected:
+  Array(void* c_ptr, void* f_ptr);
+  void* c_ptr_;
+  void* f_ptr_;
 
 private:
   std::vector<Real> values_;

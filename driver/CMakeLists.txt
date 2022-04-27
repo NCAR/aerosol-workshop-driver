@@ -24,23 +24,25 @@ endfunction()
 ################################################################################
 # model drivers built from my_model/ code
 
-foreach (lang fortran cpp c)
-  get_suffix_from_language(${lang} suffix)
-  if (EXISTS ${CMAKE_SOURCE_DIR}/my_model/my_model.${suffix})
-    # Generate a file that creates the desired model implementation.
-    configure_file(
-      ${CMAKE_SOURCE_DIR}/my_model/create_model.${suffix}.in
-      ${CMAKE_BINARY_DIR}/my_model/create_model.${suffix}
-      @ONLY
-    )
-    add_executable(${lang}_driver compute_aero_optics.${suffix}
-                                  ${CMAKE_BINARY_DIR}/my_model/create_model.${suffix})
-    target_link_libraries(${lang}_driver PRIVATE my_model)
-    target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR})
-    target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR}/my_model)
-    target_include_directories(${lang}_driver PUBLIC ${CMAKE_BINARY_DIR}/my_model)
-  endif()
-endforeach(lang)
+if (NOT AERO_TESTS_ONLY)
+  foreach (lang fortran cpp c)
+    get_suffix_from_language(${lang} suffix)
+    if (EXISTS ${CMAKE_SOURCE_DIR}/my_model/my_model.${suffix})
+      # Generate a file that creates the desired model implementation.
+      configure_file(
+        ${CMAKE_SOURCE_DIR}/my_model/create_model.${suffix}.in
+        ${CMAKE_BINARY_DIR}/my_model/create_model.${suffix}
+        @ONLY
+      )
+      add_executable(${lang}_driver compute_aero_optics.${suffix}
+                                    ${CMAKE_BINARY_DIR}/my_model/create_model.${suffix})
+      target_link_libraries(${lang}_driver PRIVATE my_model)
+      target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR})
+      target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR}/my_model)
+      target_include_directories(${lang}_driver PUBLIC ${CMAKE_BINARY_DIR}/my_model)
+    endif()
+  endforeach(lang)
+endif()
 
 ################################################################################
 # tests built from template code

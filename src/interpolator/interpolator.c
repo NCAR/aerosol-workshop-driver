@@ -15,6 +15,7 @@ static aero_interpolator_t* aero_interpolator_create(aero_interpolator_impl_t
 static void aero_interpolator_free(aero_interpolator_t *interp) {
   free(interp->impl_->from_points_);
   free(interp->impl_->from_weights_);
+  free(interp->impl_);
   free(interp);
 }
 

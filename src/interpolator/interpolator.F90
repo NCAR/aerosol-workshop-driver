@@ -59,7 +59,7 @@ contains
       end if
     end do
 
-    if ((low < size(array)) .and. (array(low) < val)) low = low + 1
+    if ((low < size(array)+1) .and. (array(low) < val)) low = low + 1
     lb = low
   end function lower_bound
 
@@ -92,7 +92,7 @@ contains
     allocate(impl%from_weights_(2*to_n))
     do i = 1, to_n
       lb = lower_bound(from_x, to_x(i))
-      if ((lb == 1) .and. (to_x(i) < from_x(1))) then ! off the lower end!
+      if (lb == 1) then ! off the lower end!
         impl%from_points_(2*i-1)  = 1   ! no left neighbor
         impl%from_weights_(2*i-1) = 0.0
         impl%from_points_(2*i)    = 1   ! right neighbor

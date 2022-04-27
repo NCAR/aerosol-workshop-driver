@@ -80,7 +80,7 @@ aero_interpolator_t* aero_linear_interpolator(const aero_grid_t *from,
   for (size_t i=0; i < to_n; ++i) {
     // Find the "from" points to the left and right of this "to" point.
     size_t lb = lower_bound(from_x, from_n, to_x[i]);
-    if ((lb == 0) && (to_x[i] < from_x[0])) { // off the lower end!
+    if (lb == 0) { // off the lower end!
       impl->from_points_[2*i]    = 0; // no left neighbor
       impl->from_weights_[2*i]   = 0.0;
       impl->from_points_[2*i+1]  = 0; // right neighbor

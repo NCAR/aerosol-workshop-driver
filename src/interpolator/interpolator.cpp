@@ -24,7 +24,7 @@ Interpolator::Interpolator(const Grid& from, const Grid& to)
     // Find the "from" points to the left and right of this "to" point.
     auto lb_iter = std::lower_bound(from_x, from_x + from_n, to_x[i]);
     size_t lb = std::distance(from_x, lb_iter);
-    if ((lb == 0) && (to_x[i] < from_x[0])) { // off the lower end!
+    if (lb == 0) { // off the lower end!
       impl_->from_points_[2*i]    = 0; // no left neighbor
       impl_->from_weights_[2*i]   = 0.0;
       impl_->from_points_[2*i+1]  = 0; // right neighbor

@@ -98,6 +98,10 @@ int main(int argc, char *argv[]) {
 
   // Construct your aerosol model from the given description file.
   aero_model_t *model = aero_c_factory_new_model(package_name, desc_file);
+  if (!model) {
+    fprintf(stderr, "Invalid model: %s\n", package_name);
+    exit(1);
+  }
 
   // Use the model to create an aerosol state.
   aero_state_t *state = model->create_state(model);

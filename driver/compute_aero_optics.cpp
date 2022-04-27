@@ -92,6 +92,10 @@ int main(int argc, char *argv[]) {
   // Construct an aerosol model from the given package name and
   // descriptor file.
   aero::Model* model = aero::cpp_factory_new_model(package_name, desc_file);
+  if (model == nullptr) {
+    std::cerr << "Invalid model: " << package_name << std::endl;
+    exit(1);
+  }
 
   // Use the model to create an aerosol state.
   aero::State* state = model->create_state();

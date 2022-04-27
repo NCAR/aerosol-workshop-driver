@@ -98,10 +98,10 @@ int main(int argc, char *argv[]) {
 
   // Construct your aerosol model from the given description file.
   aero_model_t *model = aero_c_factory_new_model(package_name, desc_file);
-#if 0
-  // Use the model to create an aerosol state.
-  aero_state_t *state = aero_model_create_state(model);
 
+  // Use the model to create an aerosol state.
+  aero_state_t *state = model->create_state(model);
+#if 0
   // The host wavelength grid to which optical properties are interpolated.
   aero_grid_t *host_grid = create_host_wavelength_grid();
 
@@ -144,8 +144,8 @@ int main(int argc, char *argv[]) {
   interp->free(interp);
   aero_grid_free(aero_grid);
   aero_grid_free(host_grid);
-  aero_model_free_state(model, state);
 #endif
+  state->free(state);
   model->free(model);
 
   printf("\nFinished!\n\n");

@@ -92,10 +92,10 @@ int main(int argc, char *argv[]) {
   // Construct an aerosol model from the given package name and
   // descriptor file.
   aero::Model* model = aero::cpp_factory_new_model(package_name, desc_file);
-#if 0
+
   // Use the model to create an aerosol state.
   aero::State* state = model->create_state();
-
+#if 0
   // The host wavelength grid to which optical properties are interpolated.
   aero::Grid host_grid = create_host_wavelength_grid();
 
@@ -129,8 +129,8 @@ int main(int argc, char *argv[]) {
   write_optics_data(ss.str(), host_grid, host_od, host_od_ssa, host_od_asym);
 
   // Clean up.
-  delete state;
 #endif
+  delete state;
   delete model;
 
   std::cout << "Finished!" << std::endl;

@@ -160,10 +160,10 @@ program compute_aero_optics
   ! Construct an aerosol model from the given package name and
   ! descriptor file.
   model => create_model( package_name, desc_file )
-#if 0
+
   ! Use the model to create an initial aerosol state.
   state => model%create_state( )
-
+#if 0
   ! The host wavelength grid to which optical properties are interpolated.
   host_grid = create_host_wavelength_grid();
 
@@ -195,7 +195,6 @@ program compute_aero_optics
                           host_od_ssa, host_od_asym )
 
   ! Free memory
-  deallocate( state        )
   deallocate( host_od      )
   deallocate( host_od_ssa  )
   deallocate( host_od_asym )
@@ -203,6 +202,7 @@ program compute_aero_optics
   deallocate( aero_od_ssa  )
   deallocate( aero_od_asym )
 #endif
+  deallocate( state        )
   deallocate( model        )
 
   write(*,*) "Finished!"

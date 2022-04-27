@@ -58,7 +58,7 @@ if (AERO_TESTS_ONLY)
       add_executable(${driver_name} compute_aero_optics.${suffix} ${template_src})
       target_link_libraries(${driver_name} PRIVATE my_model_${model_lang}_stub)
       target_include_directories(${driver_name} PUBLIC ${CMAKE_SOURCE_DIR})
-      target_include_directories(${driver_name} PUBLIC ${CMAKE_BINARY_DIR}/my_model/${model_lang}/template)
+      target_include_directories(${driver_name} PUBLIC ${CMAKE_BINARY_DIR}/my_model/template)
 
       # Add tests to the test suite
       set(driver_args [[my model]] none)

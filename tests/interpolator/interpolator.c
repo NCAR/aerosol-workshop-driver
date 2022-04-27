@@ -20,7 +20,7 @@ int main(const int argc, const char *argv[]) {
   aero_grid_t  *from_grid = aero_grid_from_interfaces(from_interfaces);
   aero_grid_t  *to_grid   = aero_grid_from_interfaces(to_interfaces);
 
-  aero_array_t *from_data = aero_array_from_array(3, from_values);
+  aero_array_t *from_data = aero_array_from_array(4, from_values);
   aero_array_t *to_data   = aero_array_from_dimensions(5, 0.0);
 
   aero_interpolator_t *interp = aero_linear_interpolator(from_grid, to_grid);

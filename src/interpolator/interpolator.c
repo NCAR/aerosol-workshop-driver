@@ -24,7 +24,7 @@ static void aero_interpolator_interpolate(const aero_interpolator_t *interp,
   const aero_real_t *from_a = from->const_data(from);
   aero_real_t *to_a = to->data(to);
   size_t to_n = to->size(to);
-  for (int i=0; i < to_n; ++i) {
+  for (size_t i=0; i < to_n; ++i) {
     size_t j_left  = interp->impl_->from_points_[2*i];
     aero_real_t w_left = interp->impl_->from_weights_[2*i];
     size_t j_right = interp->impl_->from_points_[2*i+1];

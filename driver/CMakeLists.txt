@@ -45,23 +45,25 @@ endforeach(lang)
 ################################################################################
 # tests built from template code
 
-include(test_util)
+if (AERO_TESTS_ONLY)
+  include(test_util)
 
-foreach (model_lang fortran cpp c)
-  foreach (driver_lang fortran cpp c)
-    # Define test executables.
-    get_suffix_from_language(${driver_lang} suffix)
-    set (test_name ${model_lang}_aero_${driver_lang}_driver)
-    set(driver_name test_${test_name})
-    get_template_source_from_language(${model_lang} template_src)
-    add_executable(${driver_name} compute_aero_optics.${suffix} ${template_src})
-    target_link_libraries(${driver_name} PRIVATE my_model_${model_lang}_stub)
-    target_include_directories(${driver_name} PUBLIC ${CMAKE_SOURCE_DIR})
-    target_include_directories(${driver_name} PUBLIC ${CMAKE_BINARY_DIR}/my_model/template)
+  foreach (model_lang fortran cpp c)
+    foreach (driver_lang fortran cpp c)
+      # Define test executables.
+      get_suffix_from_language(${driver_lang} suffix)
+      set (test_name ${model_lang}_aero_${driver_lang}_driver)
+      set(driver_name test_${test_name})
+      get_template_source_from_language(${model_lang} template_src)
+      add_executable(${driver_name} compute_aero_optics.${suffix} ${template_src})
+      target_link_libraries(${driver_name} PRIVATE my_model_${model_lang}_stub)
+      target_include_directories(${driver_name} PUBLIC ${CMAKE_SOURCE_DIR})
+      target_include_directories(${driver_name} PUBLIC ${CMAKE_BINARY_DIR}/my_model/${model_lang}/template)
 
-    # Add tests to the test suite
-    set(driver_args [[my model]] none)
-    add_aero_test(${test_name} ${driver_name} "${driver_args}")
+      # Add tests to the test suite
+      set(driver_args [[my model]] none)
+      add_aero_test(${test_name} ${driver_name} "${driver_args}")
+    endforeach()
   endforeach()
-endforeach()
+endif()
 

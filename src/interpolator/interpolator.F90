@@ -93,21 +93,21 @@ contains
     do i = 1, to_n
       lb = lower_bound(from_x, to_x(i))
       if ((lb == 1) .and. (to_x(i) < from_x(1))) then ! off the lower end!
-        impl%from_points_(2*i)    = 1   ! no left neighbor
-        impl%from_weights_(2*i)   = 0.0
-        impl%from_points_(2*i+1)  = 1   ! right neighbor
-        impl%from_weights_(2*i+1) = 1.0
-      elseif (lb >= from_n+1) then ! off the upper end!
-        impl%from_points_(2*i)    = from_n ! left neighbor
+        impl%from_points_(2*i-1)  = 1   ! no left neighbor
+        impl%from_weights_(2*i-1) = 0.0
+        impl%from_points_(2*i)    = 1   ! right neighbor
         impl%from_weights_(2*i)   = 1.0
-        impl%from_points_(2*i+1)  = from_n ! no right neighbor
-        impl%from_weights_(2*i+1) = 0.0
+      elseif (lb >= from_n+1) then ! off the upper end!
+        impl%from_points_(2*i-1)  = from_n ! left neighbor
+        impl%from_weights_(2*i-1) = 1.0
+        impl%from_points_(2*i)    = from_n ! no right neighbor
+        impl%from_weights_(2*i)   = 0.0
       else
-        impl%from_points_(2*i)    = lb-1       ! left neighbor
-        impl%from_weights_(2*i)   = &
+        impl%from_points_(2*i-1)  = lb-1       ! left neighbor
+        impl%from_weights_(2*i-1) = &
           1.0 - (to_x(i) - from_x(lb-1))/(from_x(lb)-from_x(lb-1))
-        impl%from_points_(2*i+1)  = lb         ! right neighbor
-        impl%from_weights_(2*i+1) = &
+        impl%from_points_(2*i)    = lb         ! right neighbor
+        impl%from_weights_(2*i)   = &
           1.0 - (from_x(lb) - to_x(i))/(from_x(lb)-from_x(lb-1))
       end if
     end do
@@ -133,10 +133,10 @@ contains
     to_a   => to%data( )
     from_a => from%data( )
     do i = 1, size( to_a )
-      j_left  = this%impl_%from_points_(2*i)
-      w_left  = this%impl_%from_weights_(2*i)
-      j_right = this%impl_%from_points_(2*i+1)
-      w_right = this%impl_%from_weights_(2*i+1)
+      j_left  = this%impl_%from_points_(2*i-1)
+      w_left  = this%impl_%from_weights_(2*i-1)
+      j_right = this%impl_%from_points_(2*i)
+      w_right = this%impl_%from_weights_(2*i)
       to_a(i) = from_a(j_left) * w_left + from_a(j_right) * w_right
     end do
 

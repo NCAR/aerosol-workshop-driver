@@ -50,16 +50,20 @@ void test_my_model() {
 
   // C model
   model = new aero::CModel(test_my_model_create_c_model(), true);
+  state = model->create_state();
 
   // AERO_ASSERT(model->name() == "my model");
 
+  delete(state);
   delete(model);
 
   // Fortran model
   model = new aero::FortranModel(test_my_model_create_fortran_model(), true);
+  state = model->create_state();
 
   // AERO_ASSERT(model->name() == "my model");
 
+  delete(state);
   delete(model);
 
 }

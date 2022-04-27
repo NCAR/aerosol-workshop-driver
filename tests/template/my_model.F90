@@ -77,16 +77,20 @@ contains
 
     ! c model
     model => c_model_t( test_my_model_create_c_model( ), owns_model = .true. )
+    state => model%create_state( )
 
     ! call assert( 630628252, model%name( ) .eq. "my model" )
 
+    deallocate( state )
     deallocate( model )
 
     ! c++ model
     model => cpp_model_t( test_my_model_create_cpp_model( ), owns_model = .true. )
+    state => model%create_state( )
 
     ! call assert( 125421847, model%name( ) .eq. "my model" )
 
+    deallocate( state )
     deallocate( model )
 
   end subroutine test_my_model_t

@@ -53,16 +53,20 @@ void test_my_model_t() {
 
   // c++ model
   model = aero_new_cpp_model(test_my_model_create_cpp_model(), true);
+  state = model->create_state(model);
 
   // AERO_ASSERT(strcmp(model->name(model), "my model") == 0);
 
+  state->free(state);
   model->free(model);
 
   // fortran model
   model = aero_new_fortran_model(test_my_model_create_fortran_model(), true);
+  state = model->create_state(model);
 
   // AERO_ASSERT(strcmp(model->name(model), "my model") == 0);
 
+  state->free(state);
   model->free(model);
 
 }

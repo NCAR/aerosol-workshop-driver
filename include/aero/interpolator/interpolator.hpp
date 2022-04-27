@@ -21,7 +21,7 @@ public:
   Interpolator(const Grid& from, const Grid& to);
 
   /// Destructor
-  virtual ~Interpolator() {}
+  ~Interpolator();
 
   /// Deleted assignment operator
   Interpolator& operator=(const Interpolator&) = delete;
@@ -35,12 +35,10 @@ public:
   void interpolate(const Array& from, Array& to) const;
 
 private:
-  /// Constructor from weighted map
-  explicit Interpolator(const std::vector<std::tuple<int, int, Real>> &map);
 
-  /// Weighted map (from index, to index, weight)
-  const std::vector<std::tuple<int, int, Real>> map_;
-
+  // implementation
+  struct Impl;
+  Impl* impl_;
 };
 
 } // namespace aero

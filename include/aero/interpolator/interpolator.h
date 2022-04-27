@@ -10,7 +10,7 @@ extern "C" {
 #endif
 
 /// This opaque type represents an implementation of an interpolator
-typedef struct aero_interpolator_weights_t aero_interpolator_weights_t;
+typedef struct aero_interpolator_impl_t aero_interpolator_impl_t;
 
 /// Behaviors and data associated with an Interpolator. All of these
 /// functions are passed the data pointer created by an Interplator
@@ -18,7 +18,7 @@ typedef struct aero_interpolator_weights_t aero_interpolator_weights_t;
 typedef struct aero_interpolator_t aero_interpolator_t;
 typedef struct aero_interpolator_t {
   /// pointer to the interpolator weights and other parameters
-  aero_interpolator_weights_t *weights_;
+  aero_interpolator_impl_t *impl_;
   /// frees resources associated with an interpolator
   void (*free)(aero_interpolator_t *interp);
   /// interpolates from an array on the input grid to an array

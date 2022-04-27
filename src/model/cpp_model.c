@@ -52,9 +52,8 @@ static aero_grid_t* aero_cpp_model_optics_grid(const aero_model_t *model) {
 
 static void aero_cpp_model_compute_optics(const aero_model_t *model, aero_state_t *state,
     aero_array_t *od, aero_array_t *od_ssa, aero_array_t *od_asym) {
-  // convert cpp_state and cpp_arrays to c types
-  //aero_bridge_cpp_model_optics_grid(model->data_->cpp_model_, (void*) state,
-  //    (void*) od, (void*) od_ssa, (void*) od_asym);
+  aero_bridge_cpp_model_compute_optics(model->data_->cpp_model_, state->data_->cpp_state_,
+      od->cpp_ptr(od), od_ssa->cpp_ptr(od_ssa), od_asym->cpp_ptr(od_asym));
 }
 static void aero_cpp_model_free(aero_model_t *model) {
   if (model->data_->owns_model_)

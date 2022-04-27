@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
   aero::Array aero_od_asym(aero_grid->interfaces().size(), 0.0);
 
   // Have the aerosol model compute its optical properties on its native grid.
-//  model->compute_optics(*state, aero_od, aero_od_ssa, aero_od_asym);
+  model->compute_optics(*state, aero_od, aero_od_ssa, aero_od_asym);
 
   // Interpolate the aerosol optics to the host grid.
   interp.interpolate(aero_od, host_od);

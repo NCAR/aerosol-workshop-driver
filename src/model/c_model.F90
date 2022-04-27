@@ -74,6 +74,18 @@ interface
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  subroutine aero_bridge_c_model_compute_optics( model_c, state_c, od_c,      &
+      od_ssa_c, od_asym_c ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: model_c
+    type(c_ptr), value :: state_c
+    type(c_ptr), value :: od_c
+    type(c_ptr), value :: od_ssa_c
+    type(c_ptr), value :: od_asym_c
+  end subroutine aero_bridge_c_model_compute_optics
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   subroutine aero_bridge_c_state_free( state_c ) bind(c)
     use iso_c_binding
     type(c_ptr), value :: state_c
@@ -207,6 +219,7 @@ contains
   subroutine compute_optics( this, state, od, od_ssa, od_asym )
 
     use aero_state,                    only : state_t
+    use aero_util,                     only : die_msg
 
     !> C aerosol model
     class(c_model_t), intent(inout) :: this
@@ -218,6 +231,14 @@ contains
     class(array_t),    intent(inout) :: od_ssa
     !> Aerosol asymmetric scattering optical depth [m]
     class(array_t),    intent(inout) :: od_asym
+
+    select type( state )
+    class is( c_state_t )
+      call aero_bridge_c_model_compute_optics( this%model_, state%state_,    &
+            od%get_c_ptr( ), od_ssa%get_c_ptr( ), od_asym%get_c_ptr( ) )
+    class default
+      call die_msg( 699518494, "Incompatible state sent to C Model")
+    end select
 
   end subroutine compute_optics
 

@@ -62,6 +62,15 @@ void test_my_model() {
   od_ssa_v  = std::vector<aero::Real>(size, 0.0);
   od_asym_v = std::vector<aero::Real>(size, 0.0);
 
+  model->compute_optics(*state, *od, *od_ssa, *od_asym);
+  od->copy_out(od_v);
+  od_ssa->copy_out(od_ssa_v);
+  od_asym->copy_out(od_asym_v);
+
+  AERO_ASSERT(aero::almost_equal(od_v[1], 0.35));
+  AERO_ASSERT(aero::almost_equal(od_ssa_v[3], 0.75 * 0.88));
+  AERO_ASSERT(aero::almost_equal(od_asym_v[0], 0.27 * 0.88 * 0.3));
+
   delete(od);
   delete(od_ssa);
   delete(od_asym);
@@ -83,6 +92,15 @@ void test_my_model() {
   od_v      = std::vector<aero::Real>(size, 0.0);
   od_ssa_v  = std::vector<aero::Real>(size, 0.0);
   od_asym_v = std::vector<aero::Real>(size, 0.0);
+
+  model->compute_optics(*state, *od, *od_ssa, *od_asym);
+  od->copy_out(od_v);
+  od_ssa->copy_out(od_ssa_v);
+  od_asym->copy_out(od_asym_v);
+
+  AERO_ASSERT(aero::almost_equal(od_v[1], 0.92 * 0.35));
+  AERO_ASSERT(aero::almost_equal(od_ssa_v[3], 0.92 * 0.75 * 0.88));
+  AERO_ASSERT(aero::almost_equal(od_asym_v[0], 0.92 * 0.27 * 0.88 * 0.3));
 
   delete(od);
   delete(od_ssa);

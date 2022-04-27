@@ -92,6 +92,35 @@ contains
   end function aero_bridge_fortran_model_optics_grid
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Copmutes aerosol optical properties for a given state
+  subroutine aero_bridge_fortran_model_compute_optics( model_c_ptr,           &
+      state_c_ptr, od_c_ptr, od_ssa_c_ptr, od_asym_c_ptr ) bind(c)
+
+    use aero_array,                    only : array_ptr
+    use aero_state,                    only : state_ptr
+
+    type(c_ptr), value, intent(in) :: model_c_ptr
+    type(c_ptr), value, intent(in) :: state_c_ptr
+    type(c_ptr), value, intent(in) :: od_c_ptr
+    type(c_ptr), value, intent(in) :: od_ssa_c_ptr
+    type(c_ptr), value, intent(in) :: od_asym_c_ptr
+
+    type(model_ptr), pointer :: model_f_ptr
+    type(state_ptr), pointer :: state_f_ptr
+    type(array_ptr), pointer :: od_f_ptr, od_ssa_f_ptr, od_asym_f_ptr
+
+    call c_f_pointer( model_c_ptr,   model_f_ptr   )
+    call c_f_pointer( state_c_ptr,   state_f_ptr   )
+    call c_f_pointer( od_c_ptr,      od_f_ptr      )
+    call c_f_pointer( od_ssa_c_ptr,  od_ssa_f_ptr  )
+    call c_f_pointer( od_asym_c_ptr, od_asym_f_ptr )
+
+    call model_f_ptr%ptr_%compute_optics( state_f_ptr%ptr_, od_f_ptr%ptr_,    &
+           od_ssa_f_ptr%ptr_, od_asym_f_ptr%ptr_ )
+
+  end subroutine aero_bridge_fortran_model_compute_optics
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 end module aero_model_bridge

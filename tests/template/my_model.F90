@@ -94,6 +94,15 @@ contains
     allocate( od_ssa_a(  interfaces%size( ) ) )
     allocate( od_asym_a( interfaces%size( ) ) )
 
+    call model%compute_optics( state, od, od_ssa, od_asym )
+    call od%copy_out(      od_a      )
+    call od_ssa%copy_out(  od_ssa_a  )
+    call od_asym%copy_out( od_asym_a )
+
+    call assert( 939069112, almost_equal( od_a(2),      0.35_rk ) )
+    call assert( 151387458, almost_equal( od_ssa_a(4),  0.75_rk * 0.88_rk ) )
+    call assert( 316280055, almost_equal( od_asym_a(1), 0.27_rk * 0.88_rk * 0.3_rk ) )
+
     deallocate( od          )
     deallocate( od_ssa      )
     deallocate( od_asym     )
@@ -118,6 +127,15 @@ contains
     allocate( od_a(      interfaces%size( ) ) )
     allocate( od_ssa_a(  interfaces%size( ) ) )
     allocate( od_asym_a( interfaces%size( ) ) )
+
+    call model%compute_optics( state, od, od_ssa, od_asym )
+    call od%copy_out(      od_a      )
+    call od_ssa%copy_out(  od_ssa_a  )
+    call od_asym%copy_out( od_asym_a )
+
+    call assert( 435768241, almost_equal( od_a(2),      0.35_rk ) )
+    call assert( 600660838, almost_equal( od_ssa_a(4),  0.75_rk * 0.88_rk ) )
+    call assert( 765553435, almost_equal( od_asym_a(1), 0.27_rk * 0.88_rk * 0.3_rk ) )
 
     deallocate( od          )
     deallocate( od_ssa      )

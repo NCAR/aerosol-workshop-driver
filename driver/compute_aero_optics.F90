@@ -183,7 +183,7 @@ program compute_aero_optics
   aero_od_asym => create_array_from_grid( aero_grid )
 
   ! Have the aerosol model compute its optical properties on its native grid.
-!  call model%compute_optics( state, aero_od, aero_od_ssa, aero_od_asym )
+  call model%compute_optics( state, aero_od, aero_od_ssa, aero_od_asym )
 
   ! Interpolate the aerosol optics to the host grid.
   call interp%interpolate( aero_od,      host_od      )

@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
   aero_array_t *aero_od_asym = create_array_from_grid(aero_grid);
 
   // Have the aerosol model compute its optical properties on its native grid.
-//  aero_model_compute_optics(model, state, aero_od, aero_od_ssa, aero_od_asym);
+  model->compute_optics(model, state, aero_od, aero_od_ssa, aero_od_asym);
 
   // Interpolate the aerosol optics to the host grid.
   interp->interpolate(interp, aero_od, host_od);

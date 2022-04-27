@@ -52,8 +52,8 @@ static aero_grid_t* aero_fortran_model_optics_grid(const aero_model_t *model) {
 
 static void aero_fortran_model_compute_optics(const aero_model_t *model, aero_state_t *state,
     aero_array_t *od, aero_array_t *od_ssa, aero_array_t *od_asym) {
-  //aero_bridge_fortran_model_optics_grid(model->data_->fortran_model_, (void*) state,
-  //    (void*) od, (void*) od_ssa, (void*) od_asym);
+  aero_bridge_fortran_model_compute_optics(model->data_->fortran_model_, state->data_->fortran_state_,
+      od->fortran_ptr(od), od_ssa->fortran_ptr(od_ssa), od_asym->fortran_ptr(od_asym));
 }
 static void aero_fortran_model_free(aero_model_t *model) {
   if (model->data_->owns_model_)

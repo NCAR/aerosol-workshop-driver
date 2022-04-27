@@ -37,7 +37,9 @@ void FortranModel::compute_optics(aero::State& state,
                                   aero::Array& od,
                                   aero::Array& od_ssa,
                                   aero::Array& od_asym) const {
-  //aero_bridge_fortran_model_compute_optics(state, od, od_ssa, od_asym);
+  aero_bridge_fortran_model_compute_optics(f_ptr_,
+      reinterpret_cast<FortranState&>(state).f_ptr_,
+      od.fortran_ptr(), od_ssa.fortran_ptr(), od_asym.fortran_ptr());
 }
 
 }

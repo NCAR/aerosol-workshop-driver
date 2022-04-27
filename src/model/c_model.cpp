@@ -37,7 +37,9 @@ void CModel::compute_optics(aero::State& state,
                             aero::Array& od,
                             aero::Array& od_ssa,
                             aero::Array& od_asym) const {
-  //aero_bridge_c_model_compute_optics(state, od, od_ssa, od_asym);
+  aero_bridge_c_model_compute_optics(c_ptr_,
+      reinterpret_cast<CState&>(state).c_ptr_,
+      od.c_ptr(), od_ssa.c_ptr(), od_asym.c_ptr());
 }
 
 }

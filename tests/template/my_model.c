@@ -68,6 +68,15 @@ void test_my_model_t() {
   od_ssa_a  = (aero_real_t*) malloc(size*sizeof(aero_real_t));
   od_asym_a = (aero_real_t*) malloc(size*sizeof(aero_real_t));
 
+  model->compute_optics(model, state, od, od_ssa, od_asym);
+  od->copy_out(od, od_a);
+  od_ssa->copy_out(od_ssa, od_ssa_a);
+  od->copy_out(od_asym, od_asym_a);
+
+  AERO_ASSERT(almost_equal(od_a[1], 0.35));
+  AERO_ASSERT(almost_equal(od_ssa_a[3], 0.75 * 0.88));
+  AERO_ASSERT(almost_equal(od_asym_a[0], 0.27 * 0.88 * 0.3));
+
   od->free(od);
   od_ssa->free(od_ssa);
   od_asym->free(od_asym);
@@ -93,6 +102,15 @@ void test_my_model_t() {
   od_a      = (aero_real_t*) malloc(size*sizeof(aero_real_t));
   od_ssa_a  = (aero_real_t*) malloc(size*sizeof(aero_real_t));
   od_asym_a = (aero_real_t*) malloc(size*sizeof(aero_real_t));
+
+  model->compute_optics(model, state, od, od_ssa, od_asym);
+  od->copy_out(od, od_a);
+  od_ssa->copy_out(od_ssa, od_ssa_a);
+  od->copy_out(od_asym, od_asym_a);
+
+  AERO_ASSERT(almost_equal(od_a[1], 0.92 * 0.35));
+  AERO_ASSERT(almost_equal(od_ssa_a[3], 0.92 * 0.75 * 0.88));
+  AERO_ASSERT(almost_equal(od_asym_a[0], 0.92 * 0.27 * 0.88 * 0.3));
 
   od->free(od);
   od_ssa->free(od_ssa);

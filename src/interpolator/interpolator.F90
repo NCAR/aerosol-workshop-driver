@@ -59,7 +59,9 @@ contains
       end if
     end do
 
-    if ((low < size(array)+1) .and. (array(low) < val)) low = low + 1
+    if (low < size(array)+1) then
+      if (array(low) < val) low = low + 1
+    end if
     lb = low
   end function lower_bound
 

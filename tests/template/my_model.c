@@ -55,20 +55,54 @@ void test_my_model_t() {
   // c++ model
   model = aero_new_cpp_model(test_my_model_create_cpp_model(), true);
   state = model->create_state(model);
+  model_grid = model->optics_grid(model);
+  interfaces = aero_grid_interfaces(model_grid);
 
   // AERO_ASSERT(strcmp(model->name(model), "my model") == 0);
+  size = interfaces->size(interfaces);
+  AERO_ASSERT(size == 4);
+  od      = aero_array_from_dimensions(size, 0.0);
+  od_ssa  = aero_array_from_dimensions(size, 0.0);
+  od_asym = aero_array_from_dimensions(size, 0.0);
+  od_a      = (aero_real_t*) malloc(size*sizeof(aero_real_t));
+  od_ssa_a  = (aero_real_t*) malloc(size*sizeof(aero_real_t));
+  od_asym_a = (aero_real_t*) malloc(size*sizeof(aero_real_t));
 
+  od->free(od);
+  od_ssa->free(od_ssa);
+  od_asym->free(od_asym);
+  aero_grid_free(model_grid);
   state->free(state);
   model->free(model);
+  free(od_a);
+  free(od_ssa_a);
+  free(od_asym_a);
 
   // fortran model
   model = aero_new_fortran_model(test_my_model_create_fortran_model(), true);
   state = model->create_state(model);
+  model_grid = model->optics_grid(model);
+  interfaces = aero_grid_interfaces(model_grid);
 
   // AERO_ASSERT(strcmp(model->name(model), "my model") == 0);
+  size = interfaces->size(interfaces);
+  AERO_ASSERT(size == 4);
+  od      = aero_array_from_dimensions(size, 0.0);
+  od_ssa  = aero_array_from_dimensions(size, 0.0);
+  od_asym = aero_array_from_dimensions(size, 0.0);
+  od_a      = (aero_real_t*) malloc(size*sizeof(aero_real_t));
+  od_ssa_a  = (aero_real_t*) malloc(size*sizeof(aero_real_t));
+  od_asym_a = (aero_real_t*) malloc(size*sizeof(aero_real_t));
 
+  od->free(od);
+  od_ssa->free(od_ssa);
+  od_asym->free(od_asym);
+  aero_grid_free(model_grid);
   state->free(state);
   model->free(model);
+  free(od_a);
+  free(od_ssa_a);
+  free(od_asym_a);
 
 }
 

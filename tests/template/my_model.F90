@@ -41,7 +41,7 @@ contains
 
     class(model_t), pointer :: model
     class(state_t), pointer :: state
-    type(grid_t) :: optics_grid
+    type(grid_t),   allocatable :: optics_grid
     class(array_t), pointer :: interfaces, od, od_ssa, od_asym
     real(kind=rk), allocatable :: od_a(:), od_ssa_a(:), od_asym_a(:)
 
@@ -69,29 +69,65 @@ contains
     call assert( 359278219, almost_equal( od_ssa_a(4),  0.92_rk * 0.75_rk * 0.88_rk ) )
     call assert( 754071813, almost_equal( od_asym_a(1), 0.92_rk * 0.27_rk * 0.88_rk * 0.3_rk ) )
 
-    deallocate( od      )
-    deallocate( od_ssa  )
-    deallocate( od_asym )
-    deallocate( state   )
-    deallocate( model   )
+    deallocate( od          )
+    deallocate( od_ssa      )
+    deallocate( od_asym     )
+    deallocate( od_a        )
+    deallocate( od_ssa_a    )
+    deallocate( od_asym_a   )
+    deallocate( optics_grid )
+    deallocate( state       )
+    deallocate( model       )
 
     ! c model
     model => c_model_t( test_my_model_create_c_model( ), owns_model = .true. )
     state => model%create_state( )
+    optics_grid = model%optics_grid( )
+    interfaces => optics_grid%interfaces( )
 
     ! call assert( 630628252, model%name( ) .eq. "my model" )
+    call assert( 134656377, interfaces%size( ) == 4 )
+    od      => array_t( interfaces%size( ), 0.0_rk )
+    od_ssa  => array_t( interfaces%size( ), 0.0_rk )
+    od_asym => array_t( interfaces%size( ), 0.0_rk )
+    allocate( od_a(      interfaces%size( ) ) )
+    allocate( od_ssa_a(  interfaces%size( ) ) )
+    allocate( od_asym_a( interfaces%size( ) ) )
 
-    deallocate( state )
-    deallocate( model )
+    deallocate( od          )
+    deallocate( od_ssa      )
+    deallocate( od_asym     )
+    deallocate( od_a        )
+    deallocate( od_ssa_a    )
+    deallocate( od_asym_a   )
+    deallocate( optics_grid )
+    deallocate( state       )
+    deallocate( model       )
 
     ! c++ model
     model => cpp_model_t( test_my_model_create_cpp_model( ), owns_model = .true. )
     state => model%create_state( )
+    optics_grid = model%optics_grid( )
+    interfaces => optics_grid%interfaces( )
 
     ! call assert( 125421847, model%name( ) .eq. "my model" )
+    call assert( 303360042, interfaces%size( ) == 4 )
+    od      => array_t( interfaces%size( ), 0.0_rk )
+    od_ssa  => array_t( interfaces%size( ), 0.0_rk )
+    od_asym => array_t( interfaces%size( ), 0.0_rk )
+    allocate( od_a(      interfaces%size( ) ) )
+    allocate( od_ssa_a(  interfaces%size( ) ) )
+    allocate( od_asym_a( interfaces%size( ) ) )
 
-    deallocate( state )
-    deallocate( model )
+    deallocate( od          )
+    deallocate( od_ssa      )
+    deallocate( od_asym     )
+    deallocate( od_a        )
+    deallocate( od_ssa_a    )
+    deallocate( od_asym_a   )
+    deallocate( optics_grid )
+    deallocate( state       )
+    deallocate( model       )
 
   end subroutine test_my_model_t
 

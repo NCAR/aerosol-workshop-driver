@@ -67,6 +67,13 @@ interface
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  type(c_ptr) function aero_bridge_c_model_optics_grid( model_c ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: model_c
+  end function aero_bridge_c_model_optics_grid
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   subroutine aero_bridge_c_state_free( state_c ) bind(c)
     use iso_c_binding
     type(c_ptr), value :: state_c
@@ -176,12 +183,20 @@ contains
   !> Returns the aerosol optics grid, discretized in wavenumber space
   function optics_grid( this )
 
+    use aero_array,                    only : array_t
+    use aero_c_array,                  only : c_array_t
     use aero_grid,                     only : grid_t
 
     !> Aerosol optical property wave number grid
     type(grid_t) :: optics_grid
     !> C aerosol model
     class(c_model_t), intent(in) :: this
+
+    class(array_t), pointer :: ifaces
+
+    ifaces => c_array_t( aero_bridge_c_model_optics_grid( this%model_ ),      &
+                         owns_array = .true. )
+    optics_grid = grid_t( ifaces )
 
   end function optics_grid
 

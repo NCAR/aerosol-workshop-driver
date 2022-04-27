@@ -68,6 +68,13 @@ interface
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  type(c_ptr) function aero_bridge_cpp_model_optics_grid( model_cpp ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: model_cpp
+  end function aero_bridge_cpp_model_optics_grid
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   subroutine aero_bridge_cpp_state_free( state_cpp ) bind(c)
     use iso_c_binding
     type(c_ptr), value :: state_cpp
@@ -177,12 +184,20 @@ contains
   !> Returns the aerosol optics grid, discretized in wavenumber space
   function optics_grid( this )
 
+    use aero_array,                    only : array_t
+    use aero_cpp_array,                only : cpp_array_t
     use aero_grid,                     only : grid_t
 
     !> Aerosol optical property wave number grid
     type(grid_t) :: optics_grid
     !> C++ aerosol model
     class(cpp_model_t), intent(in) :: this
+
+    class(array_t), pointer :: ifaces
+
+    ifaces => cpp_array_t( aero_bridge_cpp_model_optics_grid( this%model_ ),  &
+                           owns_array = .true. )
+    optics_grid = grid_t( ifaces )
 
   end function optics_grid
 

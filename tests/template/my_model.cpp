@@ -21,8 +21,8 @@ void test_my_model() {
   aero::Array *od, *od_ssa, *od_asym;
   int size;
 
-  size = model_grid->interfaces().size();
   AERO_ASSERT(model->name() == "my model");
+  size = model_grid->interfaces().size();
   AERO_ASSERT(size == 4);
   od      = new aero::Array(size, 0.0);
   od_ssa  = new aero::Array(size, 0.0);
@@ -30,7 +30,6 @@ void test_my_model() {
   std::vector<aero::Real> od_v(     size, 0.0);
   std::vector<aero::Real> od_ssa_v( size, 0.0);
   std::vector<aero::Real> od_asym_v(size, 0.0);
-
 
   model->compute_optics(*state, *od, *od_ssa, *od_asym);
   od->copy_out(od_v);
@@ -51,18 +50,44 @@ void test_my_model() {
   // C model
   model = new aero::CModel(test_my_model_create_c_model(), true);
   state = model->create_state();
+  model_grid = model->optics_grid();
 
   // AERO_ASSERT(model->name() == "my model");
+  size = model_grid->interfaces().size();
+  AERO_ASSERT(size == 4);
+  od      = new aero::Array(size, 0.0);
+  od_ssa  = new aero::Array(size, 0.0);
+  od_asym = new aero::Array(size, 0.0);
+  od_v      = std::vector<aero::Real>(size, 0.0);
+  od_ssa_v  = std::vector<aero::Real>(size, 0.0);
+  od_asym_v = std::vector<aero::Real>(size, 0.0);
 
+  delete(od);
+  delete(od_ssa);
+  delete(od_asym);
+  delete(model_grid);
   delete(state);
   delete(model);
 
   // Fortran model
   model = new aero::FortranModel(test_my_model_create_fortran_model(), true);
   state = model->create_state();
+  model_grid = model->optics_grid();
 
   // AERO_ASSERT(model->name() == "my model");
+  size = model_grid->interfaces().size();
+  AERO_ASSERT(size == 4);
+  od      = new aero::Array(size, 0.0);
+  od_ssa  = new aero::Array(size, 0.0);
+  od_asym = new aero::Array(size, 0.0);
+  od_v      = std::vector<aero::Real>(size, 0.0);
+  od_ssa_v  = std::vector<aero::Real>(size, 0.0);
+  od_asym_v = std::vector<aero::Real>(size, 0.0);
 
+  delete(od);
+  delete(od_ssa);
+  delete(od_asym);
+  delete(model_grid);
   delete(state);
   delete(model);
 

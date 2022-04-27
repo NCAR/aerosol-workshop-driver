@@ -67,8 +67,30 @@ contains
   end function aero_bridge_fortran_model_create_state
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns a copy of the optics grid interfaces used by the model
+  type(c_ptr) function aero_bridge_fortran_model_optics_grid( model_c_ptr )   &
+      result( ifaces_c_ptr ) bind(c)
+
+    use aero_grid,                     only : grid_t
+    use aero_array,                    only : array_t, array_ptr
+
+    type(c_ptr), value, intent(in) :: model_c_ptr
+
+    type(model_ptr), pointer :: model_f_ptr
+    type(grid_t) :: grid
+    class(array_t), pointer :: grid_ifaces
+    type(array_ptr), pointer :: array_f_ptr
+
+    call c_f_pointer( model_c_ptr, model_f_ptr )
+    allocate( array_f_ptr )
+    grid = model_f_ptr%ptr_%optics_grid( )
+    grid_ifaces => grid%interfaces( )
+    array_f_ptr%ptr_ => grid_ifaces%clone( )
+    ifaces_c_ptr = c_loc( array_f_ptr )
+
+  end function aero_bridge_fortran_model_optics_grid
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

@@ -1,4 +1,6 @@
 #include "model_bridge.h"
+#include <aero/array/array.hpp>
+#include <aero/array/fortran_array.hpp>
 #include <aero/model/fortran_model.hpp>
 #include <aero/state/fortran_state.hpp>
 
@@ -27,7 +29,8 @@ State* FortranModel::create_state() const {
 }
 
 aero::Grid* FortranModel::optics_grid() const {
-  return nullptr; //aero_bridge_fortran_model_optics_grid(f_ptr_);
+  FortranArray *ifaces = new FortranArray(aero_bridge_fortran_model_optics_grid(f_ptr_), true);
+  return new Grid(ifaces);
 }
 
 void FortranModel::compute_optics(aero::State& state,

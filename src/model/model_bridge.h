@@ -30,7 +30,7 @@ void* aero_bridge_cpp_model_create_state(void *model);
 void* aero_bridge_fortran_model_create_state(void *model);
 /// @}
 
-/// Returns a copy of the optics grid used by the aerosol model.
+/// Returns a copy of the optics grid interfaces used by the aerosol model.
 /// @{
 void* aero_bridge_c_model_optics_grid(void *model);
 void* aero_bridge_cpp_model_optics_grid(void *model);

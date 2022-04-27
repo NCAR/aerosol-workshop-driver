@@ -1,4 +1,6 @@
 #include "model_bridge.h"
+#include <aero/array/array.hpp>
+#include <aero/array/c_array.hpp>
 #include <aero/model/c_model.hpp>
 #include <aero/state/c_state.hpp>
 
@@ -26,8 +28,9 @@ State* CModel::create_state() const {
   return new CState(aero_bridge_c_model_create_state(c_ptr_));
 }
 
-aero::Grid* CModel::optics_grid() const {
-  return nullptr; //reinterpret_cast<aero::Grid*>(aero_bridge_c_model_optics_grid(c_ptr_));
+Grid* CModel::optics_grid() const {
+  CArray *ifaces = new CArray(aero_bridge_c_model_optics_grid(c_ptr_), true);
+  return new Grid(ifaces);
 }
 
 void CModel::compute_optics(aero::State& state,

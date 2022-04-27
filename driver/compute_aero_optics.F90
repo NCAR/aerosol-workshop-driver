@@ -163,7 +163,7 @@ program compute_aero_optics
 
   ! Use the model to create an initial aerosol state.
   state => model%create_state( )
-#if 0
+
   ! The host wavelength grid to which optical properties are interpolated.
   host_grid = create_host_wavelength_grid();
 
@@ -183,7 +183,7 @@ program compute_aero_optics
   aero_od_asym => create_array_from_grid( aero_grid )
 
   ! Have the aerosol model compute its optical properties on its native grid.
-  call model%compute_optics( state, aero_od, aero_od_ssa, aero_od_asym )
+!  call model%compute_optics( state, aero_od, aero_od_ssa, aero_od_asym )
 
   ! Interpolate the aerosol optics to the host grid.
   call interp%interpolate( aero_od,      host_od      )
@@ -201,7 +201,6 @@ program compute_aero_optics
   deallocate( aero_od      )
   deallocate( aero_od_ssa  )
   deallocate( aero_od_asym )
-#endif
   deallocate( state        )
   deallocate( model        )
 

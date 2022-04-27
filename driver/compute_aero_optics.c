@@ -101,12 +101,12 @@ int main(int argc, char *argv[]) {
 
   // Use the model to create an aerosol state.
   aero_state_t *state = model->create_state(model);
-#if 0
+
   // The host wavelength grid to which optical properties are interpolated.
   aero_grid_t *host_grid = create_host_wavelength_grid();
 
   // The grid the model uses to compute optical properties.
-  aero_grid_t *aero_grid = aero_model_optics_grid(model);
+  aero_grid_t *aero_grid = model->optics_grid(model);
 
   // An interpolator that interpolates data linearly from aero_grid to
   // host_grid.
@@ -121,7 +121,7 @@ int main(int argc, char *argv[]) {
   aero_array_t *aero_od_asym = create_array_from_grid(aero_grid);
 
   // Have the aerosol model compute its optical properties on its native grid.
-  aero_model_compute_optics(model, state, aero_od, aero_od_ssa, aero_od_asym);
+//  aero_model_compute_optics(model, state, aero_od, aero_od_ssa, aero_od_asym);
 
   // Interpolate the aerosol optics to the host grid.
   interp->interpolate(interp, aero_od, host_od);
@@ -144,7 +144,6 @@ int main(int argc, char *argv[]) {
   interp->free(interp);
   aero_grid_free(aero_grid);
   aero_grid_free(host_grid);
-#endif
   state->free(state);
   model->free(model);
 

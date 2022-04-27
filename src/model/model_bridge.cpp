@@ -52,12 +52,19 @@ void aero_bridge_cpp_model_free_state(void *model, void *state) {
 
 void* aero_bridge_c_model_optics_grid(void *model) {
   aero_model_t *c_model = reinterpret_cast<aero_model_t*>(model);
-  return reinterpret_cast<void*>(c_model->optics_grid(c_model));
+  aero_grid_t *grid = c_model->optics_grid(c_model);
+  const aero_array_t *grid_ifaces = aero_grid_interfaces(grid);
+  aero_array_t *ifaces = grid_ifaces->clone(grid_ifaces);
+  aero_grid_free(grid);
+  return reinterpret_cast<void*>(ifaces);
 }
 
 void* aero_bridge_cpp_model_optics_grid(void *model) {
   aero::Model *cpp_model = reinterpret_cast<aero::Model*>(model);
-  return reinterpret_cast<void*>(cpp_model->optics_grid());
+  aero::Grid *grid = cpp_model->optics_grid();
+  aero::Array *ifaces = grid->interfaces().clone();
+  delete grid;
+  return reinterpret_cast<void*>(ifaces);
 }
 
 void aero_bridge_c_model_compute_optics(void *model, void *state,

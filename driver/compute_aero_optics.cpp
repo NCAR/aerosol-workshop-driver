@@ -95,27 +95,27 @@ int main(int argc, char *argv[]) {
 
   // Use the model to create an aerosol state.
   aero::State* state = model->create_state();
-#if 0
+
   // The host wavelength grid to which optical properties are interpolated.
   aero::Grid host_grid = create_host_wavelength_grid();
 
   // The grid the model uses to compute optical properties.
-  const aero::Grid& aero_grid = model->optics_grid();
+  aero::Grid* aero_grid = model->optics_grid();
 
   // An interpolator that interpolates data from aero_grid to host_grid,
   // using a pre-selected scheme.
-  aero::Interpolator interp(aero_grid, host_grid);
+  aero::Interpolator interp(*aero_grid, host_grid);
 
   // Make some arrays to store optical properties on the host and model grids.
-  aero::Array host_od(host_grid.interfaces());
-  aero::Array host_od_ssa(host_grid.interfaces());
-  aero::Array host_od_asym(host_grid.interfaces());
-  aero::Array aero_od(aero_grid.interfaces());
-  aero::Array aero_od_ssa(aero_grid.interfaces());
-  aero::Array aero_od_asym(aero_grid.interfaces());
+  aero::Array host_od(host_grid.interfaces().size(), 0.0);
+  aero::Array host_od_ssa(host_grid.interfaces().size(), 0.0);
+  aero::Array host_od_asym(host_grid.interfaces().size(), 0.0);
+  aero::Array aero_od(aero_grid->interfaces().size(), 0.0);
+  aero::Array aero_od_ssa(aero_grid->interfaces().size(), 0.0);
+  aero::Array aero_od_asym(aero_grid->interfaces().size(), 0.0);
 
   // Have the aerosol model compute its optical properties on its native grid.
-  model->compute_optics(*state, aero_od, aero_od_ssa, aero_od_asym);
+//  model->compute_optics(*state, aero_od, aero_od_ssa, aero_od_asym);
 
   // Interpolate the aerosol optics to the host grid.
   interp.interpolate(aero_od, host_od);
@@ -129,7 +129,7 @@ int main(int argc, char *argv[]) {
   write_optics_data(ss.str(), host_grid, host_od, host_od_ssa, host_od_asym);
 
   // Clean up.
-#endif
+  delete aero_grid;
   delete state;
   delete model;
 

@@ -1,3 +1,5 @@
+#include <aero/array/array.h>
+#include <aero/array/cpp_array.h>
 #include <aero/model/cpp_model.h>
 #include "model_bridge.h"
 #include "../state/state_bridge.h"
@@ -43,8 +45,9 @@ static aero_state_t* aero_cpp_model_create_state(const aero_model_t *model) {
 }
 
 static aero_grid_t* aero_cpp_model_optics_grid(const aero_model_t *model) {
-  // convert cpp_grid to c_grid
-  return NULL; //(aero_grid_t*) aero_bridge_cpp_model_optics_grid(model->data_->cpp_model_);
+  aero_array_t* ifaces =
+    aero_new_cpp_array(aero_bridge_cpp_model_optics_grid(model->data_->cpp_model_), true);
+  return aero_grid_from_interfaces(ifaces);
 }
 
 static void aero_cpp_model_compute_optics(const aero_model_t *model, aero_state_t *state,

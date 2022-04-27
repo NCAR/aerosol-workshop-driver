@@ -1,14 +1,9 @@
-//===-- template/c/my_aerosol.h -----------------------------*- C -*-===//
-//
-// Copyright (C) 2022 National Center for Atmospheric Research
-// SPDX-License-Identifier: Apache-2.0
-//
-//===----------------------------------------------------------------------===//
-///
-/// \file Implementation of an aerosol model
-///
-//===----------------------------------------------------------------------===//
-
+/* Copyright (C) 2022 National Center for Atmospheric Research,
+ * National Technology & Engineering Solutions of Sandia, LLC (NTESS),
+ * and the U.S. Environmental Protection Agency (USEPA)
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 #ifndef AI_MY_MODEL_H
 #define AI_MY_MODEL_H
 

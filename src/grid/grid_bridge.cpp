@@ -1,13 +1,9 @@
-//===-- interface/grid/ai_bridge_grid.cpp -----------------------*- C++ -*-===//
+// Copyright (C) 2022 National Center for Atmospheric Research,
+// National Technology & Engineering Solutions of Sandia, LLC (NTESS),
+// and the U.S. Environmental Protection Agency (USEPA)
 //
-// Copyright (C) 2022 National Center for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
 //
-//===----------------------------------------------------------------------===//
-///
-/// \file C/C++ <--> Fortran bridge functions for the Grid class
-///
-//===----------------------------------------------------------------------===//
 #include "grid_bridge.h"
 #include <aero/grid/grid.h>
 #include <aero/grid/grid.hpp>

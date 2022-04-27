@@ -1,13 +1,9 @@
-//===-- interface/state/ai_bridge_state.cpp ---------------------*- C++ -*-===//
+// Copyright (C) 2022 National Center for Atmospheric Research,
+// National Technology & Engineering Solutions of Sandia, LLC (NTESS),
+// and the U.S. Environmental Protection Agency (USEPA)
 //
-// Copyright (C) 2022 National Center for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
 //
-//===----------------------------------------------------------------------===//
-///
-/// \file C/C++ <--> Fortran bridge functions for the State class
-///
-//===----------------------------------------------------------------------===//
 #include "state_bridge.h"
 #include <aero/state/state.h>
 #include <aero/state/state.hpp>

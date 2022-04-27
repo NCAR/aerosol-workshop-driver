@@ -1,10 +1,9 @@
-! Copyright (C) 2022 National Center for Atmospheric Research
+! Copyright (C) 2022 National Center for Atmospheric Research,
+! National Technology & Engineering Solutions of Sandia, LLC (NTESS),
+! and the U.S. Environmental Protection Agency (USEPA)
+!
 ! SPDX-License-Identifier: Apache-2.0
 !
-!> \file
-!> Fortran wrapper for aerosol models in C
-
-!> The cpp_model_t type and related functions
 module aero_cpp_model
 
   use aero_array,                      only : array_t

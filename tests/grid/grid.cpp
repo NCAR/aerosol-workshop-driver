@@ -1,9 +1,9 @@
-/* Copyright (C) 2022 National Center for Atmospheric Research
- * SPDX-License-Identifier: Apache-2.0
- *
- * Tests for the C grid type
- */
-
+// Copyright (C) 2022 National Center for Atmospheric Research,
+// National Technology & Engineering Solutions of Sandia, LLC (NTESS),
+// and the U.S. Environmental Protection Agency (USEPA)
+//
+// SPDX-License-Identifier: Apache-2.0
+//
 #include "grid_helper.h"
 
 #include <aero/grid/grid.hpp>

@@ -47,7 +47,25 @@ contains
   end function aero_bridge_fortran_model_name
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Creates a new state for use with the given Fortran model
+  type(c_ptr) function aero_bridge_fortran_model_create_state( model_c_ptr )  &
+    result( state_c_ptr ) bind(c)
+
+    use aero_state,                    only : state_ptr
+
+    type(c_ptr), value, intent(in) :: model_c_ptr
+
+    type(model_ptr), pointer :: model_f_ptr
+    type(state_ptr), pointer :: state_f_ptr
+
+    call c_f_pointer( model_c_ptr, model_f_ptr )
+    allocate( state_f_ptr )
+    state_f_ptr%ptr_ => model_f_ptr%ptr_%create_state( )
+    state_c_ptr = c_loc( state_f_ptr )
+
+  end function aero_bridge_fortran_model_create_state
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

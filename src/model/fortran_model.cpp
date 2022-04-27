@@ -1,5 +1,6 @@
 #include "model_bridge.h"
 #include <aero/model/fortran_model.hpp>
+#include <aero/state/fortran_state.hpp>
 
 namespace aero {
 
@@ -21,8 +22,8 @@ std::string FortranModel::name() const {
   return std::string(reinterpret_cast<char*>(aero_bridge_fortran_model_name(f_ptr_)));
 }
 
-aero::State* FortranModel::create_state() const {
-  return nullptr; //aero_bridge_fortran_model_create_state(f_ptr_);
+State* FortranModel::create_state() const {
+  return new FortranState(aero_bridge_fortran_model_create_state(f_ptr_));
 }
 
 aero::Grid* FortranModel::optics_grid() const {

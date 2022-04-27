@@ -1,5 +1,6 @@
 #include "model_bridge.h"
 #include <aero/model/c_model.hpp>
+#include <aero/state/c_state.hpp>
 
 namespace aero {
 
@@ -21,8 +22,8 @@ std::string CModel::name() const {
   return std::string(aero_bridge_c_model_name(c_ptr_));
 }
 
-aero::State* CModel::create_state() const {
-  return nullptr; //reinterpret_cast<aero::State*>(aero_bridge_c_model_create_state(c_ptr_));
+State* CModel::create_state() const {
+  return new CState(aero_bridge_c_model_create_state(c_ptr_));
 }
 
 aero::Grid* CModel::optics_grid() const {

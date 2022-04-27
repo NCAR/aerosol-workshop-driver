@@ -9,15 +9,23 @@ module aero_cpp_model
 
   use aero_array,                      only : array_t
   use aero_c_array,                    only : c_array_t
+  use aero_constants,                  only : real_kind
   use aero_cpp_array,                  only : cpp_array_t
   use aero_model,                      only : model_t
-  use aero_constants,                  only : real_kind
+  use aero_state,                      only : state_t
   use iso_c_binding
 
   implicit none
   private
 
-  public :: cpp_model_t
+  public :: cpp_model_t, cpp_state_t
+
+  type, extends(state_t) :: cpp_state_t
+    private
+    type(c_ptr) :: state_ = c_null_ptr
+  contains
+    final :: state_finalize
+  end type cpp_state_t
 
   type, extends(model_t) :: cpp_model_t
     private
@@ -50,6 +58,20 @@ interface
     use iso_c_binding
     type(c_ptr), value :: model_cpp
   end function aero_bridge_cpp_model_name
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  type(c_ptr) function aero_bridge_cpp_model_create_state( model_cpp ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: model_cpp
+  end function aero_bridge_cpp_model_create_state
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine aero_bridge_cpp_state_free( state_cpp ) bind(c)
+    use iso_c_binding
+    type(c_ptr), value :: state_cpp
+  end subroutine aero_bridge_cpp_state_free
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -142,6 +164,12 @@ contains
     !> C++ aerosol model
     class(cpp_model_t), intent(in) :: this
 
+    allocate( cpp_state_t :: state )
+    select type( state )
+    type is( cpp_state_t )
+      state%state_ = aero_bridge_cpp_model_create_state( this%model_ )
+    end select
+
   end function create_state
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -190,6 +218,18 @@ contains
     this%model_ = c_null_ptr
 
   end subroutine finalize
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Frees memory associated with the given state wrapper
+  subroutine state_finalize( this )
+
+    type(cpp_state_t), intent(inout) :: this
+
+    call aero_bridge_cpp_state_free( this%state_ )
+    this%state_ = c_null_ptr
+
+  end subroutine state_finalize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

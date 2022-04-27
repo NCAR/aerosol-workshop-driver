@@ -30,13 +30,6 @@ void* aero_bridge_cpp_model_create_state(void *model);
 void* aero_bridge_fortran_model_create_state(void *model);
 /// @}
 
-/// Frees resources associated with a given aerosol model state.
-/// @{
-void aero_bridge_c_model_free_state(void* model, void *state);
-void aero_bridge_cpp_model_free_state(void* model, void *state);
-void aero_bridge_fortran_model_free_state(void* model, void *state);
-/// @}
-
 /// Returns a copy of the optics grid used by the aerosol model.
 /// @{
 void* aero_bridge_c_model_optics_grid(void *model);

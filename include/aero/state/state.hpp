@@ -8,17 +8,17 @@ public:
   /// Default constructor.
   State() = default;
   /// Copy constructor
-  State(const State&) = default;
+  State(const State&) = delete;
   /// Move constructor
-  State(State&&) = default;
+  State(State&&) = delete;
 
   /// Destructor
   virtual ~State() {}
 
   /// Assignment operator
-  State& operator=(const State&) = default;
+  State& operator=(const State&) = delete;
   /// Default move assignment operator
-  State& operator=(State&&) = default;
+  State& operator=(State&&) = delete;
 };
 
 } // namespace aero

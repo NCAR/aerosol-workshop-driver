@@ -1,6 +1,30 @@
 #include <aero/model/fortran_model.h>
 #include "model_bridge.h"
+#include "../state/state_bridge.h"
 #include <stdlib.h>
+
+struct aero_state_data_t {
+  void *fortran_state_;
+};
+
+static void aero_fortran_state_free(aero_state_t *state) {
+  aero_bridge_fortran_state_free(state->data_->fortran_state_);
+  free(state->data_);
+  free(state);
+}
+
+static aero_state_t* aero_fortran_state_create(aero_state_data_t *state_data) {
+  aero_state_t *state = malloc(sizeof(aero_state_t));
+  state->data_ = state_data;
+  state->free = aero_fortran_state_free;
+  return state;
+}
+
+static aero_state_t* aero_fortran_state_wrap(void *fortran_state) {
+  aero_state_data_t *state_data = malloc(sizeof(aero_state_data_t));
+  state_data->fortran_state_ = fortran_state;
+  return aero_fortran_state_create(state_data);
+}
 
 struct aero_model_data_t {
   bool owns_model_;
@@ -15,11 +39,7 @@ static const char* aero_fortran_model_name(const aero_model_t *model) {
 }
 
 static aero_state_t* aero_fortran_model_create_state(const aero_model_t *model) {
-  return NULL; //(aero_state_t*) aero_bridge_fortran_model_create_state(model->data_->fortran_model_);
-}
-
-static void aero_fortran_model_free_state(const aero_model_t *model, aero_state_t *state) {
-  //aero_bridge_fortran_model_free_state(model->data_->fortran_model_, (void*)state);
+  return aero_fortran_state_wrap(aero_bridge_fortran_model_create_state(model->data_->fortran_model_));
 }
 
 static aero_grid_t* aero_fortran_model_optics_grid(const aero_model_t *model) {
@@ -44,7 +64,6 @@ static aero_model_t* aero_fortran_model_create(aero_model_data_t *model_data) {
   model->data_ = model_data;
   model->name = aero_fortran_model_name;
   model->create_state = aero_fortran_model_create_state;
-  model->free_state = aero_fortran_model_free_state;
   model->optics_grid = aero_fortran_model_optics_grid;
   model->compute_optics = aero_fortran_model_compute_optics;
   model->free = aero_fortran_model_free;

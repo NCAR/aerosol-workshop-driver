@@ -45,7 +45,7 @@ void test_my_model_t() {
   od->free(od);
   od_ssa->free(od_ssa);
   od_asym->free(od_asym);
-  model->free_state(model, state);
+  state->free(state);
   model->free(model);
   free(od_a);
   free(od_ssa_a);

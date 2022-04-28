@@ -45,14 +45,6 @@ add_custom_target(copy_input_data ALL ${CMAKE_COMMAND} -E copy_directory
 ################################################################################
 # aerosol model source
 
-# Configuration variables
-include(aero_config.cmake)
-if (NOT AERO_MODEL_TYPE)
-  message(FATAL_ERROR "No AERO_MODEL_TYPE found! Please edit aero_config.cmake.")
-elseif (NOT AERO_MODEL_SOURCE)
-  message(FATAL_ERROR "No AERO_MODEL_SOURCE found! Please edit aero_config.cmake.")
-endif()
-
 # Project-wide include directories
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_BINARY_DIR}/include)

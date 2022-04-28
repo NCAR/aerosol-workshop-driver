@@ -11,24 +11,21 @@ create_aerosol_model(NAME "my model"
                      TYPE my_model_t
                      F90_MODULE my_model
                      LIBRARY my_model_fortran_stub
-                     SOURCE fortran/my_model.F90
-                            fortran/model_factory.cpp
-                            fortran/model_factory.F90)
+                     SOURCE_DIR fortran
+                     SOURCE fortran/my_model.F90)
 
 create_aerosol_model(NAME "my model"
                      TYPE MyModel
                      HEADER_FILE cpp/my_model.hpp
                      LIBRARY my_model_cpp_stub
-                     SOURCE cpp/my_model.cpp
-                            cpp/model_factory.cpp
-                            cpp/model_factory.F90)
+                     SOURCE_DIR cpp
+                     SOURCE cpp/my_model.cpp)
 
 create_aerosol_model(NAME "my model"
                      HEADER_FILE c/my_model.h
                      LIBRARY my_model_c_stub
-                     SOURCE c/my_model.c
-                            c/model_factory.cpp
-                            c/model_factory.F90)
+                     SOURCE_DIR c
+                     SOURCE c/my_model.c)
 
 foreach (language fortran cpp c)
   target_include_directories(my_model_${language}_stub PUBLIC

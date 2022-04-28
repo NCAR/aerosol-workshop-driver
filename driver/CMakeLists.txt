@@ -54,7 +54,7 @@ if (AERO_TESTS_ONLY)
       target_include_directories(${driver_name} PUBLIC ${CMAKE_BINARY_DIR}/my_model/template)
 
       # Add tests to the test suite
-      set(driver_args [[my model]] none)
+      set(driver_args [[my model]] "/aerosol/my_model/template/${model_lang}/my_model_data.nc")
       add_aero_test(${test_name} ${driver_name} "${driver_args}")
     endforeach()
   endforeach()

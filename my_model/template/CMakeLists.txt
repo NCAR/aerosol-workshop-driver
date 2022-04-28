@@ -16,13 +16,14 @@ create_aerosol_model(NAME "my model"
 
 create_aerosol_model(NAME "my model"
                      TYPE MyModel
-                     HEADER_FILE cpp/my_model.hpp
+                     HEADER_FILE my_model.hpp
                      LIBRARY my_model_cpp_stub
                      SOURCE_DIR cpp
                      SOURCE cpp/my_model.cpp)
 
 create_aerosol_model(NAME "my model"
-                     HEADER_FILE c/my_model.h
+                     TYPE my_model
+                     HEADER_FILE my_model.h
                      LIBRARY my_model_c_stub
                      SOURCE_DIR c
                      SOURCE c/my_model.c)

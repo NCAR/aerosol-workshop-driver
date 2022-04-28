@@ -27,11 +27,4 @@ create_aerosol_model(NAME "my model"
                      SOURCE_DIR c
                      SOURCE c/my_model.c)
 
-foreach (language fortran cpp c)
-  target_include_directories(my_model_${language}_stub PUBLIC
-                             ${CMAKE_SOURCE_DIR}/include)
-  target_include_directories(my_model_${language}_stub PUBLIC
-                             ${CMAKE_CURRENT_SOURCE_DIR}/${language})
-endforeach()
-
 ################################################################################

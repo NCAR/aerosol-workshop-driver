@@ -16,6 +16,8 @@ function(create_aerosol_model)
                                ${BLD_DIR}/model_factory.cpp
                                ${BLD_DIR}/model_factory.F90)
   target_link_libraries(${MODEL_LIBRARY} PUBLIC aero)
+  target_include_directories(${MODEL_LIBRARY} PUBLIC ${CMAKE_SOURCE_DIR}/include)
+  target_include_directories(${MODEL_LIBRARY} PUBLIC ${SRC_DIR})
 endfunction(create_aerosol_model)
 
 ################################################################################

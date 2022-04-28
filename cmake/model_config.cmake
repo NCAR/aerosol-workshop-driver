@@ -18,6 +18,7 @@ function(create_aerosol_model)
   target_link_libraries(${MODEL_LIBRARY} PUBLIC aero)
   target_include_directories(${MODEL_LIBRARY} PUBLIC ${CMAKE_SOURCE_DIR}/include)
   target_include_directories(${MODEL_LIBRARY} PUBLIC ${SRC_DIR})
+  set(AERO_MODEL_LIB_NAME ${MODEL_LIBRARY} CACHE INTERNAL "")
 endfunction(create_aerosol_model)
 
 ################################################################################

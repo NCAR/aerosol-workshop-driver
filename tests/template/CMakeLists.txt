@@ -13,7 +13,7 @@ add_executable(test_c_model_stub my_model.c
                                  ${CMAKE_SOURCE_DIR}/my_model/template/c/my_model.c
                                  ${CMAKE_SOURCE_DIR}/my_model/template/cpp/my_model.cpp
                                  ${CMAKE_SOURCE_DIR}/my_model/template/fortran/my_model.F90)
-target_link_libraries(test_c_model_stub PRIVATE aero)
+target_link_libraries(test_c_model_stub PUBLIC aero)
 target_include_directories(test_c_model_stub PUBLIC ${CMAKE_SOURCE_DIR}/my_model/template/c)
 target_include_directories(test_c_model_stub PUBLIC ${CMAKE_SOURCE_DIR}/my_model/template/cpp)
 target_include_directories(test_c_model_stub PUBLIC ${CMAKE_SOURCE_DIR}/include)
@@ -26,7 +26,7 @@ add_executable(test_cpp_model_stub my_model.cpp
                                    ${CMAKE_SOURCE_DIR}/my_model/template/c/my_model.c
                                    ${CMAKE_SOURCE_DIR}/my_model/template/cpp/my_model.cpp
                                    ${CMAKE_SOURCE_DIR}/my_model/template/fortran/my_model.F90)
-target_link_libraries(test_cpp_model_stub PRIVATE aero)
+target_link_libraries(test_cpp_model_stub PUBLIC aero)
 target_include_directories(test_cpp_model_stub PUBLIC ${CMAKE_SOURCE_DIR}/my_model/template/c)
 target_include_directories(test_cpp_model_stub PUBLIC ${CMAKE_SOURCE_DIR}/my_model/template/cpp)
 target_include_directories(test_cpp_model_stub PUBLIC ${CMAKE_SOURCE_DIR}/include)

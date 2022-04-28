@@ -11,6 +11,10 @@
 
 #ifdef AERO_USE_NETCDF
 #include <netcdf.h>
+
+// NetCDF error code handler
+#define ERRCODE 2
+#define ERR(e) {printf("Error: %s\n", nc_strerror(e)); exit(ERRCODE);}
 #endif
 
 // Aerosol state specific to this model
@@ -58,9 +62,9 @@ MyModel::MyModel(const char* description_file)
 #ifdef AERO_USE_NETCDF
   // read some NetCDF data
   if (strlen(description_file)>0) {
-    int ncid;
-    AERO_ASSERT(!nc_open(description_file, NC_NOWRITE, &ncid));
-    AERO_ASSERT(!nc_close(ncid));
+    int ncid, retval;;
+    if(retval = nc_open(description_file, NC_NOWRITE, &ncid)) ERR(retval);
+    if(retval = nc_close(ncid)) ERR(retval);
   }
 #endif
 

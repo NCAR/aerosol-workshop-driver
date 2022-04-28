@@ -15,13 +15,13 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          cmake -D CMAKE_BUILD_TYPE=Debug -D AERO_TESTS_ONLY:BOOL=TRUE ..
+          cmake -D CMAKE_BUILD_TYPE=Debug -D AERO_TESTS_ONLY:BOOL=TRUE -D AERO_ENABLE_NETCDF:BOOL=FALSE ..
           make
           make test
       - name: Build library and run tests in RELEASE
         run: |
           mkdir -p build
           cd build
-          cmake -D CMAKE_BUILD_TYPE=Release -D AERO_TESTS_ONLY:BOOL=TRUE ..
+          cmake -D CMAKE_BUILD_TYPE=Release -D AERO_TESTS_ONLY:BOOL=TRUE -D AERO_ENABLE_NETCDF:BOOL=FALSE ..
           make
           make test

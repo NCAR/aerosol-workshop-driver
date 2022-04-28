@@ -73,9 +73,10 @@ contains
 
     use aero_array,                    only : array_t
     use aero_util,                     only : assert_msg
+#ifdef AERO_USE_NETCDF
     use netcdf,                        only : nf90_open, nf90_close,          &
                                               NF90_NOWRITE, NF90_NOERR
-
+#endif
     type(my_model_t), pointer    :: model
     character(len=*), intent(in) :: description_file
 
@@ -91,7 +92,7 @@ contains
     class(array_t), pointer :: interfaces
 
     integer :: i, netcdf_file
-
+#ifdef AERO_USE_NETCDF
     ! access NetCDF data
     if( len_trim( description_file ) > 0 ) then
       call assert_msg( 724306399,                                             &
@@ -101,7 +102,7 @@ contains
       call assert_msg( 299736143, nf90_close( netcdf_file ) == NF90_NOERR,    &
           "Error closing NetCDF file '"//trim( description_file )//"'" )
     end if
-
+#endif
     ! Convert to wave numbers for the grid's interfaces [m-1]
     do i = 1, 4
       wave_numbers(i) = 1.0e-9_rk / wavelengths(5-i)

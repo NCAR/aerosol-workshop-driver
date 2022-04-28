@@ -11,12 +11,12 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 # options
 
 option(AERO_TESTS_ONLY "Build only tests (ignores code in src/)" OFF)
-option(ENABLE_NETCDF "Enable NetCDF support" ON)
+option(AERO_ENABLE_NETCDF "Enable NetCDF support" ON)
 
 ################################################################################
 # NetCDF library
 
-if(ENABLE_NETCDF)
+if(AERO_ENABLE_NETCDF)
   find_path(NETCDF_INCLUDE_DIR netcdf.mod NETCDF.mod
     DOC "NetCDF include directory (must contain netcdf.mod)"
     PATHS
@@ -43,6 +43,7 @@ if(ENABLE_NETCDF)
     set(NETCDF_LIBS ${NETCDF_LIBS} ${NETCDF_FORTRAN_LIB})
   endif()
   include_directories(${NETCDF_INCLUDE_DIR})
+  add_definitions(-DAERO_USE_NETCDF)
 endif()
 
 ################################################################################

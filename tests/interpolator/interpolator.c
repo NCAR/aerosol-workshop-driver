@@ -1,9 +1,9 @@
-/* Copyright (C) 2022 National Center for Atmospheric Research
- * SPDX-License-Identifier: Apache-2.0
+/* Copyright (C) 2022 National Center for Atmospheric Research,
+ * National Technology & Engineering Solutions of Sandia, LLC (NTESS),
+ * and the U.S. Environmental Protection Agency (USEPA)
  *
- * Tests for the C Interpolator type
+ * SPDX-License-Identifier: Apache-2.0
  */
-
 #include <aero/aero.h>
 #include <aero/array/array.h>
 #include <aero/grid/grid.h>

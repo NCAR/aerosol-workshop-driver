@@ -1,9 +1,9 @@
-! Copyright (C) 2022 National Center for Atmospheric Research
+! Copyright (C) 2022 National Center for Atmospheric Research,
+! National Technology & Engineering Solutions of Sandia, LLC (NTESS),
+! and the U.S. Environmental Protection Agency (USEPA)
+!
 ! SPDX-License-Identifier: Apache-2.0
 !
-!> \file
-
-!> The interpolator_t type and related functions
 module aero_interpolator
 
   use aero_constants,                   only : real_kind
@@ -38,9 +38,11 @@ module aero_interpolator
 
 contains
 
-  ! This helper performs a binary search on sorted grid data, computing the index
-  !of the first point within the grid data that is no larger than the desired
-  ! value.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> This helper performs a binary search on sorted grid data, computing the
+  !! index of the first point within the grid data that is no larger than the
+  !! desired value.
   function lower_bound(array, val) result(lb)
     real(kind=real_kind), pointer, intent(in) :: array(:)
     real(kind=real_kind),          intent(in) :: val
@@ -157,5 +159,5 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-end module aero_interpolator!
+end module aero_interpolator
 

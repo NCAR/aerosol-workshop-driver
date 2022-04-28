@@ -1,9 +1,9 @@
-! Copyright (C) 2022 National Center for Atmospheric Research
+! Copyright (C) 2022 National Center for Atmospheric Research,
+! National Technology & Engineering Solutions of Sandia, LLC (NTESS),
+! and the U.S. Environmental Protection Agency (USEPA)
+!
 ! SPDX-License-Identifier: Apache-2.0
 !
-!> \file
-
-!> Bridge functions for the array_t type
 module aero_grid_bridge
 
   use aero_grid,                       only : grid_t
@@ -34,5 +34,7 @@ contains
     ifaces_c_ptr = c_loc( ifaces_ptr )
 
   end function aero_bridge_fortran_grid_interfaces
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 end module aero_grid_bridge

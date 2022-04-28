@@ -1,13 +1,9 @@
-//===-- interface/array/ai_bridge_array.cpp ---------------------*- C++ -*-===//
+// Copyright (C) 2022 National Center for Atmospheric Research,
+// National Technology & Engineering Solutions of Sandia, LLC (NTESS),
+// and the U.S. Environmental Protection Agency (USEPA)
 //
-// Copyright (C) 2022 National Center for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
 //
-//===----------------------------------------------------------------------===//
-///
-/// \file C/C++ <--> Fortran bridge functions for the aero::Array class
-///
-//===----------------------------------------------------------------------===//
 #include <aero/array/array.h>
 #include <aero/array/array.hpp>
 #include "array_bridge.h"

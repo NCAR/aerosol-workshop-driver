@@ -1,9 +1,9 @@
-! Copyright (C) 2022 National Center for Atmospheric Research
+! Copyright (C) 2022 National Center for Atmospheric Research,
+! National Technology & Engineering Solutions of Sandia, LLC (NTESS),
+! and the U.S. Environmental Protection Agency (USEPA)
+!
 ! SPDX-License-Identifier: Apache-2.0
 !
-!> \file
-
-!> Support functions for C/C++ Array tests
 module test_array_helper
 
   use aero_array,                      only : array_t, array_ptr

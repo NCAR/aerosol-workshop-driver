@@ -1,9 +1,9 @@
-! Copyright (C) 2022 National Center for Atmospheric Research
+! Copyright (C) 2022 National Center for Atmospheric Research,
+! National Technology & Engineering Solutions of Sandia, LLC (NTESS),
+! and the U.S. Environmental Protection Agency (USEPA)
+!
 ! SPDX-License-Identifier: Apache-2.0
 !
-!> \file
-
-!> Bridge functions for the array_t type
 module aero_array_bridge
 
   use aero_array,                      only : array_t, array_ptr

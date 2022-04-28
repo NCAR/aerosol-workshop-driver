@@ -6,6 +6,13 @@
 //
 #include "my_model.hpp"
 
+#include <aero/aero.hpp>
+#include <cstring>
+
+#ifdef AERO_USE_NETCDF
+#include <netcdf.h>
+#endif
+
 // Aerosol state specific to this model
 class MyState : public aero::State {
 public:
@@ -47,6 +54,15 @@ MyModel::MyModel(const char* description_file)
   // We specify wavelengths in descending order so their wave numbers appear in
   // ascending order in the grid interfaces array.
   aero::Real wavelengths[] = {1020.0, 870.0, 675.0, 440.0}; // [nm]
+
+#ifdef AERO_USE_NETCDF
+  // read some NetCDF data
+  if (strlen(description_file)>0) {
+    int ncid;
+    AERO_ASSERT(!nc_open(description_file, NC_NOWRITE, &ncid));
+    AERO_ASSERT(!nc_close(ncid));
+  }
+#endif
 
   // Convert to wave numbers for the grid's interfaces.
   std::vector<aero::Real> wave_numbers;

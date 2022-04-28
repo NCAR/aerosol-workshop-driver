@@ -10,7 +10,7 @@ jobs:
       - name: Install dependencies
         run: |
           /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          brew reinstall gcc
+          brew reinstall gcc netcdf
       - name: Build library and run tests in DEBUG
         run: |
           mkdir -p build

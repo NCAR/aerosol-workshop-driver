@@ -18,6 +18,7 @@
 #define ERR(e) {printf("Error: %s\n", nc_strerror(e)); exit(ERRCODE);}
 #endif
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 

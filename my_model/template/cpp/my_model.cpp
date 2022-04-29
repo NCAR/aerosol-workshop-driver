@@ -7,6 +7,7 @@
 #include "my_model.hpp"
 
 #include <aero/aero.hpp>
+#include <cstdio>
 #include <cstring>
 
 #ifdef AERO_USE_NETCDF

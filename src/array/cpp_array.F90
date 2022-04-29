@@ -79,7 +79,7 @@ interface
   pure integer(kind=c_int) function aero_bridge_cpp_array_size( array_c )     &
       bind(c)
     use iso_c_binding
-    type(c_ptr), value :: array_c
+    type(c_ptr), value, intent(in) :: array_c
   end function aero_bridge_cpp_array_size
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

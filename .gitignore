@@ -3,11 +3,6 @@ build/
 **/CMakeCache.txt
 **/CMakeFiles/
 
-# Aerosol source code
-my_model/*
-!my_model/README
-!my_model/template/
-
 # Model output
 output/*
 !output/README

@@ -1,0 +1,19 @@
+BootStrap: docker
+From: fedora:33
+
+%post
+  dnf -y install \
+    gcc-fortran \
+    gcc-c++ \
+    gcc \
+    cmake \
+    make \
+    man \
+    diffutils \
+    netcdf-fortran-devel \
+    git \
+    valgrind \
+    python3 \
+    python3-matplotlib
+  dnf clean all
+

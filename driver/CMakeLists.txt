@@ -61,7 +61,7 @@ if (AERO_TESTS_ONLY)
       add_aero_test(${test_name} ${driver_name} "${driver_args}")
 
       # Make sure the Fortran drivers are linked using Fortran's linker.
-      if (driver_lang STREQUAL "Fortran")
+      if (driver_lang STREQUAL "fortran")
         set_target_properties(${driver_name} PROPERTIES LINKER_LANGUAGE "Fortran")
       endif()
     endforeach()

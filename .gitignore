@@ -44,3 +44,6 @@ output/*
 *.exe
 *.out
 *.app
+
+# Singularity Files
+*.sif

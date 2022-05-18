@@ -1,16 +1,56 @@
 cmake_minimum_required(VERSION 3.12)
 project(aerosol-radiation)
 enable_language(Fortran)
+enable_language(C)
 enable_language(CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# (In case the C/C++ standards above don't take...)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 ################################################################################
 # options
 
 option(AERO_TESTS_ONLY "Build only tests (ignores code in src/)" OFF)
+option(AERO_ENABLE_NETCDF "Enable NetCDF support" ON)
+
+################################################################################
+# NetCDF library
+
+if(AERO_ENABLE_NETCDF)
+  find_path(NETCDF_INCLUDE_DIR netcdf.mod NETCDF.mod
+    DOC "NetCDF include directory (must contain netcdf.mod)"
+    PATHS
+      $ENV{NETCDF_HOME}/include
+      /usr/lib/gfortran/modules
+      /usr/lib64/gfortran/modules
+      /opt/local/include)
+  find_library(NETCDF_C_LIB netcdf
+    DOC "NetCDF C library"
+    PATHS
+      $ENV{NETCDF_HOME}/lib
+      $ENV{NETCDF_HOME}/lib64
+      /usr/lib
+      /usr/lib64
+      /opt/local/lib)
+  find_library(NETCDF_FORTRAN_LIB netcdff
+    DOC "NetCDF Fortran library"
+    PATHS
+      $ENV{NETCDF_HOME}/lib
+      $ENV{NETCDF_HOME}/lib64
+      /opt/local/lib)
+  set(NETCDF_LIBS ${NETCDF_C_LIB})
+  if(NETCDF_FORTRAN_LIB)
+    set(NETCDF_LIBS ${NETCDF_FORTRAN_LIB} ${NETCDF_LIBS})
+  endif()
+  include_directories(${NETCDF_INCLUDE_DIR})
+  add_definitions(-DAERO_USE_NETCDF)
+endif()
 
 ################################################################################
 # floating point precision
@@ -44,14 +84,6 @@ add_custom_target(copy_input_data ALL ${CMAKE_COMMAND} -E copy_directory
 
 ################################################################################
 # aerosol model source
-
-# Configuration variables
-include(aero_config.cmake)
-if (NOT AERO_MODEL_TYPE)
-  message(FATAL_ERROR "No AERO_MODEL_TYPE found! Please edit aero_config.cmake.")
-elseif (NOT AERO_MODEL_SOURCE)
-  message(FATAL_ERROR "No AERO_MODEL_SOURCE found! Please edit aero_config.cmake.")
-endif()
 
 # Project-wide include directories
 include_directories(${PROJECT_SOURCE_DIR}/include)

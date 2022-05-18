@@ -27,21 +27,15 @@ endfunction()
 if (NOT AERO_TESTS_ONLY)
   foreach (lang fortran cpp c)
     get_suffix_from_language(${lang} suffix)
-    if (EXISTS ${CMAKE_SOURCE_DIR}/my_model/my_model.${suffix})
-      # Generate a file that creates the desired model implementation.
-      configure_file(
-        ${CMAKE_SOURCE_DIR}/my_model/create_model.${suffix}.in
-        ${CMAKE_BINARY_DIR}/my_model/create_model.${suffix}
-        @ONLY
-      )
-      add_executable(${lang}_driver compute_aero_optics.${suffix}
-                                    ${CMAKE_BINARY_DIR}/my_model/create_model.${suffix})
-      target_link_libraries(${lang}_driver PRIVATE my_model)
-      target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR})
-      target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR}/my_model)
-      target_include_directories(${lang}_driver PUBLIC ${CMAKE_BINARY_DIR}/my_model)
-    endif()
+    add_executable(${lang}_driver compute_aero_optics.${suffix})
+    target_link_libraries(${lang}_driver PRIVATE ${AERO_MODEL_LIB_NAME})
+    target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR})
+    target_include_directories(${lang}_driver PUBLIC ${CMAKE_SOURCE_DIR}/my_model)
+    target_include_directories(${lang}_driver PUBLIC ${CMAKE_BINARY_DIR}/my_model)
   endforeach(lang)
+
+  # Make sure the Fortran driver is linked using Fortran's linker.
+  set_target_properties(fortran_driver PROPERTIES LINKER_LANGUAGE "Fortran")
 endif()
 
 ################################################################################
@@ -63,8 +57,13 @@ if (AERO_TESTS_ONLY)
       target_include_directories(${driver_name} PUBLIC ${CMAKE_BINARY_DIR}/my_model/template)
 
       # Add tests to the test suite
-      set(driver_args [[my model]] none)
+      set(driver_args [[my model]] "../../aerosol/my_model/template/${model_lang}/my_model_data.nc")
       add_aero_test(${test_name} ${driver_name} "${driver_args}")
+
+      # Make sure the Fortran drivers are linked using Fortran's linker.
+      if (driver_lang STREQUAL "fortran")
+        set_target_properties(${driver_name} PROPERTIES LINKER_LANGUAGE "Fortran")
+      endif()
     endforeach()
   endforeach()
 endif()

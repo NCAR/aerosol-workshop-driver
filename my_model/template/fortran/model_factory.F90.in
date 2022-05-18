@@ -9,7 +9,7 @@ module aero_model_factory
   use aero_model,                      only : model_t
   use aero_c_model,                    only : c_model_t
   use aero_cpp_model,                  only : cpp_model_t
-  use my_model,                        only : my_model_t
+  use @MODEL_F90_MODULE@,              only : @MODEL_TYPE@
   use iso_c_binding
 
   implicit none
@@ -59,8 +59,8 @@ contains
 
     c_name = trim( package_name )//c_null_char
     c_file = trim( description_file )//c_null_char
-    if( trim( package_name ) == "my model" ) then
-      model => my_model_t( description_file )
+    if( trim( package_name ) == "@MODEL_NAME@" ) then
+      model => @MODEL_TYPE@( description_file )
       return
     end if
     c_model_ptr = aero_factory_new_c_model( c_name, c_file )
@@ -96,9 +96,9 @@ contains
     call c_f_string( package_name, f_name )
     call c_f_string( description_file, f_file )
     model = c_null_ptr
-    if( f_name == "my model" ) then
+    if( f_name == "@MODEL_NAME@" ) then
       allocate( wrap_model )
-      wrap_model%ptr_ => my_model_t( f_file )
+      wrap_model%ptr_ => @MODEL_TYPE@( f_file )
       model = c_loc( wrap_model )
     end if
 

@@ -12,7 +12,7 @@
 #include <aero/model/fortran_model.hpp>
 #include <cstring>
 #include "model_factory.h"
-#include "my_model.h"
+#include "@MODEL_HEADER_FILE@"
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,8 +31,8 @@ aero_model_t* aero_c_factory_new_model(const char *package_name,
 
 void* aero_factory_new_c_model(const char *package_name,
     const char *description_file) {
-  if (strcmp(package_name, "my model") == 0) {
-    return (void*) my_model_new(description_file);
+  if (strcmp(package_name, "@MODEL_NAME@") == 0) {
+    return (void*) @MODEL_TYPE@_new(description_file);
   }
   return NULL;
 }

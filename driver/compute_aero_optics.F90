@@ -33,15 +33,15 @@ contains
     use aero_constants,                only : rk => real_kind
     use aero_grid,                     only : grid_t
 
-    real(kind=rk) :: wavelengths(7) = & ! [nm]
-      (/ 440.0_rk, 557.5_rk, 675.0_rk, 777.5_rk, 870.0_rk, 945.0_rk, 1020.0_rk /)
-    real(kind=rk) :: wave_numbers(7) ! [m-1]
+    real(kind=rk) :: wavelengths(11) = & ! [nm]
+      (/ 220.0_rk, 280.0_rk, 320.0_rk, 380.0_rk, 440.0_rk, 557.5_rk, 675.0_rk, 777.5_rk, 870.0_rk, 945.0_rk, 1020.0_rk /)
+    real(kind=rk) :: wave_numbers(11) ! [m-1]
     class(array_t), pointer :: interfaces
     integer :: i
 
     ! Convert to wave numbers for the grid's interfaces [m-1]
-    do i = 1, 7
-      wave_numbers(i) = 1.0e-9_rk / wavelengths(8-i)
+    do i = 1,11
+      wave_numbers(i) = 1.0e-9_rk / wavelengths(12-i)
     end do
     interfaces => array_t( wave_numbers )
 
